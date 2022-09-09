@@ -1,0 +1,36 @@
+<div class="modal-header">
+  <h4 class="modal-title">Orçamento Planejado x Orçamento Executado</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="container container-fluid">
+    <div class="row justify-content-center mb-5">
+      <div class="col-6">
+        <label class="labelOrc" for="orcamento">Orçamento:</label>
+        <select class="form-control" name="budgetId" id="budgetId" [(ngModel)]="budgetId" (change)="changeBudget($event.target['value'])">
+          <option *ngFor="let b of budgets" [value]="b.id">{{b.description}}</option>
+        </select>
+      </div>
+      <div class="col-6">
+        <p class="title">Média Executada (últimos 3 meses)</p><span
+          class="averageValue">{{averageExecValue | currency: "EUR":true }}</span>
+        <p class="title">Média Orçamento</p><span
+          class="averageValue">{{averageOrcValue | currency: "EUR":true }}</span>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div style="display: block;">
+          <canvas baseChart width="400" height="200" [options]="chartOptions" [datasets]="lineChartData"
+            [labels]="lineChartLabels" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="'line'"
+            [plugins]="lineChartPlugins"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+</div>

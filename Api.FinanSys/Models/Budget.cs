@@ -1,0 +1,34 @@
+﻿using FinansysControl.Data;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace FinansysControl.Models
+{
+    public class Budget : IEntity
+    {
+
+        public int? Id { get; set; }
+
+        [Required]
+        public string  Description { get; set; }
+
+        [Required]
+        public decimal Value { get; set; }
+
+        [Required]
+        public int Month { get; set; }
+
+        [Required]
+        public string TypeBudget { get; set; }
+
+        public string UserCreated { get; set; }
+        public DateTime? DateCreated { get; set;}
+
+        public bool? Default { get; set; }
+
+        public bool? Active {get;set;}
+
+        public virtual List<BudgetWords> BudgetWords { get; set; }
+    }
+}

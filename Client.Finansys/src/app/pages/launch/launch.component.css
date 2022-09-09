@@ -1,0 +1,29 @@
+.bg-light-gray {
+  background-color: lightgray;
+}
+
+.bottom-line {
+  border-bottom: 1px solid;
+}
+
+.accountType{
+  font-family: 'FontAwesome';
+    font-size: large;
+    border-radius: 21px;
+    line-height: 23px;
+    width: 42px;
+    border: 1px solid;
+    text-align: center;
+    margin-bottom: 0px;
+}
+
+.accountType.blue {
+  background-color: cornflowerblue;
+}
+
+.btn-import {
+  background-color: orange;
+  color: white;
+  text-decoration: solid;
+}
+

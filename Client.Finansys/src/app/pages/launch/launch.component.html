@@ -1,0 +1,230 @@
+<div class="container container-fluid">
+  <form>
+    <div class="form-group">
+      <div class="row">
+        <div class="col">
+          <input
+            class="form-control ml-2"
+            type="text"
+            name="searchTerm"
+            placeholder="Pesquisar"
+            [(ngModel)]="launchService.searchTerm"
+          />
+          <span class="ml-3" *ngIf="launchService.loading$ | async">Carregando...</span>
+        </div>
+        <div class="col text-right">
+          <button (click)="import()" class="btn btn-import mr-2">
+            Importar
+          </button>
+          <button (click)="addLaunch()" class="btn btn-primary">
+            Adicionar
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col" sortable="description" (sort)="onSort($event)">Descrição</th>
+        <th scope="col" sortable="budget" (sort)="onSort($event)">Tipo</th>
+        <th scope="col" sortable="account" (sort)="onSort($event)">Conta</th>
+        <th scope="col" sortable="day" (sort)="onSort($event)">Data</th>
+        <th scope="col" sortable="valuePrev" (sort)="onSort($event)">Valor Previsto</th>
+        <th scope="col" sortable="valueExec" (sort)="onSort($event)">Valor Executado</th>
+        <th scope="col">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr [ngClass]="launch.valuePrev > 0 ? 'trPrev' : ''"
+          *ngFor="let launch of launchs$ | async">
+          <td>{{ launch.description }}</td>
+          <td>{{ launch.budget.description }}</td>
+          <td><p class="accountType" [ngClass]="launch.accountId == 2 ? 'blue':''">{{getAccountNameIcon(launch.accountId)}}</td>
+          <td>{{ launch.day | date: "dd/MM/yyyy" }}</td>
+          <td [ngClass]="launch.typeLaunch === 'R' ? 'line-r' : 'line-d'">
+            {{ launch.valuePrev | currency: "EUR":true }}
+          </td>
+          <td [ngClass]="launch.typeLaunch === 'R' ? 'line-r' : 'line-d'">
+            {{ launch.valueExec | currency: "EUR":true }}
+          </td>
+          <td>
+            <span (click)="editLaunch(launch)"
+              ><i class="fas fa-edit fa-fw" style="cursor: pointer" title="Editar Lançamento"></i
+            ></span>
+            <span (click)="deleteLaunch(launch)"
+              ><i class="fas fa-trash-alt fa-fw" style="cursor: pointer" title="Remover Lançamento"></i
+            ></span>
+            <span (click)="executePrev(launch)" *ngIf="launch.valuePrev > 0"
+            ><i class="fas fa-money-bill-alt fa-fw" style="cursor: pointer" title="Tornar Lançamento Executado"></i
+          ></span>
+          </td>
+      </tr>
+      <tr class="bg-light-gray">
+        <td><b>Total</b></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><b>{{ getTotalExpensesPrev() | currency: "EUR":true}}</b></td>
+        <td><b>{{ getTotalExpensesExec() | currency: "EUR":true}}</b></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-between p-2">
+    <ngb-pagination
+      [collectionSize]="(total$ | async)!"
+      [(page)]="launchService.page"
+      [pageSize]="launchService.pageSize"
+    >
+    </ngb-pagination>
+
+    <select
+      class="custom-select"
+      style="width: auto"
+      name="pageSize"
+      [(ngModel)]="launchService.pageSize"
+    >
+      <option [ngValue]="10">10 itens por page</option>
+      <option [ngValue]="25">25 itens por page</option>
+      <option [ngValue]="50">50 itens por page</option>
+    </select>
+  </div>
+</div>
+<modal #modal [modalConfig]="modalConfig" (clickSave)="save($event)">
+  <form [formGroup]="myForm">
+    <div class="form-group ml-3">
+      <div class="form-check form-check-inline">
+        <input
+          class="form-check-input"
+          type="radio"
+          value="R"
+          formControlName="typeLaunch"
+        />
+        <label class="form-check-label" for="typeLaunchRadio1"> Receita </label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input
+          class="form-check-input"
+          type="radio"
+          value="D"
+          formControlName="typeLaunch"
+        />
+        <label class="form-check-label" for="typeLaunchRadio2"> Despesa </label>
+      </div>
+      <div *ngIf="submitted && f['typeLaunch'].errors" class="text-danger">
+        <div *ngIf="f['typeLaunch'].errors['required']">
+          Tipo de Lançamento Requerido
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="description" class="col-sm-6 control-label"
+        >Descrição Lançamento</label
+      >
+      <div class="col-sm-12">
+        <input
+          type="text"
+          class="form-control"
+          name="description"
+          id="description"
+          placeholder="Descrição Lançamento"
+          formControlName="description"
+        />
+        <div *ngIf="submitted && f['description'].errors" class="text-danger">
+          <div *ngIf="f['description'].errors['required']">Descrição Requerido</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="value" class="col-sm-6 control-label">Tipo Orçamento:</label>
+      <div class="col-sm-12">
+        <select class="form-control" formControlName="budgetId">
+          <option [ngValue]="null" disabled>
+            Selecione o Tipo de Orçamento
+          </option>
+          <option *ngFor="let t of typeBudgets" [ngValue]="t.id">
+            {{ t.description }}
+          </option>
+        </select>
+        <div *ngIf="submitted && f['budgetId'].errors" class="text-danger">
+          <div *ngIf="f['budgetId'].errors['required']">Orçamento Requerido</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="value" class="col-sm-6 control-label">Conta do Lançamento:</label>
+      <div class="col-sm-12">
+        <select class="form-control" formControlName="accountId">
+          <option [ngValue]="null" disabled>
+            Selecione a Conta do Lançamento
+          </option>
+          <option *ngFor="let a of accounts" [ngValue]="a.id">
+            {{ a.accountName }}
+          </option>
+        </select>
+        <div *ngIf="submitted && f['accountId'].errors" class="text-danger">
+          <div *ngIf="f['accountId'].errors['required']">Tipo de Conta Requerida</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="day" class="col-sm-6 control-label">Data:</label>
+      <div class="col-sm-6">
+        <input
+          class="form-control"
+          formControlName="day"
+          name="day"
+          id="day"
+          placeholder="Ex. 00/00/0000"
+          type="date"
+        />
+        <div *ngIf="submitted && f['day'].errors" class="text-danger">
+          <div *ngIf="f['day'].errors['required']">Data Requerida</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="valuePrev" class="col-sm-6 control-label">Valor Previsto:</label>
+      <div class="col-sm-6">
+        <input
+          type="text"
+          currencyMask
+          class="form-control"
+          [options]="{ prefix: '€ ', thousands: '.', decimal: ',' }"
+          name="valuePrev"
+          id="valuePrev"
+          placeholder="Valor Previsto"
+          formControlName="valuePrev"
+        />
+        <div *ngIf="submitted && f['valuePrev'].errors" class="text-danger">
+          <div *ngIf="f['valuePrev'].errors['required']">
+            Valor Previsto Requerido
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="valueExec" class="col-sm-6 control-label">Valor Executado:</label>
+      <div class="col-sm-6">
+        <input
+          type="text"
+          currencyMask
+          class="form-control"
+          [options]="{ prefix: '€ ', thousands: '.', decimal: ',' }"
+          name="valueExec"
+          id="valueExec"
+          placeholder="Valor Executado."
+          formControlName="valueExec"
+          (keyup)="handleKeyUp($event)"
+        />
+        <div *ngIf="submitted && f['valueExec'].errors" class="text-danger">
+          <div *ngIf="f['valueExec'].errors['required']">
+            Valor Executado Requerido
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</modal>

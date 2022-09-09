@@ -1,0 +1,58 @@
+<div class="modal-header">
+  <h4 class="modal-title">Palavras Chave do Orçamento: {{budget.description}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="container container-fluid budgetModal">
+    <div class="row">
+      <div class="card-body">
+        <form [formGroup]="formWord">
+          <div class="row">
+            <div class="col-sm-4">
+              <input type="text" class="form-control" id="word" name="word" formControlName="word"
+                placeholder="Nova Palavra" />
+            </div>
+            <div class="col-sm-4">
+              <button class="btn btn-primary" (click)="addNewWord(budget.id);">
+                Adicionar
+              </button>
+            </div>
+          </div>
+        </form>
+        <table id="tableBudgets" class="table table-striped table-borderless">
+          <thead>
+            <tr>
+              <th class="col-1">#</th>
+              <th class="col-9">Palavra</th>
+              <th class="col-3 alignLast">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let word of budgetWords ; let i = index">
+              <td>{{ i+1 }}</td>
+              <td>
+                <span *ngIf="!word.editable">{{word.budgetWord}}</span>
+                <input type="text" [(ngModel)]="word.budgetWord" *ngIf="word.editable" />
+              </td>
+              <td class="alignLast">
+                <span style="cursor: pointer" (click)="saveEditWord(word)" *ngIf="word.editable">
+                  <i class="fas fa-check fa-fw" style="cursor: hand"></i>
+                </span>
+                <span style="cursor: pointer" (click)="editWord(word)" *ngIf="!word.editable">
+                  <i class="fas fa-pen fa-fw" style="cursor: hand"></i>
+                </span>
+                <span style="cursor: pointer" (click)="removeWord(word)"><i class="fas fa-trash fa-fw"
+                    style="cursor: hand"></i></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+</div>

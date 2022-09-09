@@ -1,0 +1,129 @@
+<div class="container" >
+  <div class="row">
+    <div class="col-8">
+      <div class="card">
+        <div class="card-header">Painel de Execução Orçamentária</div>
+        <div class="card-body">
+          <form>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-9">
+                  <input
+                    [(ngModel)]="searchText"
+                    class="form-control"
+                    placeholder="Pesquisar:"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+                </div>
+              </div>
+            </div>
+          </form>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Tipo</th>
+                <th scope="col">Valor Previsto</th>
+                <th scope="col">Valor Executado</th>
+                <th scope="col">Orçamento</th>
+                <th scope="col" style="text-align: center">%</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="
+                  let b of painel
+                    | grdFilter: { description: searchText, value: searchText };
+                  let i = index
+                "
+              >
+                <td>{{ b.description }}</td>
+                <td [ngClass]="b.typeBudget === 'R' ? 'line-r' : 'line-d'">
+                  {{ b.valuePrev | currency: "EUR":true }}
+                </td>
+                <td [ngClass]="b.typeBudget === 'R' ? 'line-r' : 'line-d'">
+                  {{ b.valueExec | currency: "EUR":true }}
+                </td>
+                <td [ngClass]="b.typeBudget === 'R' ? 'line-r' : 'line-d'">
+                  {{ b.valueOrc | currency: "EUR":true }}
+                </td>
+                <td>
+                  <p [ngClass]="getClass((b.valueExec / b.valueOrc) * 100)">
+                    {{ getPercentual((b.valueExec / b.valueOrc)) * 100 | number: "1.2-2" }} %
+                  </p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="card resume" >
+        <div class="card-header">Resumo</div>
+        <div class="card-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Entradas Executadas</th>
+                <td [ngClass]="homeResume.inBoundsExecuted>0 ? 'line-r' : 'line-d'">{{ homeResume.inBoundsExecuted | currency: "EUR":true}}</td>
+              </tr>
+              <tr>
+                <th scope="col">Entradas para Executar</th>
+                <td [ngClass]="homeResume.inBoundsExpected>0 ? 'line-r' : 'line-d'">{{ homeResume.inBoundsExpected | currency: "EUR":true}}</td>
+              </tr>
+              <tr>
+                <th scope="col">Saídas Executadas</th>
+                <td [ngClass]="homeResume.outBoundExecuted>0 ? 'line-d' : 'line-r'">{{ homeResume.outBoundExecuted | currency: "EUR":true}}</td>
+              </tr>
+              <tr>
+                <th scope="col">Saídas para Executar</th>
+                <td [ngClass]="homeResume.outBoundExpected>0 ? 'line-d' : 'line-r'">{{ homeResume.outBoundExpected | currency: "EUR":true}}</td>
+              </tr>
+              <tr>
+                <th scope="col">Saldo Atual</th>
+                <td [ngClass]="homeResume.actualBalance>0 ? 'line-r' : 'line-d'">{{ homeResume.actualBalance | currency: "EUR":true}}</td>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+      <br>
+      <div class="card resume">
+        <div class="card-header">Planejamento Despesas</div>
+        <div class="card-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Desp. Orçamento</th>
+                <td class="line-d">{{ homeResume.totalExpensesPlanned | currency: "EUR":true}}</td>
+              </tr>
+              <tr>
+                <th scope="col">Desp. Não Planejadas</th>
+                <td class="line-d">{{ homeResume.totalExpensesNotPlanned | currency: "EUR":true}}</td>
+              </tr>
+              <tr>
+                <th scope="col">Despesas Total</th>
+                <td class="line-d">{{ homeResume.totalExpenses | currency: "EUR":true}}</td>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+      <Br>
+      <div class="card resume">
+        <div class="card-header">Geral</div>
+        <div class="card-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Poupança</th>
+                <td class="line-r">{{ homeResume.savedMoney | currency: "EUR":true}}</td>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,91 @@
+<header>
+  <nav
+    class="
+      navbar navbar-expand-sm navbar-toggleable-sm navbar-light
+      bg-navFinansys
+      border-bottom
+      box-shadow
+      mb-3
+    "
+  >
+    <div class="container">
+      <div class="col-3 ">
+        <a class="navbar-brand text-white title" [routerLink]="['/']"
+          ><i class="fab fa-foursquare"></i>inansys<i class="fas fa-copyright"></i>ontrol</a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target=".navbar-collapse"
+          aria-label="Toggle navigation"
+          [attr.aria-expanded]="isExpanded"
+          (click)="toggle()"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+      <div class="col-2">
+        <select class="form-control btnMonth"  (change)="changeMonth($event.target['value'])">
+          <option
+            [value]="m.id"
+            *ngFor="let m of months"
+            [selected]="monthId == m.id"
+          >
+          {{ m.name }}
+          </option>
+        </select>
+      </div>
+      <div class="col-1">
+        <select class="form-control btnMonth"  (change)="changeYear($event.target['value'])">
+          <option
+            [value]="m"
+            *ngFor="let m of years"
+            [selected]="year == m"
+          >
+          {{ m }}
+          </option>
+        </select>
+      </div>
+      <div class="col-6">
+        <div
+          class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
+          [ngClass]="{ show: isExpanded }"
+        >
+          <ul class="navbar-nav flex-grow">
+            <li class="nav-item" *ngIf="user">
+              <a class="nav-link text-white"
+                >Olá {{ user['user'].username | titlecase }}</a
+              >
+            </li>
+            <li
+              class="nav-item"
+              [routerLinkActive]="['link-active']"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              <a class="nav-link text-white" [routerLink]="['/']">Painel</a>
+            </li>
+            <li class="nav-item" [routerLinkActive]="['link-active']">
+              <a class="nav-link text-white" [routerLink]="['/launch']"
+                >Lançamento</a
+              >
+            </li>
+            <li class="nav-item" [routerLinkActive]="['link-active']">
+              <a class="nav-link text-white" [routerLink]="['/budget']"
+                >Orçamento</a
+              >
+            </li>
+            <li
+              class="nav-item"
+              [routerLinkActive]="['link-active']"
+              [routerLinkActiveOptions]="{ exact: true }"
+              *ngIf="user"
+            >
+              <a class="nav-link text-white" (click)="logout()">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
