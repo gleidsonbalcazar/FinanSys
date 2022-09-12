@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Component, Inject, QueryList, ViewChild, ViewChildren } from "@angular/core";
-import { FormBuilder, Validators } from "@angular/forms";
+import { UntypedFormBuilder, Validators } from "@angular/forms";
 import { BudgetService } from "../budget/budget.service";
 import { budget } from "../../class/budget.interface";
 import { launch } from "../../class/launch.interface";
@@ -41,7 +41,7 @@ export class LaunchComponent extends BaseComponent {
 
   constructor(
     private http: HttpClient,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private budgetService: BudgetService,
     private appService: AppService,
     public launchService: LaunchService,

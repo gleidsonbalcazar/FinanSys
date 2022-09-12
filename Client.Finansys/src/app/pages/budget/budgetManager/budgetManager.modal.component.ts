@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { FormBuilder, Validators } from "@angular/forms";
+import { UntypedFormBuilder, Validators } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { budget } from "src/app/class/budget.interface";
@@ -19,7 +19,7 @@ export class BudgetManagerModalComponent extends BaseComponent{
   constructor(
     public activeModal: NgbActiveModal,
     private budgetService: BudgetService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private toastr: ToastrService,
   ) {
     super();

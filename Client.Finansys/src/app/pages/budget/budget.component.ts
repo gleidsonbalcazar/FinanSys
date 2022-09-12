@@ -1,5 +1,5 @@
 import { Component, Inject } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+import { UntypedFormGroup } from "@angular/forms";
 import { budget } from "../../class/budget.interface";
 import { BudgetService } from "./budget.service";
 import { BaseComponent } from "../../core/baseComponent/base";
@@ -17,7 +17,7 @@ import { BudgetManagerModalComponent } from "./budgetManager/budgetManager.modal
   providers: [BudgetService],
 })
 export class BudgetListComponent extends BaseComponent {
-  public formWord: FormGroup;
+  public formWord: UntypedFormGroup;
 
   public budgets: budget[];
   public budgetWords: BudgetWord[];
