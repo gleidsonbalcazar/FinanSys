@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import * as moment from "moment";
 import { AppService } from 'src/app/app.service';
+import { Account } from 'src/app/class/account.interface';
 import { homeResume } from 'src/app/class/homeResume.interface';
 import { budget } from '../../class/budget.interface';
 import { home } from '../../class/home.interface';
@@ -16,6 +18,7 @@ export class DashBoardComponent implements OnInit{
   public launchs!: launch[];
   public budgets!: budget[];
   public painel!: home[];
+  public accounts!: Account[];
   public monthId!: number;
   public year!: number;
   public homeResume!: homeResume;
@@ -29,6 +32,7 @@ export class DashBoardComponent implements OnInit{
   }
 
   ngOnInit() {
+    this.getAccounts();
     this.appService.getMonth().subscribe(id => {
       this.monthId = id;
       this.appService.getYear().subscribe(y => {
@@ -45,6 +49,20 @@ export class DashBoardComponent implements OnInit{
 
     this.painelService.getPainelResume(this.monthId, this.year).subscribe( (s) => {
       this.homeResume = s;
+    });
+  }
+
+  public getMonthDescription():string{
+    return this.appService.months.find(f => f.id == this.monthId).name;
+  }
+
+  public getLastDate(date:any):string{
+    return `Ultima atualização em: ${moment(date).format("DD/MM/YYYY hh:mm:ss")}`;
+  }
+
+  public getAccounts(){
+    this.painelService.getAccounts().subscribe( s => {
+      this.accounts = s;
     });
   }
 

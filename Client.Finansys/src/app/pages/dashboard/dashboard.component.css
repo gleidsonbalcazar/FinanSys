@@ -1,5 +1,13 @@
 .resume td {
     text-align: right;
-  }
+}
+
+.card-text-header{
+  font-weight: 600;
+}
+
+.account-lastupdate{
+  color: indianred;
+}
 
 
