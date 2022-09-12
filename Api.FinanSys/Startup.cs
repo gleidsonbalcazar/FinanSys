@@ -42,6 +42,7 @@ namespace FinanSys
             ));
 
             services.AddScoped<BudgetRepository>();
+            services.AddScoped<AccountRepository>();
             services.AddScoped<ImportService>();
             services.AddScoped<UserRepository>();
             services.AddScoped<LaunchRepository>();

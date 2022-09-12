@@ -1,34 +1,33 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FinansysControl.Data;
+using Api.FinanSys.Models.ViewModels;
+using FinansysControl.Models;
 using Microsoft.AspNetCore.Mvc;
-using Repository.Base;
+using Repository;
 
 namespace FinansysControl.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
-    public abstract class GenericController<TEntity, TRepository> : ControllerBase
-                        where TEntity: class, IEntity
-                        where TRepository: IRepository<TEntity>
+    [ApiController]
+    //Authorize]
+    public class AccountsController : Controller
     {
-        private readonly TRepository _repository;
-
-        public GenericController(TRepository repository)
+        private readonly AccountRepository _repository;
+        public AccountsController(AccountRepository repository) 
         {
-            _repository = repository;
+            this._repository = repository;
         }
-
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TEntity>>> Get()
+        public async Task<ActionResult<IEnumerable<AccountViewModel>>> Get()
         {
-            return await _repository.GetAll();
+            return _repository.GetAll();
 
         }
+        
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TEntity>> Get(int id)
+        public async Task<ActionResult<Account>> Get(int id)
         {
             var entity = await _repository.Get(id);
             if (entity == null)
@@ -39,25 +38,27 @@ namespace FinansysControl.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, TEntity entity)
+        public async Task<IActionResult> Put(int id, Account entity)
         {
             if (id != entity.Id)
             {
                 return BadRequest();
             }
+
             await _repository.Update(entity);
+
             return CreatedAtAction("Get", new { id = entity.Id }, entity);
         }
 
         [HttpPost]
-        public async Task<ActionResult<TEntity>> Post(TEntity entity)
+        public async Task<ActionResult<Account>> Post(Account entity)
         {
             await _repository.Add(entity);
             return CreatedAtAction("Get", new { id = entity.Id }, entity);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<TEntity>> Delete(int id)
+        public async Task<ActionResult<Account>> Delete(int id)
         {
             var entity = await _repository.Delete(id);
             if (entity == null)
@@ -69,4 +70,3 @@ namespace FinansysControl.Controllers
 
     }
 }
-

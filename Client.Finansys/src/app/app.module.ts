@@ -8,7 +8,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChartsModule } from 'ng2-charts';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { ToastrModule } from 'ngx-toastr';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
@@ -26,6 +25,7 @@ import { BudgetWordsModalComponent } from './pages/budget/budgetWords/budgetWord
 import { DashBoardComponent } from './pages/dashboard/dashboard.component';
 import { LaunchImportComponent } from './pages/launch/launch-import/launch-import.component';
 import { LaunchComponent } from './pages/launch/launch.component';
+
 
 @NgModule({
   declarations: [
@@ -67,4 +67,7 @@ import { LaunchComponent } from './pages/launch/launch.component';
   providers: [DecimalPipe,AppService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+}
+
