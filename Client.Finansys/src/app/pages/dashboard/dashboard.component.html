@@ -133,7 +133,7 @@
                 <th scope="col">{{account.accountName}}</th>
                 <td [ngClass]="account?.value>0 ? 'line-r' : 'line-d'">{{ account?.value | currency: "EUR":true}}</td>
                 <th scope="col" class="account-lastupdate" [title]="getLastDate(account.lastUpdate)">
-                  <i class="fa-light fa-calendar-exclamation"></i>
+                  <i [ngClass]="checkLastDateUpdated(account.lastUpdate)? 'fa-regular fa-calendar-minus' :'fa-regular fa-calendar-check'"></i>
                 </th>
               </tr>
             </thead>

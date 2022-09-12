@@ -18,14 +18,6 @@ namespace FinansysControl.Controllers
             _repository = repository;
         }
 
-        // [HttpGet("teste/{id}")]
-        // public Task<ActionResult<Home>> Get2(int id)
-        // {
-        //     // Return an asynchronous list of heroes that satisfy query
-        //     HomeResume homeResume = _repository.GetPainelResume(id);
-        //     return null;
-        // }
-
         [HttpGet("{month}/{year}")]
         public ActionResult<IEnumerable<Home>> Get(int month, int year)
         {

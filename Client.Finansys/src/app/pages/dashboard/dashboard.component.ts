@@ -60,6 +60,16 @@ export class DashBoardComponent implements OnInit{
     return `Ultima atualização em: ${moment(date).format("DD/MM/YYYY hh:mm:ss")}`;
   }
 
+  checkLastDateUpdated(date:any):boolean{
+    const dateReg = new Date(date).getTime();
+    const dateIn = new Date();
+    // console.log(dateReg);
+    // console.log(dateIn.setDate(dateIn.getDate()-7));
+    // console.log(dateReg <= dateIn.setDate(dateIn.getDate()-7));
+
+    return dateReg <= dateIn.setDate(dateIn.getDate()-7);
+  }
+
   public getAccounts(){
     this.painelService.getAccounts().subscribe( s => {
       this.accounts = s;

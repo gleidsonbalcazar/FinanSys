@@ -67,6 +67,7 @@ namespace Repository
 
             return this._context.Launch
                                 .Where(w => w.DateCreated != null && w.AccountId == accountId)
+                                .OrderByDescending(o => o.DateCreated)
                                 .FirstOrDefault()?
                                 .DateCreated;
         }
