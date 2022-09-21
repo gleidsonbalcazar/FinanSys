@@ -1,14 +1,13 @@
 import { Component, Inject } from "@angular/core";
-import { UntypedFormGroup } from "@angular/forms";
 import { budget } from "../../class/budget.interface";
 import { BudgetService } from "./budget.service";
 import { BaseComponent } from "../../core/baseComponent/base";
 import { Account } from "src/app/class/account.interface";
 import { BudgetWord } from "src/app/class/budgetWord.interface";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { BudgetWordsModalComponent } from "./budgetWords/budgetWords.modal.component";
 import { BudgetIndicatorsModalComponent } from "./budgetIndicators/budgetIndicators.modal.component";
 import { BudgetManagerModalComponent } from "./budgetManager/budgetManager.modal.component";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: "app-budget",
@@ -17,7 +16,7 @@ import { BudgetManagerModalComponent } from "./budgetManager/budgetManager.modal
   providers: [BudgetService],
 })
 export class BudgetListComponent extends BaseComponent {
-  public formWord: UntypedFormGroup;
+  public formWord: any;
 
   public budgets: budget[];
   public budgetWords: BudgetWord[];

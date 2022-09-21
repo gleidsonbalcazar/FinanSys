@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChartsModule } from 'ng2-charts';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { ToastrModule } from 'ngx-toastr';
@@ -25,6 +24,7 @@ import { BudgetWordsModalComponent } from './pages/budget/budgetWords/budgetWord
 import { DashBoardComponent } from './pages/dashboard/dashboard.component';
 import { LaunchImportComponent } from './pages/launch/launch-import/launch-import.component';
 import { LaunchComponent } from './pages/launch/launch.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -51,9 +51,9 @@ import { LaunchComponent } from './pages/launch/launch.component';
     CurrencyMaskModule,
     FormsModule,
     AlertModule,
+    NgbModule,
     ChartsModule,
     ConfirmDialogModule,
-    NgbModule,
     PipeModule,
     ToastrModule.forRoot({
       timeOut: 1600,
@@ -62,7 +62,8 @@ import { LaunchComponent } from './pages/launch/launch.component';
       preventDuplicates: true,
       progressBar: true,
       positionClass: 'toast-top-right'
-    })
+    }),
+    NgbModule
   ],
   providers: [DecimalPipe,AppService],
   bootstrap: [AppComponent]
