@@ -1,5 +1,5 @@
 import { Component, Input, NgZone } from "@angular/core";
-import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms";
+import { FormBuilder } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { budget } from "src/app/class/budget.interface";
@@ -15,12 +15,12 @@ export class BudgetWordsModalComponent {
   @Input() budget:budget;
   @Input() budgetWords:BudgetWord[];
 
-  public formWord: UntypedFormGroup;
+  public formWord: any;
 
   constructor(
     public activeModal: NgbActiveModal,
     private budgetService: BudgetService,
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private toastr: ToastrService,
   ) { }
 

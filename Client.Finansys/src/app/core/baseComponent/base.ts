@@ -1,15 +1,13 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, QueryList, ViewChildren } from "@angular/core";
-import { UntypedFormGroup } from "@angular/forms";
-import { Subject } from "rxjs";
+import { Component, OnInit } from "@angular/core";
+import { FormGroup } from "@angular/forms";
 import { Months } from "src/app/class/months.interface";
-import { NgbdSortableHeader, SortEvent } from "../directives/sort/sortable.directive";
 
 @Component({
   template: "",
 })
 export abstract class BaseComponent implements OnInit {
   /*Variables*/
-  myForm: UntypedFormGroup;
+  myForm: FormGroup;
   submitted = false;
 
   public months: Months[] = [
