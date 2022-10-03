@@ -26,6 +26,10 @@
   font-size: 10px;
 }
 
+.container {
+  height: 84vh;
+}
+
 .alertMsg {
   color: red;
   font-weight:bold;

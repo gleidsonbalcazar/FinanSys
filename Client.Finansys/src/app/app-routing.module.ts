@@ -17,10 +17,11 @@ const routes: Routes = [
   },
   {
     path: "launch",
-    children: [
-      {path: '', component: LaunchComponent},
-      {path: 'import', component: LaunchImportComponent}
-    ]
+    component: LaunchComponent
+  },
+  {
+    path: "import",
+    component: LaunchImportComponent
   },
   { path: "**", redirectTo: "" },
 ];
