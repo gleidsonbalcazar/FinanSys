@@ -79,6 +79,10 @@ th[sortable].desc:before {
   max-width: 800px;
 }
 
+.bg-navFinansys{
+  background-color: cornflowerblue;
+  color: white;
+}
 
 
 

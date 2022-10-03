@@ -25,11 +25,13 @@ import { DashBoardComponent } from './pages/dashboard/dashboard.component';
 import { LaunchImportComponent } from './pages/launch/launch-import/launch-import.component';
 import { LaunchComponent } from './pages/launch/launch.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FooterComponent } from './footer/footer.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    FooterComponent,
     NavMenuComponent,
     LaunchComponent,
     BudgetListComponent,

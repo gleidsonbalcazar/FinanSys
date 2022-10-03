@@ -6,6 +6,10 @@
   border-bottom: 1px solid;
 }
 
+.container {
+  height: 84vh;
+}
+
 .accountType{
   font-family: 'FontAwesome';
     font-size: large;
