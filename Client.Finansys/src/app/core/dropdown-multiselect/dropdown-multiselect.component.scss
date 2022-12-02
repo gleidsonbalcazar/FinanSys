@@ -1,0 +1,154 @@
+// app theme SCSS Variables
+@import "./tokens.scss";
+
+$gray-200: #f9f9f9;
+$gray-300: #eeeeee;
+
+#app-dropdown-multiselect {
+
+  .btn {
+    border: 1px solid #ced4da;
+    background-color: #F9F9F9;
+    color: #999999;
+    font-size: 0.825rem;
+    text-align: left;
+
+    &:focus {
+      border-color: $primary;
+    }
+
+    &:active,
+    .show & {
+      background-color: $gray-200;
+    }
+  }
+
+  .badge {
+    padding: 0.4rem 0.5rem 0.3rem;
+    border-radius: 50%;
+
+    &.badge-primary {
+      background-color: $primary;
+    }
+  }
+
+  .dropdown-menu {
+    z-index: 10;
+  }
+
+  ::ng-deep {
+    .list-container {
+      max-height: 144px;
+      min-width: 265px;
+      overflow-y: scroll;
+      overflow-x: hidden;
+
+      &::-webkit-scrollbar {
+        width: 6px;
+
+        &-track {
+          background-color: $gray-400;
+          width: 6px;
+          border-radius: 16px !important;
+        }
+
+        &-thumb {
+          background: $gray-500;
+          border-radius: 16px;
+          width: 50px;
+        }
+
+        &-thumb:hover {
+          background: $gray-700;
+        }
+      }
+
+      .list-item {
+        display: block;
+
+        .status-label {
+          white-space: nowrap;
+          font-size: 0.85rem;
+          font-weight: 300;
+        }
+
+        .custom-control-label::before,
+        .custom-control-label::after {
+          top: 0.08rem;
+        }
+      }
+    }
+
+    .multiselect-orders.dropdown-toggle {
+      &:after {
+        position: absolute;
+        right: .75rem;
+        top: 46%;
+      }
+    }
+
+    .dropdownConfig {
+      justify-content: start !important;
+    }
+
+  }
+
+  .checkmark {
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    background-color: transparent;
+    border: 2px solid #cccccc;
+    bottom: 1px;
+    cursor: pointer;
+    left: 0;
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    -o-transition: all .5s ease;
+    -ms-transition: all .5s ease;
+    transition: all .5s ease;
+  }
+
+  .checkmark:hover {
+    border-color: $primary-dark;
+  }
+
+  .checkmark.rounded {
+    border-radius: 0.125rem !important;
+  }
+
+  .checkbox-box input[type='checkbox'] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  .checkmark:after {
+    content: '';
+    position: absolute;
+    display: none;
+  }
+
+  .checkbox-box input:checked ~ .checkmark {
+    background-color: $primary;
+    border: none;
+  }
+
+  .checkbox-box input:checked ~ .checkmark:after {
+    display: block;
+  }
+
+  .checkbox-box .checkmark:after {
+    left: 6px;
+    width: 6px;
+    height: 10px;
+    top: 3px;
+    border: solid #FFF;
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+}

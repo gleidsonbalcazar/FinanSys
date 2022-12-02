@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Api.FinanSys.Models.ViewModels;
 using FinansysControl.Models;
@@ -20,12 +21,17 @@ namespace FinansysControl.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Budget>>> Get()
+        public async Task<ActionResult<IEnumerable<Budget>>> Get(bool allFields = false)
         {
-            return await _repository.GetAll();
-
+            return await _repository.GetAllFilter(x => !allFields ? x.Active==true : x.Active == true || x.Active == false, o => o.OrderBy(a => a.Description));
         }
-        
+
+        [HttpGet("{month}/{year}")]
+        public async Task<ActionResult<IEnumerable<Budget>>> Get(int month, int year)
+        {
+            return await _repository.GetAllFilter(w => w.BudgetConfig.Any(), o => o.OrderBy(a => a.Description), u => u.BudgetConfig.Where(w => w.Year == year && w.Month == month));
+        }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Budget>> Get(int id)
@@ -39,33 +45,40 @@ namespace FinansysControl.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Budget entity)
+        public async Task<IActionResult> Put(int id, BudgetReq budgetReq)
         {
-            if (id != entity.Id)
+            if (id != budgetReq.Id)
             {
                 return BadRequest();
             }
 
-            await _repository.Update(entity);
+            _repository.UpdateBudget(budgetReq);
 
-            if(entity.Month == 0){
-                _repository.UpdateAllMonth(entity);
-            }
+            _repository.UpdateConfig(id, budgetReq);
 
-            return CreatedAtAction("Get", new { id = entity.Id }, entity);
+            return CreatedAtAction("Get", new { id = budgetReq.Id }, budgetReq);
         }
 
+
         [HttpPost]
-        public async Task<ActionResult<Budget>> Post(Budget entity)
+        public async Task<ActionResult<Budget>> Post(BudgetReq budgetReq)
         {
-            await _repository.Add(entity);
-            return CreatedAtAction("Get", new { id = entity.Id }, entity);
+
+            var budget = _repository.AddBudget(budgetReq);
+
+            if(budget.Id != null)
+            {
+                _repository.UpdateConfig(budget.Id, budgetReq);
+
+            }
+
+            return CreatedAtAction("Get", new { id = budget.Id }, budgetReq);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<Budget>> Delete(int id)
         {
-            var entity = await _repository.Delete(id);
+            var entity = await _repository.DeleteBudget(id);
             if (entity == null)
             {
                 return NotFound();

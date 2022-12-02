@@ -1,6 +1,9 @@
 using FinansysControl.Data;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Repository.Base
@@ -43,6 +46,39 @@ namespace Repository.Base
         public async Task<List<TEntity>> GetAll()
         {
             return await context.Set<TEntity>().ToListAsync();
+        }
+
+ 
+
+        public async Task<List<TEntity>> GetAllFilter(
+                                                        Expression<Func<TEntity, bool>> predicate,
+                                                        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+                                                        params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            var query = context.Set<TEntity>().AsQueryable();
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate).AsQueryable();
+            }
+
+            if (includeProperties != null)
+            {
+                query = this.ApplyIncludesOnQuery(query, includeProperties);
+            }
+
+            if (orderBy != null)
+            {
+                return (orderBy(query).ToList());
+            }
+           
+            return (query.ToList());
+        }
+
+        public IQueryable<TEntity> ApplyIncludesOnQuery<TEntity>(IQueryable<TEntity> query, params Expression<Func<TEntity, object>>[] includeProperties) where TEntity : class, IEntity
+        {
+            // Return Applied Includes query
+            return (includeProperties.Aggregate(query, (current, include) => current.Include(include)));
         }
 
         public async Task<TEntity> Update(TEntity entity)

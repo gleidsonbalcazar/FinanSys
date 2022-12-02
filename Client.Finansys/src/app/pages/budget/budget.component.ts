@@ -8,6 +8,8 @@ import { BudgetWordsModalComponent } from "./budgetWords/budgetWords.modal.compo
 import { BudgetIndicatorsModalComponent } from "./budgetIndicators/budgetIndicators.modal.component";
 import { BudgetManagerModalComponent } from "./budgetManager/budgetManager.modal.component";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { ToastrService } from "ngx-toastr";
+import { BudgetConfig } from "src/app/class/budgetConfig.interface";
 
 @Component({
   selector: "app-budget",
@@ -24,20 +26,29 @@ export class BudgetListComponent extends BaseComponent {
   public titleModalWords:string;
   public accounts: Account[];
   public budgetId:number = 4;
+  public showAllFields:boolean = false;
   titleForm: string;
 
   constructor(
     @Inject("BASE_URL") private baseUrl: string,
     private budgetService: BudgetService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private toastr: ToastrService,
   ) {
     super();
     this.getBudgets();
   }
 
+  public showAll(){
+    this.showAllFields = !this.showAllFields;
+    this.budgetService.findAll(`allFields=${this.showAllFields}`).subscribe((result) => {
+      this.budgets = result;
+    });
+  }
+
   public getBudgets(): void {
-    this.budgetService.findAll().subscribe((s) => {
-      this.budgets = s.map(m => m = {...m, default: m.default===null?false:true});
+    this.budgetService.findAll(null).subscribe((result) => {
+      this.budgets = result;
     });
   }
 
@@ -51,15 +62,22 @@ export class BudgetListComponent extends BaseComponent {
     );
   }
 
-  public getMonthById(id: number) {
-    return this.months.find((f) => f.id === id).name;
+  public getMonth(budgetConfig: BudgetConfig[]) {
+    if(budgetConfig==null)
+      return "";
+
+    let months = budgetConfig.map(m => m.month);
+
+    let monthsDescArray = this.months.filter(f => months.includes(f.id)).map(m => m.pref);
+
+    return monthsDescArray.join(", ");
   }
 
   async editBudget(budget: budget) {
     const modalRef = this.modalService.open(BudgetManagerModalComponent,{ windowClass : "modal-pre-lg"});
     modalRef.componentInstance.title = `Editar Orçamento ${budget.description}`;
     modalRef.componentInstance.budget = budget;
-    modalRef.result.then(r => { if(r != 0) {this.budgets.push(r)}});
+    modalRef.result.then(r => { if(r != 0) {this.getBudgets();}});
   }
 
   async addBudget() {
@@ -79,7 +97,16 @@ export class BudgetListComponent extends BaseComponent {
     modalRef.componentInstance.budgets = this.budgets;
   }
 
-
-
+  public updateStatus(budget:budget){
+    budget.active = !budget.active;
+    this.budgetService.update(budget.id, budget).subscribe(
+      (f) => {
+        this.toastr.success('Orçamento atualizado com sucesso');
+      },
+      (error) => {
+        this.toastr.error('Houve um erro na ação');
+      }
+    );
+  }
 
 }

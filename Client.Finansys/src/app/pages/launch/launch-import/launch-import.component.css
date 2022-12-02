@@ -27,7 +27,7 @@
 }
 
 .container {
-  height: 84vh;
+  height: 100vh;
 }
 
 .alertMsg {
@@ -43,6 +43,14 @@
 
 #collapseTableImportWithour{
   padding-bottom: 100px;
+}
+
+.icon-exclamation {
+  border: 1px solid;
+  width: 20px;
+  height: 20px;
+  background-color: orange;
+  color: white
 }
 
 

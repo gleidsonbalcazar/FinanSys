@@ -26,6 +26,7 @@ import { LaunchImportComponent } from './pages/launch/launch-import/launch-impor
 import { LaunchComponent } from './pages/launch/launch.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FooterComponent } from './footer/footer.component';
+import { DropdownMultiselectModule } from './core/dropdown-multiselect/dropdown-multiselect.module';
 
 
 @NgModule({
@@ -49,6 +50,7 @@ import { FooterComponent } from './footer/footer.component';
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    DropdownMultiselectModule,
     ReactiveFormsModule,
     CurrencyMaskModule,
     FormsModule,

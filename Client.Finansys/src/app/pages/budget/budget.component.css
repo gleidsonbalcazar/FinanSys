@@ -29,3 +29,7 @@
   text-align-last: end;
   padding-right: 48px;
 }
+
+.table-budget{
+  max-height: calc(100vh - 150px);
+}

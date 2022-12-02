@@ -1,4 +1,6 @@
+using FinansysControl.Models;
 using System;
+using System.Collections.Generic;
 
 public class ImportModel {
     public DateTime DateLaunch { get; set; }
@@ -8,5 +10,7 @@ public class ImportModel {
 
     public int? ProspectiveBudgetId {get;set;}
     public bool ProspectiveLoaded {get;set;}
+
+    public IEnumerable<Launch> LaunchsProspectiveLoaded { get; set; }
 
 }

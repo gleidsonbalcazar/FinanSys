@@ -14,6 +14,8 @@ namespace FinansysControl.Data
         }
 
         public DbSet<Budget> Budget { get; set; }
+
+        public DbSet<BudgetConfig> BudgetConfig { get; set; }
         public DbSet<BudgetWords> BudgetWords { get; set; }
         public DbSet<Launch> Launch { get; set; }
 
