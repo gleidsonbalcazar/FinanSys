@@ -58,7 +58,7 @@ export class LaunchImportComponent {
   }
 
   getTypeBudgets() {
-    this.budgetService.findAll().subscribe((s) =>
+    this.budgetService.findAll(null).subscribe((s) =>
                                             {
                                               this.typeBudgets = s;
                                               this.typeBudgets.push(
@@ -68,8 +68,7 @@ export class LaunchImportComponent {
                                                   typeBudget:null,
                                                   active: true,
                                                   averageValue: 0,
-                                                  default:true,
-                                                  month:0,
+                                                  budgetConfig: [],
                                                   budgetWords:[]
                                                 });
                                             });
@@ -77,6 +76,10 @@ export class LaunchImportComponent {
 
   returnData(receiveData:any){
     return moment(receiveData).format("YYYY-MM-DD");
+  }
+
+  getTitleByLaunch(res){
+    return "Este lançamento provávelmente pode estar duplicado";
   }
 
   showUploadField():boolean{

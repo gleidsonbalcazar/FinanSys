@@ -1,169 +1,162 @@
-<div class="container" >
-<div class="card resume">
-  <div class="card-header">Importar Arquivo</div>
-  <div class="card-body">
-    <div class="form-group row">
-      <label for="bank" class="col-1 col-form-label">Banco:</label>
-      <div class="col-sm-4">
-        <select class="form-control"  [(ngModel)]="bankSelected">
-          <option *ngFor="let b of banks" [ngValue]="b" >
-            {{ b.name }}
-          </option>
-        </select>
-      </div>
-      <label for="account" class="col-1 col-form-label">Conta:</label>
-      <div class="col-sm-4">
-        <select class="form-control" [(ngModel)]="accountSelected">
-          <option *ngFor="let ac of accounts" [ngValue]="ac">
-            {{ ac.accountName }}
-          </option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group row" *ngIf="showUploadField()">
-      <label for="fileLabel" class="col-1 col-form-label">Arquivo:</label>
-      <div class="col-sm-4">
-        <app-upload [bank]="bankSelected.id"  (onUploadFinished)="uploadFinished($event)"></app-upload>
-      </div>
-      <label *ngIf="fileName != null" for="fileLabel" class="col-1 col-form-label">Nome:</label>
-      <div class="col-sm-4 font-weight-bold col-form-label" *ngIf="fileName != null">
-        {{ fileName}}
-        <div *ngIf="fileWasImported" class="fileWasImported">*Este arquivo já foi importado</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div *ngIf="!!importResponse" class="mt-3">
-  <div id="collapseTableImport" >
-    <div class="card">
-      <div class="card-header" (click)="isCollapsedBudget = !isCollapsedBudget">
-        Registros Auto Orçamento
-        <div class="float-right">
-          {{dataWithAutoBudget.length}} registros - {{ numberAutoBudgetWasImported }} já importados.
+<div class="container">
+  <div class="card resume">
+    <div class="card-header">Importar Arquivo</div>
+    <div class="card-body">
+      <div class="form-group row">
+        <label for="bank" class="col-1 col-form-label">Banco:</label>
+        <div class="col-sm-4">
+          <select class="form-control" [(ngModel)]="bankSelected">
+            <option *ngFor="let b of banks" [ngValue]="b">
+              {{ b.name }}
+            </option>
+          </select>
+        </div>
+        <label for="account" class="col-1 col-form-label">Conta:</label>
+        <div class="col-sm-4">
+          <select class="form-control" [(ngModel)]="accountSelected">
+            <option *ngFor="let ac of accounts" [ngValue]="ac">
+              {{ ac.accountName }}
+            </option>
+          </select>
         </div>
       </div>
-      <div class="card-body" [ngbCollapse]="isCollapsedBudget">
-        <table class="table table-scroll" *ngIf="!!importResponse">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Descrição</th>
-              <th scope="col">Data</th>
-              <th scope="col">Valor Executado</th>
-              <th scope="col">Auto Orçamento</th>
-              <th scope="col">Duplicado</th>
-              <th scope="col" class="text-center">
-                <input type="checkbox" (click)="changeSelect(dataWithAutoBudget);" [checked]="checkAllChecked(dataWithAutoBudget)"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let res of dataWithAutoBudget; let i = index" [ngClass]="res.prospectiveLoaded ? 'trPrev' : ''">
-              <td>{{ i+1 }}</td>
-              <td>{{ res.description }}</td>
-              <td>
-                <input
-                class="form-control"
-                name="day"
-                id="day"
-                placeholder="Ex. 00/00/0000"
-                type="date"
-                #data
-                [value]="returnData(res.dateLaunch)"
-                (change)="changeData(dataWithAutoBudget[i], data.value)"
-              />
-              </td>
-              <td [ngClass]="res.typeLaunch === 'Crédito' ? 'line-r' : 'line-d'" class="text-center">
-                {{ res.valueLaunch | currency: "EUR":true }}
-              </td>
-              <td>
-                <select class="form-control" #t (change)="onChangeProspectiveBudget(dataWithAutoBudget[i], t.value)"
-                  [ngClass]="res.prospectiveBudgetId === null ? 'select-red' : ''">
-                  <option *ngFor="let t of typeBudgets" [value]="t.id" [selected]="t.id === res.prospectiveBudgetId">
-                    {{ t.description }}
-                  </option>
-                </select>
-              </td>
-              <td class="text-center"> {{ res.prospectiveLoaded ? "Sim":"Não"}}</td>
-              <td class="text-center"> <input type="checkbox" (click)="onChangeInput(dataWithAutoBudget[i])"
-                  [checked]="res.selectedToImport">
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  <div id="collapseTableImportWithour" >
-    <div class="card">
-      <div class="card-header tableImportWithout" (click)="isCollapsedBudgetWithout = !isCollapsedBudgetWithout">
-        Registros Sem Auto Orçamento
-        <div class="float-right">
-          {{dataWithOutAutoBudget.length}} registros  - {{ numberWithoutBudgetWasImported }} já importados.
+      <div class="form-group row" *ngIf="showUploadField()">
+        <label for="fileLabel" class="col-1 col-form-label">Arquivo:</label>
+        <div class="col-sm-4">
+          <app-upload [bank]="bankSelected.id" (onUploadFinished)="uploadFinished($event)"></app-upload>
+        </div>
+        <label *ngIf="fileName != null" for="fileLabel" class="col-1 col-form-label">Nome:</label>
+        <div class="col-sm-4 font-weight-bold col-form-label" *ngIf="fileName != null">
+          {{ fileName}}
+          <div *ngIf="fileWasImported" class="fileWasImported">*Este arquivo já foi importado</div>
         </div>
       </div>
-      <div class="card-body" [ngbCollapse]="isCollapsedBudgetWithout">
-        <table class="table table-scroll" *ngIf="!!importResponse">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Descrição</th>
-              <th scope="col">Data</th>
-              <th scope="col">Valor Executado</th>
-              <th scope="col">Auto Orçamento</th>
-              <th scope="col">Duplicado</th>
-              <th scope="col" class="text-center">
-                <input type="checkbox" (click)="changeSelect(dataWithAutoBudget);" [checked]="checkAllChecked(dataWithAutoBudget)">
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let res of dataWithOutAutoBudget; let i = index" [ngClass]="res.prospectiveLoaded ? 'trPrev' : ''">
-              <td>{{ i+1 }}</td>
-              <td>{{ res.description }}</td>
-              <td>
-                <input
-                class="form-control"
-                name="day"
-                id="day"
-                placeholder="Ex. 00/00/0000"
-                type="date"
-                #data
-                [value]="returnData(res.dateLaunch)"
-                (change)="changeData(dataWithOutAutoBudget[i], data.value)"
-              />
-              </td>
-              <td [ngClass]="res.typeLaunch === 'Crédito' ? 'line-r' : 'line-d'" class="text-center">
-                {{ res.valueLaunch | currency: "EUR":true }}
-              </td>
-              <td>
-                <select class="form-control" #t (change)="onChangeProspectiveBudget(dataWithOutAutoBudget[i], t.value)"
-                  [ngClass]="res.prospectiveBudgetId === null ? 'select-red' : ''">
-                  <option *ngFor="let t of typeBudgets" [value]="t.id" [selected]="t.id === res.prospectiveBudgetId">
-                    {{ t.description }}
-                  </option>
-                </select>
-              </td>
-              <td class="text-center"> {{ res.prospectiveLoaded ? "Sim":"Não"}}</td>
-              <td class="text-center"> <input type="checkbox" (click)="onChangeInput(dataWithOutAutoBudget[i])"
-                  [checked]="res.selectedToImport">
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    </div>
+  </div>
+
+  <div *ngIf="!!importResponse" class="mt-3">
+    <div id="collapseTableImport">
+      <div class="card">
+        <div class="card-header" (click)="isCollapsedBudget = !isCollapsedBudget">
+          Registros Auto Orçamento
+          <div class="float-right">
+            {{dataWithAutoBudget.length}} registros - {{ numberAutoBudgetWasImported }} já importados.
+          </div>
+        </div>
+        <div class="card-body" [ngbCollapse]="isCollapsedBudget">
+          <table class="table table-scroll table-striped" *ngIf="!!importResponse">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Data</th>
+                <th scope="col">Valor Executado</th>
+                <th scope="col">Auto Orçamento</th>
+                <th scope="col" class="text-center">
+                  <input type="checkbox" (click)="changeSelect(dataWithAutoBudget);"
+                    [checked]="checkAllChecked(dataWithAutoBudget)"></th>
+                <th scope="col">Obs</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let res of dataWithAutoBudget; let i = index">
+                <td>{{ i+1 }}</td>
+                <td>{{ res.description }}</td>
+                <td>
+                  <input class="form-control" name="day" id="day" placeholder="Ex. 00/00/0000" type="date" #data
+                    [value]="returnData(res.dateLaunch)" (change)="changeData(dataWithAutoBudget[i], data.value)" />
+                </td>
+                <td [ngClass]="res.typeLaunch === 'Crédito' ? 'line-r' : 'line-d'" class="text-center">
+                  {{ res.valueLaunch | currency: "EUR":true }}
+                </td>
+                <td>
+                  <select class="form-control" #t (change)="onChangeProspectiveBudget(dataWithAutoBudget[i], t.value)"
+                    [ngClass]="res.prospectiveBudgetId === null ? 'select-red' : ''">
+                    <option *ngFor="let t of typeBudgets" [value]="t.id" [selected]="t.id === res.prospectiveBudgetId">
+                      {{ t.description }}
+                    </option>
+                  </select>
+                </td>
+                <td class="text-center">
+                  <input type="checkbox" (click)="onChangeInput(dataWithAutoBudget[i])" [checked]="res.selectedToImport">
+                </td>
+                <td class="text-center">
+                  <i class="fa-regular fa-exclamation icon-exclamation" *ngIf="res.prospectiveLoaded" [title]="getTitleByLaunch(res)"></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
-
-
-  <div class="footer">
-    <div class="alertMsg" *ngIf="alertMsg != ''">
-      {{alertMsg}}
+    <div id="collapseTableImportWithour">
+      <div class="card">
+        <div class="card-header tableImportWithout" (click)="isCollapsedBudgetWithout = !isCollapsedBudgetWithout">
+          Registros Sem Auto Orçamento
+          <div class="float-right">
+            {{dataWithOutAutoBudget.length}} registros - {{ numberWithoutBudgetWasImported }} já importados.
+          </div>
+        </div>
+        <div class="card-body" [ngbCollapse]="isCollapsedBudgetWithout">
+          <table class="table table-scroll" *ngIf="!!importResponse">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Data</th>
+                <th scope="col">Valor Executado</th>
+                <th scope="col">Auto Orçamento</th>
+                <th scope="col" class="text-center">
+                  <input type="checkbox" (click)="changeSelect(dataWithAutoBudget);"
+                    [checked]="checkAllChecked(dataWithAutoBudget)">
+                </th>
+                <th scope="col">Obs</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let res of dataWithOutAutoBudget; let i = index"
+                [ngClass]="res.prospectiveLoaded ? 'trPrev' : ''">
+                <td>{{ i+1 }}</td>
+                <td>{{ res.description }}</td>
+                <td>
+                  <input class="form-control" name="day" id="day" placeholder="Ex. 00/00/0000" type="date" #data
+                    [value]="returnData(res.dateLaunch)" (change)="changeData(dataWithOutAutoBudget[i], data.value)" />
+                </td>
+                <td [ngClass]="res.typeLaunch === 'Crédito' ? 'line-r' : 'line-d'" class="text-center">
+                  {{ res.valueLaunch | currency: "EUR":true }}
+                </td>
+                <td>
+                  <select class="form-control" #t
+                    (change)="onChangeProspectiveBudget(dataWithOutAutoBudget[i], t.value)"
+                    [ngClass]="res.prospectiveBudgetId === null ? 'select-red' : ''">
+                    <option *ngFor="let t of typeBudgets" [value]="t.id" [selected]="t.id === res.prospectiveBudgetId">
+                      {{ t.description }}
+                    </option>
+                  </select>
+                </td>
+                <td class="text-center"> <input type="checkbox" (click)="onChangeInput(dataWithOutAutoBudget[i])"
+                    [checked]="res.selectedToImport">
+                </td>
+                <td class="text-center">
+                  <i class="fa-regular fa-exclamation icon-exclamation" *ngIf="res.prospectiveLoaded" [title]="getTitleByLaunch(res)"></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-    <button type="button" class="btn btn-primary mr-3" [disabled]="submitted" (click)="execute(accountSelected)"> Realizar
-      Importação </button>
-    <button type="button" class="btn btn-secondary" (click)="clear()"> Limpar </button>
-  </div>
 
-</div>
+
+    <div class="footer">
+      <div class="alertMsg" *ngIf="alertMsg != ''">
+        {{alertMsg}}
+      </div>
+      <button type="button" class="btn btn-primary mr-3" [disabled]="submitted" (click)="execute(accountSelected)">
+        Realizar
+        Importação </button>
+      <button type="button" class="btn btn-secondary" (click)="clear()"> Limpar </button>
+    </div>
+
+  </div>
 </div>

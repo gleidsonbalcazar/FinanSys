@@ -9,6 +9,7 @@ using Repository;
 using FinansysControl.Services;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Reflection;
 
 namespace FinanSys
 {
@@ -25,6 +26,7 @@ namespace FinanSys
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            var versionString = $"{Assembly.GetExecutingAssembly().GetName().Version}";
 
             services.AddSwaggerGen(c =>
             {
@@ -32,7 +34,7 @@ namespace FinanSys
                 {
                     Title = "Api.Finansys Swagger",
                     Version = "v1",
-                    Description = "Api de Controle Financeiro Pessoal"
+                    Description = $"Api de Controle Financeiro Pessoal {versionString}"
                 });
             });
 
@@ -48,7 +50,6 @@ namespace FinanSys
             services.AddScoped<LaunchRepository>();
             services.AddScoped<HomeRepository>();
             services.AddScoped<IndicatorsRepository>();
-            services.AddCors();
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
@@ -56,6 +57,7 @@ namespace FinanSys
                     {
                         builder.WithOrigins("*")
                                             .AllowAnyHeader()
+                                            .AllowAnyOrigin()
                                             .AllowAnyMethod();
                     });
             });

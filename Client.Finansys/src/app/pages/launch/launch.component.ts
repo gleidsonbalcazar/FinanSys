@@ -24,6 +24,8 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
   providers: [BudgetService, LaunchService],
 })
 export class LaunchComponent extends BaseComponent {
+  public selectedMonth:number;
+  public selectedYear:number;
   public launchs: launch[] = [];
   public accounts: Account[] = [];
   public typeBudgets: budget[] = [];
@@ -39,7 +41,6 @@ export class LaunchComponent extends BaseComponent {
   headers!: QueryList<NgbdSortableHeader>;
 
   constructor(
-    private http: HttpClient,
     private formBuilder: FormBuilder,
     private budgetService: BudgetService,
     private appService: AppService,
@@ -51,7 +52,7 @@ export class LaunchComponent extends BaseComponent {
   ) {
     super();
     this.getAccounts();
-    this.getTypeBudgets();
+    //this.getTypeBudgets();
     this.createForm();
     this.launchs$ = launchService.launchs$;
     this.total$ = launchService.total$;
@@ -62,7 +63,10 @@ export class LaunchComponent extends BaseComponent {
   }
 
   getTypeBudgets() {
-    this.budgetService.findAll().subscribe((s) => (this.typeBudgets = s));
+    this.appService.getYear().subscribe(r => this.selectedYear = r);
+    this.appService.getMonth().subscribe(r => this.selectedMonth = r);
+    this.budgetService.findAllByMonthAndYear(this.selectedMonth,this.selectedYear).subscribe((s) => (this.typeBudgets = s));
+    //this.budgetService.findAll(null).subscribe((s) => (this.typeBudgets = s));
   }
 
   getAccountNameIcon(id: number) {
@@ -93,23 +97,20 @@ export class LaunchComponent extends BaseComponent {
     var formSend = <launch>this.myForm.value;
     this.launchService.checkDuplicate(formSend).subscribe((f) => {
       let that = this;
-      if (f) {
-        this.confirmDialogService.confirmThis(
-          "É possível já ter efetuado este lançamento, tem certeza que deseja continuar?",
-          function () {
-           that.submitForm(formSend,nextBe);
-          },
-          function () {}
-        );
-      }else {
+      // if (f) {
+      //   this.confirmDialogService.confirmThis(
+      //     "É possível já ter efetuado este lançamento, tem certeza que deseja continuar?",
+      //     function () {
+      //      that.submitForm(formSend,nextBe);
+      //     },
+      //     function () {}
+      //   );
+      // }else {
         that.submitForm(formSend,nextBe);
-      }
+      //}
     });
   }
 
-  import():void{
-    this.router.navigate(['launch','import']);
-  }
 
   public modalConfig: ModalConfig = {
     modalTitle: "",
@@ -167,7 +168,16 @@ export class LaunchComponent extends BaseComponent {
     this.updateLaunch(launch);
   }
 
+  async addLaunch() {
+    this.getTypeBudgets();
+    this.modal.modalConfig.modalTitle = "Criar Lançamento";
+    this.myForm.reset();
+    this.createForm();
+    return await this.modal.open("");
+  }
+
   async editLaunch(launch: launch) {
+    this.getTypeBudgets();
     this.modal.modalConfig.modalTitle = `Editar Lançamento ${launch.description}`;
     this.myForm.patchValue({
       id: launch.id,
@@ -210,12 +220,7 @@ export class LaunchComponent extends BaseComponent {
     });
   }
 
-  async addLaunch() {
-    this.modal.modalConfig.modalTitle = "Criar Lançamento";
-    this.myForm.reset();
-    this.createForm();
-    return await this.modal.open("");
-  }
+
 
   handleKeyUp(e) {
     if (e.keyCode === 13) {

@@ -16,19 +16,19 @@ export class NavMenuComponent {
   public monthId!: number;
   public year!: number;
   public months: Months[] = [
-    { id: 0, name: "Todos os Meses" },
-    { id: 1, name: "Janeiro" },
-    { id: 2, name: "Fevereiro" },
-    { id: 3, name: "Março" },
-    { id: 4, name: "Abril" },
-    { id: 5, name: "Maio" },
-    { id: 6, name: "Junho" },
-    { id: 7, name: "Julho" },
-    { id: 8, name: "Agosto" },
-    { id: 9, name: "Setembro" },
-    { id: 10, name: "Outubro" },
-    { id: 11, name: "Novembro" },
-    { id: 12, name: "Dezembro" },
+    { id: 0, name: "Todos", pref: "All" },
+    { id: 1, name: "Janeiro", pref: "Jan" },
+    { id: 2, name: "Fevereiro", pref: "Fev" },
+    { id: 3, name: "Março", pref: "Mar" },
+    { id: 4, name: "Abril", pref:"Abr" },
+    { id: 5, name: "Maio", pref: "Mai" },
+    { id: 6, name: "Junho", pref: "Jun" },
+    { id: 7, name: "Julho", pref: "Jul" },
+    { id: 8, name: "Agosto", pref: "Ago" },
+    { id: 9, name: "Setembro", pref: "Set" },
+    { id: 10, name: "Outubro", pref: "Out" },
+    { id: 11, name: "Novembro", pref: "Nov" },
+    { id: 12, name: "Dezembro", pref: "Dez" },
   ];
   public years: any[] = [
      '2019', '2020','2021','2022','2023','2024'

@@ -47,11 +47,18 @@ namespace FinansysControl.Services
                         break;
                 }
 
+                RemoveWasImported();
+
                 GetProspectiveLoaded();
 
             }
 
             return this;
+        }
+
+        private void RemoveWasImported()
+        {
+            this.DataList = launchRepository.RemoveWasImported(this.DataList);
         }
 
         private bool CheckIfFileWasImported()
@@ -81,7 +88,7 @@ namespace FinansysControl.Services
                 DataList.Add(new ImportModel
                 {
                     DateLaunch = Convert.ToDateTime(workSheet.Cells[i, 1].Value.ToString()),
-                    Description = workSheet.Cells[i, 3].Value.ToString(),
+                    Description = GetRealDescription(workSheet.Cells[i, 3].Value.ToString()),
                     TypeLaunch = workSheet.Cells[i, 5].Value.ToString(),
                     ValueLaunch = TransformMilleniumValueLaunch(workSheet.Cells[i, 5].Value.ToString(), Convert.ToDecimal(workSheet.Cells[i, 4].Value.ToString())),
                     ProspectiveBudgetId = GetPossibleBudgetByWord(workSheet.Cells[i, 3].Value.ToString()),
@@ -89,16 +96,20 @@ namespace FinansysControl.Services
             }
         }
 
+        private string GetRealDescription(string bankDescription)
+        {
+            return bankDescription.Replace("COMPRA", "").Replace("8551","").Replace("PAG","").Replace("BXVAL","").Replace("PAG SERV","").Replace("3728","");
+        }
+
         private decimal TransformMilleniumValueLaunch(string typeLaunch, decimal valueLaunch)
         {
-            if (typeLaunch == "Crédito")
-            {
-                return valueLaunch;
-            }
-            else
+            if (valueLaunch < 0)
             {
                 return valueLaunch * -1;
             }
+
+            return valueLaunch;
+           
         }
 
         private void RunImportActiveBank(ExcelWorksheet workSheet, int totalRowsToRun)

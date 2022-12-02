@@ -1,6 +1,8 @@
 
 
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using FinansysControl.Data;
 using FinansysControl.Helpers.Enum;
@@ -19,7 +21,14 @@ namespace Repository
 
         public List<Home> GetPainel(int month, int year)
         {
-            var budgets = _context.Budget.Where(w => w.Month == month || w.Month == 0).ToList();
+            var budgetsConfig = _context.Budget
+                                .SelectMany(s => s.BudgetConfig)
+                                .Where(w => w.Month == month || w.Month == 0)
+                                .Where(y => y.Year == year)
+                                .ToList();
+
+            var budgets = GetBudgetsById(budgetsConfig.Select(s => s.BudgetId).ToList());
+   
             var Launch = _context.Launch
                                         .Where(w => w.Day.Month == month && w.AccountId != (int)AccountEnum.Poupança)
                                         .Where(y => y.Day.Year == year)
@@ -33,19 +42,41 @@ namespace Repository
                 ValueOrc = s.Value,
                 ValuePrev = 0,
                 ValueExec = 0,
+                Planned = true
             }).ToList();
+
+            var budgetsNotPlanned = Launch.Select(s => s.Budget).Except(budgets).ToList();
+
+            home.AddRange(
+                budgetsNotPlanned.Select(s => new Home 
+                                                {
+                                                    Id = (int)s.Id,
+                                                    Description = s.Description,
+                                                    TypeBudget = s.TypeBudget,
+                                                    ValueOrc = s.Value,
+                                                    ValuePrev = 0,
+                                                    ValueExec = 0,
+                                                    Planned = false
+                }
+                                        )
+                );
 
             home.ForEach(f => f.ValuePrev = Launch.Where(w => w.BudgetId == f.Id).Sum(s => s.ValuePrev));
             home.ForEach(f => f.ValueExec = Launch.Where(w => w.BudgetId == f.Id).Sum(s => s.ValueExec));
 
-            return home.ToList();
+            return home.OrderBy(o => o.Description).ToList();
+        }
+
+        private List<Budget> GetBudgetsById(List<int> budgetIds)
+        {
+            return _context.Budget.Where(f => budgetIds.Contains(f.Id??0)).ToList();
         }
 
         public HomeResume GetPainelResume(int month, int year)
         {
 
-            var budgets = getBudgetsByMonth(month);
-            var launchs = getLaunchsByPeriod(month,year);
+            var budgets = GetBudgetsByMonth(month,year);
+            var launchs = GetLaunchsByPeriod(month,year);
 
             var inBoundsExecuted = launchs.Where(w => w.TypeLaunch == TypeLaunchEnum.Receita.ToDescriptionString() 
                                                     && w.AccountId != (int)AccountEnum.Poupança)
@@ -75,9 +106,9 @@ namespace Repository
                                                                             ValueOrc = budgets.Any(w => w.Id == y.Key) ? budgets.FirstOrDefault(w => w.Id == y.Key).Value : 0
                                                                         });;
 
-            var savedMoney = getSavedMoney();
+            var savedMoney = GetSavedMoney();
 
-            var totalExpensesNotPlanned = getTotalExpensesnotPlanned(totalExpensesByBudgetLaunched); 
+            var totalExpensesNotPlanned = GetTotalExpensesnotPlanned(totalExpensesByBudgetLaunched); 
 
             var result = new HomeResume
             {
@@ -96,7 +127,7 @@ namespace Repository
         }
 
 
-        private decimal getTotalExpensesnotPlanned(IEnumerable<ExpensesByBudgetView> totalExpensesByBudgetLaunched)
+        private decimal GetTotalExpensesnotPlanned(IEnumerable<ExpensesByBudgetView> totalExpensesByBudgetLaunched)
         {
             var totalExpensesNotPlanned = 0.0M;
             foreach (var itemEx in totalExpensesByBudgetLaunched)
@@ -109,7 +140,7 @@ namespace Repository
             return totalExpensesNotPlanned;
         }
 
-        private decimal getSavedMoney()
+        private decimal GetSavedMoney()
         {
             var launchs = _context.Launch.Where(w => w.AccountId == (int)AccountEnum.Poupança && w.ValueExec > 0);
 
@@ -119,7 +150,7 @@ namespace Repository
             return launchsReceived - launchsExpenses;
         }
 
-        private List<Launch> getLaunchsByPeriod(int month, int year)
+        private List<Launch> GetLaunchsByPeriod(int month, int year)
         {
             return _context.Launch
                                 .Where(w => w.Day.Month == month && w.AccountId != (int)AccountEnum.Poupança)
@@ -127,9 +158,15 @@ namespace Repository
                                 .ToList();
         }
 
-        private List<Budget> getBudgetsByMonth(int month)
+        private List<Budget> GetBudgetsByMonth(int month, int year)
         {
-            return _context.Budget.Where(w => w.Month == month || w.Month == 0).ToList();
+            var budgetsConfig = _context.Budget
+                               .SelectMany(s => s.BudgetConfig)
+                               .Where(w => w.Month == month || w.Month == 0)
+                               .Where(y => y.Year == year)
+                               .ToList();
+
+            return GetBudgetsById(budgetsConfig.Select(s => s.BudgetId).ToList());
         }
     }
 }

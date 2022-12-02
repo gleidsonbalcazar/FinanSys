@@ -8,7 +8,7 @@ services:
     ports:
       - 80:80
     depends_on:
-      - sqlserver
+      - db
       - api
   api:
     build: Api.Finansys/.
@@ -18,8 +18,8 @@ services:
     ports: 
       - "8000:80"
     depends_on:
-      - sqlserver
-  sqlserver:
+      - db
+  db:
     image: mcr.microsoft.com/mssql/server
     restart: unless-stopped
     environment:
@@ -31,4 +31,3 @@ services:
       - "1433:1433"
     volumes:
       - D:\SQLSERVER\data:/var/opt/mssql/data
-

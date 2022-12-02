@@ -1,0 +1,48 @@
+<section id="app-dropdown-multiselect">
+
+  <div [autoClose]="true" class="dropdown" ngbDropdown>
+    <button type="button" class="btn btn-outline-gray-400 form-control w-100 multiselect-orders dropdownConfig"
+            [attr.id]="selectorId" ngbDropdownToggle>
+      <span>{{verifyItensChecked(form.value) ? 'Selecionados' : 'Todos'}}</span>
+      <span class="badge badge-primary mx-2"
+            *ngIf="showSelectedItens && verifyItensChecked(form.value)">{{verifyItensChecked(form.value)}}</span>
+    </button>
+
+    <div class="p-0" ngbDropdownMenu [attr.aria-labelledby]="selectorId">
+
+      <form #form="ngForm" novalidate>
+
+        <ul class="list-container list-unstyled m-1">
+          <li class="list-item" *ngFor="let status of statusList">
+
+            <div class="d-flex">
+              <div class="flex-grow-1">
+                <div class="py-1 px-2">
+
+                  <div class="d-flex align-items-center custom-control custom-checkbox my-1">
+                    <div class="checkbox-position-control">
+                      <label class="checkbox-box d-inline">
+                        <input type="checkbox"
+                               id="{{status._id}}"
+                               name="{{status._id}}"
+                               [(ngModel)]="status.checked"
+                               (change)="search(form.value)">
+                        <span class="checkmark rounded"></span>
+                      </label>
+                    </div>
+                    <label class="status-label align-bottom d-block mb-0 ml-2"
+                           for="{{status._id}}">{{status.label}}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </li>
+        </ul>
+
+      </form>
+
+    </div>
+  </div>
+
+</section>

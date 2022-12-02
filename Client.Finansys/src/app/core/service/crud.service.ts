@@ -31,7 +31,10 @@ export class CrudService<T, ID> implements CrudOperations<T, ID> {
     return this._http.get<T[]>(this._base + "/" + month + "/" + year);
   }
 
-  findAll(): Observable<T[]> {
+  findAll(param: string): Observable<T[]> {
+    if(param!=null){
+      return this._http.get<T[]>(this._base + "?" + param)
+    }
     return this._http.get<T[]>(this._base)
   }
 

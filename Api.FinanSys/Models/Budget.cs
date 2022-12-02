@@ -16,19 +16,18 @@ namespace FinansysControl.Models
         [Required]
         public decimal Value { get; set; }
 
-        [Required]
-        public int Month { get; set; }
+        public bool? Active { get; set; }
+
+        public bool? Default { get; set; }
 
         [Required]
         public string TypeBudget { get; set; }
 
         public string UserCreated { get; set; }
-        public DateTime? DateCreated { get; set;}
-
-        public bool? Default { get; set; }
-
-        public bool? Active {get;set;}
+        public DateTime? DateCreated { get; set;}        
 
         public virtual List<BudgetWords> BudgetWords { get; set; }
+
+        public virtual List<BudgetConfig> BudgetConfig { get; set; }
     }
 }

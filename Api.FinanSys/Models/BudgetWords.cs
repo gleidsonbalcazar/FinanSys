@@ -14,6 +14,11 @@ namespace FinansysControl.Models
 
         [Required]
         protected string _BudgetName;
+
+        [Required]
+        public bool Active { get; set; }
+
+
         public string  BudgetWord { get { return this._BudgetName; } set { this._BudgetName = (value == null ? value : value.Trim()); } }
 
         public string UserCreated { get; set; }

@@ -30,14 +30,17 @@ namespace Repository
 
         public ActionResult<bool> CheckDuplicate(Launch launch)
         {
-            return this._context.Launch.Any(w => w.Day == launch.Day && (w.ValueExec == launch.ValueExec || w.ValuePrev == launch.ValuePrev));
+            return this._context.Launch.Any(w => (w.Day.Month == launch.Day.Month && w.Day.Year == launch.Day.Year) 
+                                            && (w.ValueExec == launch.ValueExec || w.ValuePrev == launch.ValuePrev)
+                                            );
         }
 
         public bool CheckIfLoaded(ImportModel f)
         {
-            return this._context.Launch.Any(w => w.Day == f.DateLaunch
-                                            && (w.ValueExec == f.ValueLaunch || w.ValuePrev == f.ValueLaunch)
-                                           );
+            var existsValueOnLaunch = this._context.Launch.Any(w => w.ValueExec == f.ValueLaunch || w.ValuePrev == f.ValueLaunch);
+            var existsImportWithValue = this._context.ImportData.Any(w => w.ValueLaunch == f.ValueLaunch);
+
+            return existsValueOnLaunch && existsImportWithValue;
         }
 
         public async Task<ImportRequest> ProcessImport(ImportRequest importRequest, int accountId)
@@ -57,11 +60,51 @@ namespace Repository
 
             this._context.Launch.AddRange(launchListMapped);
 
+            UpdateBudgetWords(launchListMapped);
+
             CreateRegisterImport(launchListMapped, importRequest);
 
             await this._context.SaveChangesAsync();
 
             return importRequest;
+        }
+
+        public List<ImportModel> RemoveWasImported(List<ImportModel> dataList)
+        {
+            dataList.RemoveAll(w =>  this._context.ImportData.Any(a => a.ValueLaunch == w.ValueLaunch && a.DateLaunch == w.DateLaunch));
+            return dataList;
+        }
+
+        public IQueryable<Launch> GetIfLoaded(ImportModel f)
+        {
+            return this._context.Launch.Where(f => f.ValueExec == f.ValueExec && f.Day.Year == f.Day.Year);
+        }
+
+        private void UpdateBudgetWords(IEnumerable<Launch> launchListMapped)
+        {
+           foreach (var launch in launchListMapped)
+           {
+                var listWordsSplitted = launch.Description.Split(' ');
+                
+                if(listWordsSplitted.Length > 0)
+                {
+                    foreach (var word in listWordsSplitted)
+                    {
+                        if(!this._context.BudgetWords.Any(x => x.BudgetWord  == word && x.BudgetId == launch.BudgetId) && !string.IsNullOrEmpty(word))
+                        {
+                            CreateNewBudgetWord(launch.BudgetId,word);
+                        }
+                    }
+                }
+           }
+        }
+
+        private void CreateNewBudgetWord(int budgetId, string word)
+        {
+            var budget = this._context.Budget.FirstOrDefault(f => f.Id == budgetId);
+            budget.BudgetWords.Add(new BudgetWords { BudgetId = budgetId, BudgetWord = word, DateCreated = DateTime.Now, UserCreated = "ImportAdmin" });
+
+            this._context.SaveChanges();
         }
 
         private void CreateRegisterImport(IEnumerable<Launch> launchListMapped, ImportRequest importRequest)

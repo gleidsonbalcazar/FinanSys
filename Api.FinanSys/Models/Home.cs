@@ -15,5 +15,7 @@ namespace FinansysControl.Models
 
         public string TypeBudget { get; set; }
 
+        public bool Planned { get; set; }
+
     }
 }
