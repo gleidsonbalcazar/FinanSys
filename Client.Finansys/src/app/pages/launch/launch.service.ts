@@ -107,7 +107,10 @@ export class LaunchService extends CrudService<launch, number> {
         this.launchs = s;
         //   .filter((s) => new Date(s.day).getMonth() ===  this.monthId - 1);
         //   //.sort((a, b) => (a.day > b.day ? -1 : 1));
-        this._launchs$.next(this.launchs);
+        //console.log('1',this.launchs$);
+        setTimeout( () => {  this._launchs$.next(this.launchs); }, 2000 );
+
+        //console.log('2',this.launchs$);
      // }
     });
   }

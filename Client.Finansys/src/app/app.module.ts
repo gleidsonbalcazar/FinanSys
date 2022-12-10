@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -27,6 +27,9 @@ import { LaunchComponent } from './pages/launch/launch.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FooterComponent } from './footer/footer.component';
 import { DropdownMultiselectModule } from './core/dropdown-multiselect/dropdown-multiselect.module';
+import { NgxLoadingModule } from 'ngx-loading';
+import { LoaderModule } from './core/load/loader.module';
+import { LoaderInterceptor } from './core/load/loader.interceptor';
 
 
 @NgModule({
@@ -59,6 +62,8 @@ import { DropdownMultiselectModule } from './core/dropdown-multiselect/dropdown-
     ChartsModule,
     ConfirmDialogModule,
     PipeModule,
+    LoaderModule,
+    NgxLoadingModule,
     ToastrModule.forRoot({
       timeOut: 1600,
       maxOpened: 0,
@@ -69,7 +74,15 @@ import { DropdownMultiselectModule } from './core/dropdown-multiselect/dropdown-
     }),
     NgbModule
   ],
-  providers: [DecimalPipe,AppService],
+  providers: [
+    DecimalPipe,
+    AppService,
+    {
+    provide: HTTP_INTERCEPTORS,
+    useClass: LoaderInterceptor,
+    multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

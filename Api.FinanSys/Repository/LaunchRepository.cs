@@ -30,14 +30,14 @@ namespace Repository
 
         public ActionResult<bool> CheckDuplicate(Launch launch)
         {
-            return this._context.Launch.Any(w => (w.Day.Month == launch.Day.Month && w.Day.Year == launch.Day.Year) 
-                                            && (w.ValueExec == launch.ValueExec || w.ValuePrev == launch.ValuePrev)
+            return this._context.Launch.Any(w => w.Day.Month == launch.Day.Month && w.Day.Year == launch.Day.Year
+                                            && (launch.ValueExec > 0 ? w.ValueExec == launch.ValueExec : false || launch.ValuePrev > 0 ? w.ValuePrev == launch.ValuePrev: false)
                                             );
         }
 
         public bool CheckIfLoaded(ImportModel f)
         {
-            var existsValueOnLaunch = this._context.Launch.Any(w => w.ValueExec == f.ValueLaunch || w.ValuePrev == f.ValueLaunch);
+            var existsValueOnLaunch = this._context.Launch.Any(w => f.ValueLaunch > 0 ? w.ValueExec == f.ValueLaunch : false || f.ValueLaunch > 0 ? w.ValuePrev == f.ValueLaunch: false);
             var existsImportWithValue = this._context.ImportData.Any(w => w.ValueLaunch == f.ValueLaunch);
 
             return existsValueOnLaunch && existsImportWithValue;
@@ -73,11 +73,6 @@ namespace Repository
         {
             dataList.RemoveAll(w =>  this._context.ImportData.Any(a => a.ValueLaunch == w.ValueLaunch && a.DateLaunch == w.DateLaunch));
             return dataList;
-        }
-
-        public IQueryable<Launch> GetIfLoaded(ImportModel f)
-        {
-            return this._context.Launch.Where(f => f.ValueExec == f.ValueExec && f.Day.Year == f.Day.Year);
         }
 
         private void UpdateBudgetWords(IEnumerable<Launch> launchListMapped)

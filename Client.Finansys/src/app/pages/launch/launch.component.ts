@@ -24,21 +24,19 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
   providers: [BudgetService, LaunchService],
 })
 export class LaunchComponent extends BaseComponent {
-  public selectedMonth:number;
-  public selectedYear:number;
-  public launchs: launch[] = [];
-  public accounts: Account[] = [];
-  public typeBudgets: budget[] = [];
-  public searchText!: string;
-  public monthId: number = new Date().getMonth() + 1;
+  selectedMonth:number;
+  selectedYear:number;
+  launchs: launch[] = [];
+  accounts: Account[] = [];
+  typeBudgets: budget[] = [];
+  searchText!: string;
+  monthId: number = new Date().getMonth() + 1;
   titleForm!: string;
   launchs$: Observable<launch[]>;
   total$: Observable<number>;
-  @ViewChild("modal")
-  private modal!: ModalComponent;
 
-  @ViewChildren(NgbdSortableHeader)
-  headers!: QueryList<NgbdSortableHeader>;
+  @ViewChild("modal") private modal!: ModalComponent;
+  @ViewChildren(NgbdSortableHeader) headers!: QueryList<NgbdSortableHeader>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -97,17 +95,17 @@ export class LaunchComponent extends BaseComponent {
     var formSend = <launch>this.myForm.value;
     this.launchService.checkDuplicate(formSend).subscribe((f) => {
       let that = this;
-      // if (f) {
-      //   this.confirmDialogService.confirmThis(
-      //     "É possível já ter efetuado este lançamento, tem certeza que deseja continuar?",
-      //     function () {
-      //      that.submitForm(formSend,nextBe);
-      //     },
-      //     function () {}
-      //   );
-      // }else {
+      if (f) {
+        this.confirmDialogService.confirmThis(
+          "É possível já ter efetuado este lançamento, tem certeza que deseja continuar?",
+          function () {
+           that.submitForm(formSend,nextBe);
+          },
+          function () {}
+        );
+      }else {
         that.submitForm(formSend,nextBe);
-      //}
+      }
     });
   }
 
@@ -257,19 +255,18 @@ export class LaunchComponent extends BaseComponent {
     this.launchService.sortDirection = direction;
   }
 
-  // confirmDuplicateModal(formSend: launch){
-  //     this.confirmDialogService.confirmThis("Are you sure to delete?", function () {
-  //       alert("Yes clicked");
-  //     }, function () {
-  //       alert("No clicked");
-  //     })
-  //     if (formSend.id === null) {
-  //       //this.createLaunch(formSend);
-  //     } else {
-  //       //this.updateLaunch(formSend);
-  //     }
-
-  // }
+  confirmDuplicateModal(formSend: launch){
+      this.confirmDialogService.confirmThis("Are you sure to delete?", function () {
+        alert("Yes clicked");
+      }, function () {
+        alert("No clicked");
+      })
+      if (formSend.id === null) {
+        this.createLaunch(formSend);
+      } else {
+        this.updateLaunch(formSend);
+      }
+  }
 }
 
 
