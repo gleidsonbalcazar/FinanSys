@@ -1,7 +1,7 @@
 #stage 1
 FROM node:latest as node
 WORKDIR /app
-EXPOSE 80
+EXPOSE 80 443
 COPY . .
 RUN npm install
 RUN npm run build --prod
