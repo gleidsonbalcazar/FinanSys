@@ -9,6 +9,15 @@ jobs:
     steps:
       - name: Repository checkout
         uses: actions/checkout@v2
+      - name: Load private SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets. secrets.KEY }}
+      - name: Atomic Deploy
+        run: |
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} << EOF
+            whoami
+          EOF
       - name: Deploy NodeJS app
         uses: appleboy/ssh-action@master
         with:
