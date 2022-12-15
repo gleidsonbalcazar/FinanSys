@@ -10,9 +10,9 @@ jobs:
       - name: Deploy NodeJS app
         uses: appleboy/ssh-action@master
         with:
-          host: ${{secrets.SSH_HOST}} # IP address of the server you wish to ssh into
+          host: ${{secrets.SSH_HOST}} 
           port: ${{ secrets.SSH_SERVER_PORT }}
-          key: ${{secrets.SSH_KEY}} # Private or public key of the server
-          username: ${{ secrets.SSH_USERNAME }} # User of the server you want to ssh into   
+          password: ${{secrets.SSH_PASSWORD}} 
+          username: ${{ secrets.SSH_USERNAME }} 
           script: |
             whoami
