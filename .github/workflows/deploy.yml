@@ -10,7 +10,7 @@ jobs:
       - name: Repository checkout
         uses: actions/checkout@v2
       - name: Deploy NodeJS app
-        uses: appleboy/ssh-action@v0.1.4
+        uses: appleboy/ssh-action@master
         with:
           host: ${{secrets.SSH_HOST}} # IP address of the server you wish to ssh into
           port: ${{ secrets.SSH_SERVER_PORT }}
