@@ -17,4 +17,5 @@ jobs:
           script: |
             git clone git@github.com:gleidsonbalcazar/finansys.git
             cd finansys
+            docker build
             docker compose up
