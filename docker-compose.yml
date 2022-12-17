@@ -29,5 +29,3 @@ services:
       MSSQL_ENABLE_HADR: 1
     ports:
       - "1433:1433"
-    volumes:
-      - D:\SQLSERVER\data:/var/opt/mssql/data

@@ -15,4 +15,6 @@ jobs:
           password: ${{secrets.SSH_PASSWORD}} 
           username: ${{ secrets.SSH_USERNAME }} 
           script: |
-            whoami
+            git clone git@github.com:gleidsonbalcazar/finansys.git
+            cd finansys
+            docker compose -f ~/nginx-proxy-compose.yml up -d
