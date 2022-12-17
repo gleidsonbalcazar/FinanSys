@@ -15,6 +15,7 @@ jobs:
           password: ${{secrets.SSH_PASSWORD}} 
           username: ${{ secrets.SSH_USERNAME }} 
           script: |
+            rm -rf finansys
             git clone git@github.com:gleidsonbalcazar/finansys.git
             cd finansys
             docker build
