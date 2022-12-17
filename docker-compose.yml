@@ -11,7 +11,7 @@ services:
       - db
       - api
   api:
-    build: Api.Finansys/Dockerfile
+    build: Api.Finansys/.
     restart: unless-stopped
     environment:
       ASPNETCORE_ENVIRONMENT: Production
