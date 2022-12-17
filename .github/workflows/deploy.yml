@@ -18,5 +18,5 @@ jobs:
             rm -rf finansys
             git clone git@github.com:gleidsonbalcazar/finansys.git
             cd finansys
-            docker build
-            docker compose up
+            docker-compose build
+            docker-compose up
