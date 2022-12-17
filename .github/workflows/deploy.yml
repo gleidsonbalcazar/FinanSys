@@ -17,4 +17,4 @@ jobs:
           script: |
             git clone git@github.com:gleidsonbalcazar/finansys.git
             cd finansys
-            docker compose -f ~/nginx-proxy-compose.yml up -d
+            docker compose up
