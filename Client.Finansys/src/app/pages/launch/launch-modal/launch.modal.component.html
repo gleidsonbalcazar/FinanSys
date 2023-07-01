@@ -1,96 +1,10 @@
-<div class="container">
-  <form>
-    <div class="form-group">
-      <div class="row">
-        <div class="col">
-          <input
-            class="form-control ml-2"
-            type="text"
-            name="searchTerm"
-            placeholder="Pesquisar"
-            [(ngModel)]="launchService.searchTerm"
-          />
-          <span class="ml-3" *ngIf="launchService.loading$ | async">Carregando...</span>
-        </div>
-        <div class="col text-right">
-          <button (click)="addLaunch2()" class="btn btn-primary">
-            <i class="fas fa-plus fa-fw" style="cursor: hand"></i>
-            Adicionar
-          </button>
-        </div>
-      </div>
-    </div>
-  </form>
-
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col" sortable="description" (sort)="onSort($event)">Descrição</th>
-        <th scope="col" sortable="budget" (sort)="onSort($event)">Tipo</th>
-        <th scope="col" sortable="account" (sort)="onSort($event)">Conta</th>
-        <th scope="col" sortable="day" (sort)="onSort($event)">Data</th>
-        <th scope="col" sortable="valuePrev" (sort)="onSort($event)">Valor Previsto</th>
-        <th scope="col" sortable="valueExec" (sort)="onSort($event)">Valor Executado</th>
-        <th scope="col">Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr [ngClass]="launch.valuePrev > 0 ? 'trPrev' : ''"
-          *ngFor="let launch of launchs$ | async">
-          <td>{{ launch.description }}</td>
-          <td>{{ launch.budget.description }}</td>
-          <td><p class="accountType" [ngClass]="launch.accountId == 2 ? 'blue':''">{{getAccountNameIcon(launch.accountId)}}</td>
-          <td>{{ launch.day | date: "dd/MM/yyyy" }}</td>
-          <td [ngClass]="launch.typeLaunch === 'R' ? 'line-r' : 'line-d'">
-            {{ launch.valuePrev | currency: "EUR":true }}
-          </td>
-          <td [ngClass]="launch.typeLaunch === 'R' ? 'line-r' : 'line-d'">
-            {{ launch.valueExec | currency: "EUR":true }}
-          </td>
-          <td>
-            <span (click)="editLaunch(launch)"
-              ><i class="fas fa-edit fa-fw" style="cursor: pointer" title="Editar Lançamento"></i
-            ></span>
-            <span (click)="deleteLaunch(launch)"
-              ><i class="fas fa-trash-alt fa-fw" style="cursor: pointer" title="Remover Lançamento"></i
-            ></span>
-            <span (click)="executePrev(launch)" *ngIf="launch.valuePrev > 0"
-            ><i class="fas fa-money-bill-alt fa-fw" style="cursor: pointer" title="Tornar Lançamento Executado"></i
-          ></span>
-          </td>
-      </tr>
-      <tr class="bg-light-gray">
-        <td><b>Total</b></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><b>{{ getTotalExpensesPrev() | currency: "EUR":true}}</b></td>
-        <td><b>{{ getTotalExpensesExec() | currency: "EUR":true}}</b></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="d-flex justify-content-between p-2">
-    <ngb-pagination
-      [collectionSize]="(total$ | async)!"
-      [(page)]="launchService.page"
-      [pageSize]="launchService.pageSize"
-    >
-    </ngb-pagination>
-
-    <select
-      class="custom-select"
-      style="width: auto"
-      name="pageSize"
-      [(ngModel)]="launchService.pageSize"
-    >
-      <option [ngValue]="10">10 itens por page</option>
-      <option [ngValue]="25">25 itens por page</option>
-      <option [ngValue]="50">50 itens por page</option>
-    </select>
-  </div>
+<div class="modal-header">
+  <h4 class="modal-title">{{title}}</h4>
+  <button type="button" id="close" class="close" aria-label="Close" (click)="activeModal.close(0)">
+    <span aria-hidden="true">&times;</span>
+  </button>
 </div>
-<!-- <modal #modal [modalConfig]="modalConfig" (clickSave)="save($event)">
+<div class="modal-body">
   <form [formGroup]="myForm">
     <div class="form-group ml-3">
       <div class="form-check form-check-inline">
@@ -225,4 +139,8 @@
       </div>
     </div>
   </form>
-</modal> -->
+</div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-primary" (click)="save(false)">Salvar</button>
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close(0)">Close</button>
+</div>

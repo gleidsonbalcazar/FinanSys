@@ -8,15 +8,15 @@
             <div class="col-6">
               <form>
                 <div>
-                  <div class="row justify-content-center">
-                    <div class="col-3">
+                  <div class="row-orcamentos">
+                    <div class="row-adicionar">
                       <button (click)="addBudget()" class="btn btn-primary">
-                        Adicionar
+                        <i class="fas fa-plus fa-fw" style="cursor: hand"></i> Adicionar
                       </button>
                     </div>
-                    <div class="col-5">
+                    <div class="row-mostrarTodos">
                       <button (click)="showAll()" type="button" class="btn btn-warning text-wrap">
-                        {{showAllFields ? "Somente Ativos" : "Mostrar Todos"}}
+                        <i class="fas fa-eye fa-fw" style="cursor: hand"></i> {{showAllFields ? "Somente Ativos" : "Mostrar Todos"}}
                       </button>
                     </div>
                   </div>
@@ -30,9 +30,6 @@
             <thead>
               <tr>
                 <th scope="col">Descrição</th>
-                <th scope="col">Valor</th>
-                <th scope="col">Meses Config</th>
-                <!-- <th scope="col">Tipo</th> -->
                 <th scope="col">Ativo</th>
                 <th scope="col">Ações</th>
               </tr>
@@ -40,11 +37,6 @@
             <tbody>
               <tr *ngFor="let budget of budgets">
                 <td>{{ budget.description }}</td>
-                <td [ngClass]="budget.typeBudget === 'R' ? 'line-r' : 'line-d'">
-                  {{ budget.value | currency: "EUR":true }}
-                </td>
-                <td>{{ getMonth(budget.budgetConfig) }}</td>
-                <!-- <td>{{ budget.default ? "Padrão" : "" }}</td> -->
                 <td *ngIf="budget.active" class="text-center text-success" (click)="updateStatus(budget)">
                   <i class="fas fa-solid fa-check" style="cursor: pointer"></i></td>
                 <td *ngIf="!budget.active" class="text-center text-danger" (click)="updateStatus(budget)">
@@ -54,8 +46,7 @@
                       class="fas fa-solid fa-file-word fa-fw" style="cursor: hand"></i></span>
                   <span style="cursor: pointer" (click)="editBudget(budget)"><i class="fas fa-pen fa-fw"
                       style="cursor: hand"></i></span>
-                  <!-- <span style="cursor: pointer" (click)="deleteBudget(budget)"><i class="fas fa-trash fa-fw"
-                      style="cursor: hand"></i></span> -->
+
                 </td>
               </tr>
             </tbody>

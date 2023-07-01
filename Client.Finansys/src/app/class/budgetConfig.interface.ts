@@ -3,5 +3,6 @@ export interface BudgetConfig {
   budgetId?:number,
   month: number,
   year: number,
+  value: number,
   active: boolean
 }

@@ -38,7 +38,12 @@
                   let i = index
                 "
               >
-                <td>{{ b.description }}</td>
+                <td class="d-flex ">
+                  {{ b.description }}
+                  <div class="add">
+                    <i *ngIf="ifAvailableToLaunch(b)" class="fas fa-plus fa-fw add-to-Launch" style="cursor: hand" title="Adicionar aos lançamentos" (click)="addToLaunch(b)"></i>
+                  </div>
+                </td>
                 <td [ngClass]="b.typeBudget === 'R' ? 'line-r' : 'line-d'">
                   {{ b.valuePrev | currency: "EUR":true }}
                 </td>

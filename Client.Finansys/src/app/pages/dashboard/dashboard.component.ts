@@ -3,10 +3,13 @@ import * as moment from "moment";
 import { AppService } from 'src/app/app.service';
 import { Account } from 'src/app/class/account.interface';
 import { homeResume } from 'src/app/class/homeResume.interface';
-import { budget } from '../../class/budget.interface';
+import { Budget } from '../../class/budget.class';
 import { home } from '../../class/home.interface';
 import { launch } from '../../class/launch.interface';
 import { DashboardService } from './dashboard.service';
+import { LaunchService } from '../launch/launch.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { LaunchModalComponent } from '../launch/launch-modal/launch.modal.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,7 +19,7 @@ import { DashboardService } from './dashboard.service';
 export class DashBoardComponent implements OnInit{
   public searchText!: string;
   public launchs!: launch[];
-  public budgets!: budget[];
+  public budgets!: Budget[];
   public painel!: home[];
   public accounts!: Account[];
   public monthId!: number;
@@ -26,7 +29,9 @@ export class DashBoardComponent implements OnInit{
 
   constructor(
     private painelService: DashboardService,
-    public  appService:AppService
+    public appService:AppService,
+    public launchService: LaunchService,
+    public modalService: NgbModal,
     ) {
 
   }
@@ -60,13 +65,18 @@ export class DashBoardComponent implements OnInit{
     return `Ultima atualização em: ${moment(date).format("DD/MM/YYYY hh:mm:ss")}`;
   }
 
+  ifAvailableToLaunch(b:any){
+    return (b.valueExec || b.valuePrev) < b.valueOrc;
+  }
+
+  addToLaunch(b:any){
+    const modalRef = this.modalService.open(LaunchModalComponent,{ windowClass : "modal-pre-lg"});
+    modalRef.componentInstance.title = "Realizar Lançamento do Budget";
+  }
+
   checkLastDateUpdated(date:any):boolean{
     const dateReg = new Date(date).getTime();
     const dateIn = new Date();
-    // console.log(dateReg);
-    // console.log(dateIn.setDate(dateIn.getDate()-7));
-    // console.log(dateReg <= dateIn.setDate(dateIn.getDate()-7));
-
     return dateReg <= dateIn.setDate(dateIn.getDate()-7);
   }
 

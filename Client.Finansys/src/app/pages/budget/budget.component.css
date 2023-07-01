@@ -33,3 +33,16 @@
 .table-budget{
   max-height: calc(100vh - 150px);
 }
+
+.row-orcamentos {
+  display: flex;
+  text-align: end;
+}
+
+.row-adicionar {
+  flex:1
+}
+
+.row-mostrarTodos{
+  flex: 1
+}

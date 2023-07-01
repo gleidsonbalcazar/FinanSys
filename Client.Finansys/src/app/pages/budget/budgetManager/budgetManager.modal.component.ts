@@ -1,12 +1,12 @@
-import { Component, Input } from "@angular/core";
-import { FormBuilder, Validators } from "@angular/forms";
+import { Component, HostListener, Input } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
-import { budget } from "src/app/class/budget.interface";
+import { Budget } from "src/app/class/budget.class";
 import { BudgetConfig } from "src/app/class/budgetConfig.interface";
 import { BaseComponent } from "src/app/core/baseComponent/base";
-import { DropdownMultiselectInterface } from "src/app/core/dropdown-multiselect/dropdown-multiselect.interface";
 import { BudgetService } from "../budget.service";
+import { ViewportScroller } from "@angular/common";
 
 @Component({
   selector: "app-budget-manager",
@@ -14,12 +14,19 @@ import { BudgetService } from "../budget.service";
   styleUrls: ["./budgetManager.modal.component.css"],
 })
 export class BudgetManagerModalComponent extends BaseComponent{
+  @HostListener('window:scroll')
 
-  @Input() budget:budget;
+  formDetails: FormGroup;
+  formConfig: FormGroup;
+  @Input() budget:Budget;
   @Input() title:string;
-  monthsList:DropdownMultiselectInterface[] = [];
+
   budgetConfig:BudgetConfig[] = [];
-  budgetIdSelected:number[];
+  monthsList: any[];
+  yearsList: any[];
+  configAction: string = 'ADD';
+  pageYoffset: number;
+
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -32,50 +39,142 @@ export class BudgetManagerModalComponent extends BaseComponent{
 
   override ngOnInit() {
     this.createForm();
-    if(this.budget?.id>0){
-      this.myForm.setValue(this.budget);
-      this.budgetIdSelected  =this.budget.budgetConfig.map(m => m.month);
-      this.monthsList.filter(f =>  this.budgetIdSelected.includes(f._id)).forEach(e => e.checked = true);
+    if(this.budget?.id > 0){
+      this.budget.budgetConfig = this.budget.budgetConfig.sort((a,b) => { return b.year - a.year ||a.month - b.month})
+      this.formDetails.setValue(this.budget);
+    } else {
+      this.createBudgetObject();
     }
   }
 
+
+  createBudgetObject():void {
+    this.budget = new Budget({ budgetConfig: [], budgetWords:[]});
+  }
+
+  addMonthYear(){
+    let yearValue = this.formConfig.controls['yearValue'].value;
+    let monthValue = this.formConfig.controls['monthValue'].value;
+    let inputValue = this.formConfig.controls['value'].value;
+
+    if(yearValue == null || monthValue == null || inputValue == null){
+      this.toastr.warning('É necessário preencher o Ano/Mês/Valor para adicionar uma configuração');
+      return;
+    }
+
+    let budgetExists = this.budget.budgetConfig.find(f => f.month == monthValue && f.year == yearValue);
+    if(budgetExists != null && this.configAction == 'ADD'){
+      this.toastr.warning('Não é possível adicionar a configuração para um mês/ano já existente.');
+      return;
+    }
+
+
+    if(monthValue > 12 && this.configAction == 'ADD'){
+      for (let month_index = 1; month_index <= 12; month_index++) {
+        var budgetConf:BudgetConfig = { id: null, budgetId: this.budget?.id??0 ,month: +month_index, year: +yearValue, active: true, value: inputValue};
+        this.budget.budgetConfig.push(budgetConf);
+      }
+    } else {
+      var budgetConf:BudgetConfig = { id: null, budgetId: this.budget?.id??0 ,month: +monthValue, year: +yearValue, active: true, value: inputValue};
+      this.budget.budgetConfig.push(budgetConf);
+    }
+
+
+    this.formDetails.controls['budgetConfig'].patchValue(this.budget.budgetConfig);
+
+    this.clearConfigForm();
+
+  }
+
+  clearConfigForm() {
+    this.formConfig.reset();
+  }
+
+  override clearForm(): void {
+    this.formDetails.reset();
+  }
+
+  editBudgetConfig(config:any){
+    this.formConfig.controls['monthValue'].setValue(config.month);
+    this.formConfig.controls['yearValue'].setValue(config.year);
+    this.formConfig.controls['value'].setValue(config.value);
+    this.configAction = 'EDIT';
+    let el = document.getElementById('value');
+    el.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+  }
+
+  updateMonthYear(){
+    let yearValue = this.formConfig.controls['yearValue'].value;
+    let monthValue = this.formConfig.controls['monthValue'].value;
+    let budgetExists = this.budget.budgetConfig.find(f => f.month == monthValue && f.year == yearValue);
+    this.removeBudgetConfig(budgetExists);
+    this.addMonthYear();
+    this.configAction = 'ADD';
+
+  }
+
+  removeBudgetConfig(config:any){
+    let index = this.budget.budgetConfig.findIndex(f => f == config);
+    this.budget.budgetConfig.splice(index,1);
+  }
+
   createForm() {
-    this.myForm = this.formBuilder.group({
+    this.formDetails = this.formBuilder.group({
       id: [null],
       description: [null, Validators.required],
-      value: [0, Validators.required],
       budgetConfig: [null],
       budgetWords: [null],
+      value: null,
       typeBudget: [null, Validators.required],
       active: [true],
       userCreated: ['Web'],
       default: null,
-      dateCreated: [new Date()]
+      dateCreated: [new Date()],
+    });
+
+    this.formConfig = this.formBuilder.group({
+      value:[],
+      yearValue:null,
+      monthValue:null,
     });
 
     this.monthsList = [
-      { _id: 1, label: 'Janeiro', badgeLabel: '0', color: 'badge-light-green', checked: false},
-      { _id: 2, label: 'Fevereiro', badgeLabel: '0', color: 'badge-light-green', checked: false},
-      { _id: 3, label: 'Março', badgeLabel: '0', color: 'badge-light-green', checked: false},
-      { _id: 4, label: 'Abril', badgeLabel: '0', color: 'badge-light-green', checked: false},
-      { _id: 5, label: 'Maio', badgeLabel: '0', color: 'badge-light-green', checked: false},
-      { _id: 6, label: 'Junho', badgeLabel: '0', color: 'badge-light-green', checked: false},
-      { _id: 7, label: 'Julho', badgeLabel: '0', color: 'badge-light-green', checked: false},
-      { _id: 8, label: 'Agosto', badgeLabel: '0', color: 'badge-light-green', checked: false},
-      { _id: 9, label: 'Setembro', badgeLabel: '0', color: 'badge-light-green', checked: false},
-      { _id: 10, label: 'Outubro', badgeLabel: '0', color: 'badge-light-green', checked: false},
-      { _id: 11, label: 'Novembro', badgeLabel: '0', color: 'badge-light-green', checked: false},
-      { _id: 12, label: 'Dezembro', badgeLabel: '0', color: 'badge-light-green', checked: false},
+      { id: null, label: 'Selecione o Mês'},
+      { id: 1, label: 'Janeiro'},
+      { id: 2, label: 'Fevereiro'},
+      { id: 3, label: 'Março'},
+      { id: 4, label: 'Abril'},
+      { id: 5, label: 'Maio'},
+      { id: 6, label: 'Junho'},
+      { id: 7, label: 'Julho'},
+      { id: 8, label: 'Agosto'},
+      { id: 9, label: 'Setembro'},
+      { id: 10, label: 'Outubro'},
+      { id: 11, label: 'Novembro'},
+      { id: 12, label: 'Dezembro'},
+      { id: 999, label: '- TODOS -'},
+    ];
+
+    this.yearsList = [
+      { id: null, label: 'Selecione o Ano'},
+      { id: 2024, label: '2024'},
+      { id: 2023, label: '2023'},
+      { id: 2022, label: '2022'},
+      { id: 2021, label: '2021'},
+      { id: 2020, label: '2020'},
+      { id: 2019, label: '2019'},
+      { id: 2018, label: '2018'},
     ];
   }
 
-  selectMonth(ev){
-    this.budgetIdSelected = ev.status;
+  getMonthDescription(id:number):string{
+    let monthObj = this.monthsList.find(f => f.id == id);
+    return monthObj.label;
   }
 
+
   submitForm(): void {
-    this.loadBudgetConfigOnForm();
-    var formSend = <budget>this.myForm.value;
+    var formSend = this.formDetails.value;
     if (formSend.id === null) {
       this.createBudget(formSend);
     } else {
@@ -83,18 +182,8 @@ export class BudgetManagerModalComponent extends BaseComponent{
     }
   }
 
-  loadBudgetConfigOnForm() {
-    for (let index = 0; index < this.budgetIdSelected.length; index++) {
-       let value:number = Number(this.budgetIdSelected[index]);
-       var budgetConf:BudgetConfig = { month: value, year: new Date().getFullYear(), active: true};
-       this.budgetConfig.push(budgetConf);
-    }
 
-    this.myForm.controls['budgetConfig'].patchValue(this.budgetConfig);
-  }
-
-
-  updateBudget(formSend: budget) {
+  updateBudget(formSend: Budget) {
     this.budgetService.update(formSend.id, formSend).subscribe(
       (f) => {
         this.clearForm();
@@ -107,7 +196,13 @@ export class BudgetManagerModalComponent extends BaseComponent{
     );
   }
 
-  createBudget(formSend: budget) {
+  createBudget(formSend: Budget) {
+
+    if(formSend.budgetConfig == null){
+      this.toastr.warning('É necessário ter uma configuração de Ano/Mês/Valor para este orçamento');
+      return;
+    }
+
     this.budgetService.save(formSend).subscribe(
       (f) => {
         this.toastr.success('Orçamento criado com sucesso');

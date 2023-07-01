@@ -4,12 +4,12 @@ import { ToastrService } from 'ngx-toastr';
 import { AppService } from 'src/app/app.service';
 import { Account } from 'src/app/class/account.interface';
 import { Banks } from 'src/app/class/banks.interface';
-import { budget } from 'src/app/class/budget.interface';
 import { ImportBank } from 'src/app/class/importBank.interface';
 import { BudgetService } from '../../budget/budget.service';
 import { LaunchService } from '../launch.service';
 import { ImportRequest } from '../../../class/importRequest.class';
 import * as moment from "moment";
+import { Budget } from 'src/app/class/budget.class';
 
 @Component({
   selector: 'launch-import',
@@ -20,7 +20,7 @@ export class LaunchImportComponent {
   importResponse!:ImportBank[];
   dataWithAutoBudget!:ImportBank[];
   dataWithOutAutoBudget!:ImportBank[];
-  public typeBudgets: budget[] = [];
+  public typeBudgets: Budget[] = [];
   public banks:Banks[] = [];
   public accounts: Account[] = [];
   public alertMsg: string = '';
@@ -64,7 +64,6 @@ export class LaunchImportComponent {
                                               this.typeBudgets.push(
                                                 { id: null,
                                                   description: '**Selecione o Orçamento',
-                                                  value: 0,
                                                   typeBudget:null,
                                                   active: true,
                                                   averageValue: 0,

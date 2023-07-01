@@ -30,6 +30,7 @@ import { DropdownMultiselectModule } from './core/dropdown-multiselect/dropdown-
 import { NgxLoadingModule } from 'ngx-loading';
 import { LoaderModule } from './core/load/loader.module';
 import { LoaderInterceptor } from './core/load/loader.interceptor';
+import { LaunchModalComponent } from './pages/launch/launch-modal/launch.modal.component';
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import { LoaderInterceptor } from './core/load/loader.interceptor';
     UploadComponent,
     ModalComponent,
     LaunchImportComponent,
+    LaunchModalComponent,
     DashBoardComponent,
     NgbdSortableHeader,
     BudgetManagerModalComponent,

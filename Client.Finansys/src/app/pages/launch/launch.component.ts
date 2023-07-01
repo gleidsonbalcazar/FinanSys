@@ -2,7 +2,6 @@ import { HttpClient } from "@angular/common/http";
 import { Component, Inject, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { BudgetService } from "../budget/budget.service";
-import { budget } from "../../class/budget.interface";
 import { launch } from "../../class/launch.interface";
 import * as moment from "moment";
 import { LaunchService } from "./launch.service";
@@ -16,6 +15,8 @@ import { ConfirmDialogService } from "src/app/core/modal/confirm/confirm-dialog.
 import { Router } from "@angular/router";
 import { Account } from "src/app/class/account.interface";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { Budget } from "src/app/class/budget.class";
+import { LaunchModalComponent } from "./launch-modal/launch.modal.component";
 
 @Component({
   selector: "app-launch",
@@ -28,7 +29,7 @@ export class LaunchComponent extends BaseComponent {
   selectedYear:number;
   launchs: launch[] = [];
   accounts: Account[] = [];
-  typeBudgets: budget[] = [];
+  typeBudgets: Budget[] = [];
   searchText!: string;
   monthId: number = new Date().getMonth() + 1;
   titleForm!: string;
@@ -45,13 +46,10 @@ export class LaunchComponent extends BaseComponent {
     public launchService: LaunchService,
     private confirmDialogService: ConfirmDialogService,
     private modalService: NgbModal,
-    private router: Router,
-    @Inject("BASE_URL") private baseUrl: string
   ) {
     super();
     this.getAccounts();
-    //this.getTypeBudgets();
-    this.createForm();
+    //this.createForm();
     this.launchs$ = launchService.launchs$;
     this.total$ = launchService.total$;
   }
@@ -64,7 +62,6 @@ export class LaunchComponent extends BaseComponent {
     this.appService.getYear().subscribe(r => this.selectedYear = r);
     this.appService.getMonth().subscribe(r => this.selectedMonth = r);
     this.budgetService.findAllByMonthAndYear(this.selectedMonth,this.selectedYear).subscribe((s) => (this.typeBudgets = s));
-    //this.budgetService.findAll(null).subscribe((s) => (this.typeBudgets = s));
   }
 
   getAccountNameIcon(id: number) {
@@ -87,55 +84,55 @@ export class LaunchComponent extends BaseComponent {
     }
   }
 
-  save(nextBe:boolean = false) {
-    this.submitted = true;
-    if (this.myForm.invalid) {
-         return;
-    }
-    var formSend = <launch>this.myForm.value;
-    this.launchService.checkDuplicate(formSend).subscribe((f) => {
-      let that = this;
-      if (f) {
-        this.confirmDialogService.confirmThis(
-          "É possível já ter efetuado este lançamento, tem certeza que deseja continuar?",
-          function () {
-           that.submitForm(formSend,nextBe);
-          },
-          function () {}
-        );
-      }else {
-        that.submitForm(formSend,nextBe);
-      }
-    });
-  }
+  // save(nextBe:boolean = false) {
+  //   this.submitted = true;
+  //   if (this.myForm.invalid) {
+  //        return;
+  //   }
+  //   var formSend = <launch>this.myForm.value;
+  //   this.launchService.checkDuplicate(formSend).subscribe((f) => {
+  //     let that = this;
+  //     if (f) {
+  //       this.confirmDialogService.confirmThis(
+  //         "É possível já ter efetuado este lançamento, tem certeza que deseja continuar?",
+  //         function () {
+  //          that.submitForm(formSend,nextBe);
+  //         },
+  //         function () {}
+  //       );
+  //     }else {
+  //       that.submitForm(formSend,nextBe);
+  //     }
+  //   });
+  // }
 
 
-  public modalConfig: ModalConfig = {
-    modalTitle: "",
-    hideDismissButton: () => true,
-    saveButtonLabel: "Salvar",
-    onClose: () => {
-      return true;
-    },
-    closeButtonLabel: "Fechar",
-  };
+  // public modalConfig: ModalConfig = {
+  //   modalTitle: "",
+  //   hideDismissButton: () => true,
+  //   saveButtonLabel: "Salvar",
+  //   onClose: () => {
+  //     return true;
+  //   },
+  //   closeButtonLabel: "Fechar",
+  // };
 
-  submitForm(formSend:any,nextBe:boolean) {
-    if (formSend.id === null) {
-      this.createLaunch(formSend);
-    } else {
-      this.updateLaunch(formSend);
-    }
-    this.resetForm();
-    if(!nextBe){
-      this.modalService.dismissAll();
-    }
-  }
+  // submitForm(formSend:any,nextBe:boolean) {
+  //   if (formSend.id === null) {
+  //     this.createLaunch(formSend);
+  //   } else {
+  //     this.updateLaunch(formSend);
+  //   }
+  //   this.resetForm();
+  //   if(!nextBe){
+  //     this.modalService.dismissAll();
+  //   }
+  // }
 
-  resetForm():void{
-    this.myForm.reset();
-    this.createForm();
-  }
+  // resetForm():void{
+  //   this.myForm.reset();
+  //   this.createForm();
+  // }
 
   public deleteLaunch(launch: launch): void {
     this.launchService.delete(launch.id).subscribe((f) => {
@@ -166,40 +163,61 @@ export class LaunchComponent extends BaseComponent {
     this.updateLaunch(launch);
   }
 
-  async addLaunch() {
-    this.getTypeBudgets();
-    this.modal.modalConfig.modalTitle = "Criar Lançamento";
-    this.myForm.reset();
-    this.createForm();
-    return await this.modal.open("");
-  }
+  // async addLaunch() {
+  //   this.getTypeBudgets();
+  //   this.modal.modalConfig.modalTitle = "Criar Lançamento";
+  //   this.myForm.reset();
+  //   this.createForm();
+  //   return await this.modal.open("");
+  // }
 
-  async editLaunch(launch: launch) {
-    this.getTypeBudgets();
-    this.modal.modalConfig.modalTitle = `Editar Lançamento ${launch.description}`;
-    this.myForm.patchValue({
-      id: launch.id,
-      description: launch.description,
-      budgetId: launch.budgetId,
-      accountId: launch.accountId,
-      day: moment(launch.day).format("YYYY-MM-DD"),
-      valuePrev: launch.valuePrev,
-      valueExec: launch.valueExec,
-      typeLaunch: launch.typeLaunch,
-      active: launch.active,
+  addLaunch2() {
+    const modalRef = this.modalService.open(LaunchModalComponent,{ windowClass : "modal-pre-lg"});
+    modalRef.componentInstance.title = "Criar Lançamento";
+    modalRef.result.then(r => {
+      if(r != 0) {
+        this.launchService.getLaunchs();
+      }
     });
-    return await this.modal.open("");
   }
 
-  private formatDate(date:any) {
-    const d = new Date(date);
-    let month = '' + (d.getMonth() + 1);
-    let day = '' + d.getDate();
-    const year = d.getFullYear();
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-    return [year, month, day].join('-');
+  editLaunch(launch: launch) {
+    const modalRef = this.modalService.open(LaunchModalComponent,{ windowClass : "modal-pre-lg"});
+    modalRef.componentInstance.title = `Editar Lançamento ${launch.description}`;
+    modalRef.componentInstance.launch = launch;
+    modalRef.result.then(r => {
+      if(r != 0) {
+        this.launchService.getLaunchs();
+      }
+    });
   }
+
+  // async editLaunch(launch: launch) {
+  //   this.getTypeBudgets();
+  //   this.modal.modalConfig.modalTitle = `Editar Lançamento ${launch.description}`;
+  //   this.myForm.patchValue({
+  //     id: launch.id,
+  //     description: launch.description,
+  //     budgetId: launch.budgetId,
+  //     accountId: launch.accountId,
+  //     day: moment(launch.day).format("YYYY-MM-DD"),
+  //     valuePrev: launch.valuePrev,
+  //     valueExec: launch.valueExec,
+  //     typeLaunch: launch.typeLaunch,
+  //     active: launch.active,
+  //   });
+  //   return await this.modal.open("");
+  // }
+
+  // private formatDate(date:any) {
+  //   const d = new Date(date);
+  //   let month = '' + (d.getMonth() + 1);
+  //   let day = '' + d.getDate();
+  //   const year = d.getFullYear();
+  //   if (month.length < 2) month = '0' + month;
+  //   if (day.length < 2) day = '0' + day;
+  //   return [year, month, day].join('-');
+  // }
 
   updateLaunch(formSend: launch) {
     this.launchService.update(formSend.id, formSend).subscribe(
@@ -211,38 +229,38 @@ export class LaunchComponent extends BaseComponent {
     );
   }
 
-  createLaunch(formSend: launch) {
-    this.launchService.save(formSend).subscribe((f) => {
-      this.launchService.getLaunchs();
-      this.clearForm();
-    });
-  }
+  // createLaunch(formSend: launch) {
+  //   this.launchService.save(formSend).subscribe((f) => {
+  //     this.launchService.getLaunchs();
+  //     this.clearForm();
+  //   });
+  // }
 
 
 
-  handleKeyUp(e) {
-    if (e.keyCode === 13) {
-      this.modal.save();
-    }
-  }
+  // handleKeyUp(e) {
+  //   if (e.keyCode === 13) {
+  //     this.modal.save();
+  //   }
+  // }
 
-  createForm() {
-    this.myForm = this.formBuilder.group({
-      id: [null],
-      description: [{ value: "", disabled: false }, Validators.required],
-      budgetId: [null, Validators.required],
-      accountId: [1, Validators.required],
-      day: [new Date(), Validators.required],
-      valuePrev: [{ value: 0, disabled: false }, Validators.required],
-      valueExec: [{ value: 0, disabled: false }, Validators.required],
-      typeLaunch: [null, Validators.required],
-      userCreated: ["Admin"],
-      dateCreated: [new Date()],
-      active: [true],
-    });
-    let dayForm  = this.myForm.get('day');
-    dayForm.patchValue(this.formatDate(new Date()));
-  }
+  // createForm() {
+  //   this.myForm = this.formBuilder.group({
+  //     id: [null],
+  //     description: [{ value: "", disabled: false }, Validators.required],
+  //     budgetId: [null, Validators.required],
+  //     accountId: [1, Validators.required],
+  //     day: [new Date(), Validators.required],
+  //     valuePrev: [{ value: 0, disabled: false }, Validators.required],
+  //     valueExec: [{ value: 0, disabled: false }, Validators.required],
+  //     typeLaunch: [null, Validators.required],
+  //     userCreated: ["Admin"],
+  //     dateCreated: [new Date()],
+  //     active: [true],
+  //   });
+  //   let dayForm  = this.myForm.get('day');
+  //   dayForm.patchValue(this.formatDate(new Date()));
+  // }
 
   onSort({ column, direction }: SortEvent) {
     this.headers.forEach((header) => {
@@ -255,18 +273,18 @@ export class LaunchComponent extends BaseComponent {
     this.launchService.sortDirection = direction;
   }
 
-  confirmDuplicateModal(formSend: launch){
-      this.confirmDialogService.confirmThis("Are you sure to delete?", function () {
-        alert("Yes clicked");
-      }, function () {
-        alert("No clicked");
-      })
-      if (formSend.id === null) {
-        this.createLaunch(formSend);
-      } else {
-        this.updateLaunch(formSend);
-      }
-  }
+  // confirmDuplicateModal(formSend: launch){
+  //     this.confirmDialogService.confirmThis("Are you sure to delete?", function () {
+  //       alert("Yes clicked");
+  //     }, function () {
+  //       alert("No clicked");
+  //     })
+  //     if (formSend.id === null) {
+  //       this.createLaunch(formSend);
+  //     } else {
+  //       this.updateLaunch(formSend);
+  //     }
+  // }
 }
 
 

@@ -2,9 +2,9 @@ import { Component, Input, NgZone } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
-import { budget } from "src/app/class/budget.interface";
 import { BudgetWord } from "src/app/class/budgetWord.interface";
 import { BudgetService } from "../budget.service";
+import { Budget } from "src/app/class/budget.class";
 
 @Component({
   selector: "app-budget-word",
@@ -12,7 +12,7 @@ import { BudgetService } from "../budget.service";
   styleUrls: ["./budgetWords.modal.component.css"],
 })
 export class BudgetWordsModalComponent {
-  @Input() budget:budget;
+  @Input() budget:Budget;
   @Input() budgetWords:BudgetWord[];
 
   public formWord: any;

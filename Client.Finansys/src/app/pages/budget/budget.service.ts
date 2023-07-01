@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BudgetWord } from 'src/app/class/budgetWord.interface';
-import { budget } from '../../class/budget.interface';
 import { CrudService } from '../../core/service/crud.service';
+import { Budget } from 'src/app/class/budget.class';
 
 @Injectable({
   providedIn: 'root',
 })
-export class BudgetService extends CrudService<budget, number> {
+export class BudgetService extends CrudService<Budget, number> {
   constructor(
     private http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string
