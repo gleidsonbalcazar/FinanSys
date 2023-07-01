@@ -1,5 +1,4 @@
 import { Component, Inject } from "@angular/core";
-import { budget } from "../../class/budget.interface";
 import { BudgetService } from "./budget.service";
 import { BaseComponent } from "../../core/baseComponent/base";
 import { Account } from "src/app/class/account.interface";
@@ -10,6 +9,7 @@ import { BudgetManagerModalComponent } from "./budgetManager/budgetManager.modal
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { BudgetConfig } from "src/app/class/budgetConfig.interface";
+import { Budget } from "src/app/class/budget.class";
 
 @Component({
   selector: "app-budget",
@@ -20,7 +20,7 @@ import { BudgetConfig } from "src/app/class/budgetConfig.interface";
 export class BudgetListComponent extends BaseComponent {
   public formWord: any;
 
-  public budgets: budget[];
+  public budgets: Budget[];
   public budgetWords: BudgetWord[];
   public searchText: string;
   public titleModalWords:string;
@@ -52,7 +52,7 @@ export class BudgetListComponent extends BaseComponent {
     });
   }
 
-  public deleteBudget(budget: budget): void {
+  public deleteBudget(budget: Budget): void {
     this.budgetService.delete(budget.id).subscribe(
       (f) => {
         this.getBudgets();
@@ -62,18 +62,18 @@ export class BudgetListComponent extends BaseComponent {
     );
   }
 
-  public getMonth(budgetConfig: BudgetConfig[]) {
-    if(budgetConfig==null)
-      return "";
+  // public getMonth(budgetConfig: BudgetConfig[]) {
+  //   if(budgetConfig==null)
+  //     return "";
 
-    let months = budgetConfig.map(m => m.month);
+  //   let months = budgetConfig.map(m => m.month);
 
-    let monthsDescArray = this.months.filter(f => months.includes(f.id)).map(m => m.pref);
+  //   let monthsDescArray = this.months.filter(f => months.includes(f.id)).map(m => m.pref);
 
-    return monthsDescArray.join(", ");
-  }
+  //   return monthsDescArray.join(", ");
+  // }
 
-  async editBudget(budget: budget) {
+  async editBudget(budget: Budget) {
     const modalRef = this.modalService.open(BudgetManagerModalComponent,{ windowClass : "modal-pre-lg"});
     modalRef.componentInstance.title = `Editar Orçamento ${budget.description}`;
     modalRef.componentInstance.budget = budget;
@@ -86,7 +86,7 @@ export class BudgetListComponent extends BaseComponent {
     modalRef.result.then(r => { if(r != 0) {this.budgets.push(r)}});
   }
 
-  async getBudgetWords(budget:budget){
+  async getBudgetWords(budget:Budget){
     const modalRef = this.modalService.open(BudgetWordsModalComponent,{ windowClass : "modal-pre-lg"});
     modalRef.componentInstance.budget = budget;
     modalRef.componentInstance.budgetWords = budget.budgetWords?.map( el => el = {...el, editable: false});
@@ -97,7 +97,7 @@ export class BudgetListComponent extends BaseComponent {
     modalRef.componentInstance.budgets = this.budgets;
   }
 
-  public updateStatus(budget:budget){
+  public updateStatus(budget:Budget){
     budget.active = !budget.active;
     this.budgetService.update(budget.id, budget).subscribe(
       (f) => {

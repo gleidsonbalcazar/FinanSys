@@ -2,8 +2,8 @@ import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
-import { budget } from 'src/app/class/budget.interface';
 import { IndicatorsService } from '../../indicators/indicators.service';
+import { Budget } from 'src/app/class/budget.class';
 
 @Component({
   selector: 'app-budget-indicators',
@@ -12,7 +12,7 @@ import { IndicatorsService } from '../../indicators/indicators.service';
 })
 export class BudgetIndicatorsModalComponent {
   @Input() budgetId: number = 4;
-  @Input() budgets: budget[];
+  @Input() budgets: Budget[];
 
   public averageExecValue: number;
   public averageOrcValue: number;

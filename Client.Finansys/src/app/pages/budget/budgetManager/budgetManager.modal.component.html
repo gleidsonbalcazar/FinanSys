@@ -1,60 +1,123 @@
 <div class="modal-header">
   <h4 class="modal-title">{{title}}</h4>
-  <button type="button" class="close" aria-label="Close" (click)="activeModal.close(0)">
+  <button type="button" id="close" class="close" aria-label="Close" (click)="activeModal.close(0)">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
 <div class="modal-body">
-  <form [formGroup]="myForm">
-    <div class="form-group">
-      <div class="form-group ml-3">
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" value="R" formControlName="typeBudget" />
-          <label class="form-check-label" for="typeBudgetRadio1">
-            Receita
-          </label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" value="D" formControlName="typeBudget" />
-          <label class="form-check-label" for="typeBudgetRadio2">
-            Despesa
-          </label>
-        </div>
-        <div *ngIf="submitted && f['typeBudget'].errors" class="text-danger">
-          <div *ngIf="f['typeBudget'].errors['required']">
-            Tipo de Orçamento Requerido
-          </div>
-        </div>
-      </div>
+  <ul ngbNav #nav="ngbNav" class="nav-tabs">
+    <li ngbNavItem>
+      <a ngbNavLink>Detalhes</a>
+      <ng-template ngbNavContent>
+        <form [formGroup]="formDetails">
+          <div class="form-group">
+            <div class="form-group ml-3">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" value="R" formControlName="typeBudget" />
+                <label class="form-check-label" for="typeBudgetRadio1">
+                  Receita
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" value="D" formControlName="typeBudget" />
+                <label class="form-check-label" for="typeBudgetRadio2">
+                  Despesa
+                </label>
+              </div>
+              <div *ngIf="submitted && f['typeBudget'].errors" class="text-danger">
+                <div *ngIf="f['typeBudget'].errors['required']">
+                  Tipo de Orçamento Requerido
+                </div>
+              </div>
+            </div>
 
-      <label for="description" class="col-sm-6 control-label">Descrição do Orçamento</label>
-      <div class="col-sm-12">
-        <input type="text" class="form-control" name="description" id="description"
-          placeholder="Descrição do Orçamento" formControlName="description" />
-        <div *ngIf="submitted && f['description'].errors" class="text-danger">
-          <div *ngIf="f['description'].errors['required']">Descrição Requerida</div>
+            <label for="description" class="col-sm-6 control-label">Descrição do Orçamento</label>
+            <div class="col-sm-12">
+              <input type="text" class="form-control" name="description" id="description"
+                placeholder="Descrição do Orçamento" formControlName="description" />
+              <div *ngIf="submitted && f['description'].errors" class="text-danger">
+                <div *ngIf="f['description'].errors['required']">Descrição Requerida</div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+      </ng-template>
+    </li>
+    <li ngbNavItem>
+      <a ngbNavLink>Configuração</a>
+      <ng-template ngbNavContent>
+        <form [formGroup]="formConfig">
+          <div class="addConfig">
+            <div class="linhas-config">
+              <div class="col-sm-3">
+                <select class="form-control" formControlName="yearValue">
+                  <option *ngFor="let t of yearsList" [value]="t.id">
+                    {{ t.label }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-sm-3">
+                <select class="form-control" formControlName="monthValue">
+                  <option *ngFor="let t of monthsList" [value]="t.id">
+                    {{ t.label }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-sm-3">
+                <input type="text" currencyMask class="form-control" name="value" id="value" placeholder="Valor"
+                  formControlName="value" />
+              </div>
+              <div class="col-sm-3 text-end align-self-center" *ngIf="configAction == 'ADD'">
+                <span style="cursor: pointer">
+                  <button class="btn btn-primary btn-sm" (click)="addMonthYear();">
+                    <i class="fas fa-plus fa-fw" style="cursor: hand"></i> Adicionar
+                  </button>
+                </span>
+              </div>
+              <div class="col-sm-3  align-self-center" *ngIf="configAction == 'EDIT'">
+                <button class="btn btn-primary btn-sm" (click)="updateMonthYear();">
+                  <i class="fas fa-edit fa-fw" style="cursor: hand"></i> Atualizar
+                </button>&nbsp;
+                <button class="btn btn-outline-dark btn-sm" (click)="configAction = 'ADD'">
+                  <i class="fas fa-mail-reply fa-fw" style="cursor: hand"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <table id="tableBudgets" class="table table-striped" *ngIf="budget?.budgetConfig.length > 0">
+          <thead>
+            <tr>
+              <th scope="col">Ano</th>
+              <th scope="col">Mês</th>
+              <th scope="col">Valor</th>
+              <th scope="col">Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let config of budget.budgetConfig">
+              <td>{{ config.year }}</td>
+              <td>{{ getMonthDescription(config.month) }}</td>
+              <td [ngClass]="budget.typeBudget == 'R' ? 'blue-value' : 'red-value'">
+                {{ config.value | currency: "EUR":true }}</td>
+              <td>
+                <span style="cursor: pointer"><i class="fas fa-edit fa-fw" style="cursor: hand"
+                    (click)="editBudgetConfig(config)"></i></span>
+                <span style="cursor: pointer"><i class="fas fa-trash fa-fw" style="cursor: hand"
+                    (click)="removeBudgetConfig(config)"></i></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="no-data" *ngIf="!budget">
+          Não existe configurações ainda atribuídas para este orçamento
         </div>
-      </div>
-    </div>
-    <div class="form-group d-flex flex-wrap flex-column">
-      <label for="value" class="col-sm-6 control-label">Valor:</label>
-      <div class="col-sm-6">
-        <input type="text" currencyMask class="form-control" name="value" id="value" placeholder="Valor"
-          formControlName="value" />
-        <div *ngIf="submitted && f['value'].errors" class="text-danger">
-          <div *ngIf="f['value'].errors['required']">Valor Requerido</div>
-        </div>
-      </div>
-    </div>
-    <div class="form-group d-flex flex-wrap flex-column">
-      <div class="col-sm-6">
-        <label for="month" class="">Meses:</label>
-        <app-dropdown-multiselect [showSelectedItens]="true" [statusList]="monthsList"
-          (statusChange)="selectMonth($event)">
-        </app-dropdown-multiselect>
-      </div>
-    </div>
-  </form>
+      </ng-template>
+    </li>
+  </ul>
+  <div [ngbNavOutlet]="nav"></div>
 </div>
 <div class="modal-footer">
   <button type="submit" class="btn btn-primary" (click)="submitForm()">Salvar</button>

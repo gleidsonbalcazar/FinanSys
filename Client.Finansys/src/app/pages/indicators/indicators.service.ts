@@ -2,8 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BudgetIndicator } from 'src/app/class/budgetIndicator.interface';
-import { home } from 'src/app/class/home.interface';
-import { budget } from '../../class/budget.interface';
 
 @Injectable({
   providedIn: 'root'

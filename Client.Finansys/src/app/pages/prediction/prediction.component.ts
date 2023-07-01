@@ -1,7 +1,7 @@
 import { Component, Inject, ViewChild } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { FormBuilder, Validators } from "@angular/forms";
-import { budget } from "../../class/budget.interface";
+import { budget } from "../../class/budget.class";
 import { Months } from "../../class/months.interface";
 import { ModalComponent } from "../../core/modal/modal.component";
 import { ModalConfig } from "../../core/modal/modal.config";

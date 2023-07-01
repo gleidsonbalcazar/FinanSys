@@ -4,3 +4,44 @@
   color: #FFF;
   border-bottom: 2px dashed cornflowerblue;
 }
+
+.tab-content {
+  min-height: 30vh;
+  max-height: 50vh;
+  overflow-y: auto;
+  padding: 20px 10px 10px 10px;
+  border-left: 1px solid #dee2e6;
+  border-bottom: 1px solid #dee2e6;
+  border-right: 1px solid #dee2e6;
+}
+
+.linhas-config {display: flex;}
+
+#tableBudgets { margin-top: 20px}
+
+.months {
+  flex:1
+}
+
+.years {
+  flex:1
+}
+
+.no-data {
+  padding: 10px;
+  text-align: center;
+  height: 100%;
+}
+
+.red-value {
+  color:red !important;
+}
+
+.blue-value {
+  color: blue !important;
+}
+
+
+
+
+
