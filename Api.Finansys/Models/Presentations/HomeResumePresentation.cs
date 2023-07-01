@@ -1,4 +1,4 @@
-public class HomeResume
+public class HomeResumePresentation
 {
     public decimal InBoundsExecuted { get; set; }
 

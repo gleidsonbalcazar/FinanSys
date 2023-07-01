@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Api.FinanSys.Models.Presentations;
 using FinansysControl.Models;
-using FinansysControl.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 
-namespace FinansysControl.Controllers
+namespace Api.FinanSys.Controllers.Indicators
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -20,7 +20,7 @@ namespace FinansysControl.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<IEnumerable<BudgetMonthIndicatorExecuted>> Get(int id)
+        public ActionResult<IEnumerable<BudgetMonthExecutedPresentation>> Get(int id)
         {
             return _repository.GetLineBudgetIndicators(id);
         }

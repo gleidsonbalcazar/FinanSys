@@ -4,7 +4,7 @@ using FinansysControl.Models.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 
-namespace FinansysControl.Controllers
+namespace Api.FinanSys.Controllers.Login
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -30,8 +30,8 @@ namespace FinansysControl.Controllers
             user.Password = "";
             return new
             {
-                user = user,
-                token = token
+                user,
+                token
             };
         }
     }

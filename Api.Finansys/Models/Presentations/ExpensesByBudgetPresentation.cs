@@ -1,6 +1,6 @@
-﻿namespace FinansysControl.Models.ViewModels
+﻿namespace Api.FinanSys.Models.Presentations
 {
-    public class ExpensesByBudgetView
+    public class ExpensesByBudgetPresentation
     {
         public int Id { get; set; }
 

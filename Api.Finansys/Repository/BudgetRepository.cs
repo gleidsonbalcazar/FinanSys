@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using Api.FinanSys.Models.ViewModels;
+using Api.FinanSys.Models.Entities;
+using Api.FinanSys.Models.Requests;
 using FinansysControl.Data;
-using FinansysControl.Models;
 using Repository.Base;
 
 namespace Repository
@@ -19,71 +19,45 @@ namespace Repository
             this._context = context;
         }
 
-        public void UpdateConfig(int? budgetId, BudgetReq budgetReq)
-        {
-            if (budgetId == null)
-            {
-                return;
-            }
 
-            budgetReq.Id = budgetId;
-            var monthsIncludedThisYear = this._context.BudgetConfig.Where(w => w.BudgetId == budgetId && w.Year == DateTime.Now.Year).Select(s => s.Month);
-
-            if (monthsIncludedThisYear.Count() > 0)
-            {
-                RemoveBudgetConfig(budgetId??0);
-            }
-
-            AddBudgetConfig(budgetReq, budgetReq.BudgetConfig.Select(s => s.Month));
-  
-            this._context.SaveChanges();
-
-        }
-
-        private void AddBudgetConfig(BudgetReq budget, IEnumerable<int> monthsNotIncludedThisYear)
-        {
-            foreach (var month in monthsNotIncludedThisYear)
-            {
-                var budgetConfig = new BudgetConfig()
-                {
-                    Active = true,
-                    BudgetId = (int)budget.Id,
-                    Month = month,
-                    Year = DateTime.Now.Year
-                };
-
-                this._context.BudgetConfig.Add(budgetConfig);
-            }
-
-        }
-
-        public void UpdateBudget(BudgetReq budgetReq)
+        public void UpdateBudget(BudgetRequest budgetReq)
         {
             var budget = this._context.Budget.FirstOrDefault(f => f.Id == budgetReq.Id);
+
+            budget.BudgetConfig.Clear();
+
             budget.Description = budgetReq.Description;
             budget.TypeBudget = budgetReq.TypeBudget;
-            budget.Value = budgetReq.Value;
+            budget.Value = 0;
             budget.Active = budgetReq.Active;
-            budget.UserCreated = "Web";
+            budget.BudgetConfig = budgetReq.BudgetConfig;
 
             this._context.SaveChanges();
         }
 
-        public Budget AddBudget(BudgetReq budgetReq)
+        public Budget AddBudget(BudgetRequest budgetReq)
         {
             var budget = new Budget()
             {
                 Active = true,
-                DateCreated = DateTime.Now,
-                UserCreated = "Web",
-                Value = budgetReq.Value,
+                DateCreated = budgetReq.dateCreated,
+                UserCreated = budgetReq.userCreated,
+                Value = 0,
+                BudgetConfig = budgetReq.BudgetConfig,
                 Description = budgetReq.Description,
                 TypeBudget = budgetReq.TypeBudget,
             };
 
             this._context.Budget.Add(budget);
 
-            this._context.SaveChanges();
+            try
+            {
+                this._context.SaveChanges();
+
+            } catch (Exception ex)
+            {
+
+            }
 
             return budget;
         }
@@ -121,51 +95,21 @@ namespace Repository
 
         }
 
-        private void RemoveBudgetConfig(int budgetId)
+        public async Task<BudgetConfig> RemoveBudgetConfig(int budgetId)
         {
-            try
+             
+            var entity = await this._context.Set<BudgetConfig>().FindAsync(budgetId);
+            if (entity == null)
             {
-                var budgetConfig = _context.BudgetConfig.Where(b => b.BudgetId == budgetId).ToList();
-                this._context.BudgetConfig.RemoveRange(budgetConfig);
+                return entity;
             }
-            catch (Exception ex )
-            {
 
-                throw ex;
-            }
-           
+            this._context.Set<BudgetConfig>().Remove(entity);
+            await this._context.SaveChangesAsync();
+
+            return entity;
         }
 
-
-        //private void RemoveLaunchesNotBudgetDefault(Budget budget, int[] monthsYear)
-        //{
-        //    var launchesEmpty = _context.Launch.Where(s => s.BudgetId == budget.Id 
-        //                                                    && s.ValueExec == 0 
-        //                                                    && s.ValuePrev == 0).ToList();
-        //    _context.Launch.RemoveRange(launchesEmpty);
-        //}
-
-        //private void AddLaunchesBudgetDefault(Budget budget, IEnumerable<int> monthsNotIncludedThisYear)
-        //{
-        //    var actualYear = DateTime.Now.Year;
-        //    foreach (var month in monthsNotIncludedThisYear)
-        //    {
-        //        var launch = new Launch(){
-        //                                    BudgetId = (int)budget.Id, 
-        //                                    Active = true, 
-        //                                    Day = new DateTime(actualYear, month, 1), 
-        //                                    Description = budget.Description, 
-        //                                    TypeLaunch  = budget.TypeBudget,
-        //                                    ValuePrev = budget.Value,
-        //                                    ValueExec = 0.0M,
-        //                                    AccountId = 1
-        //                                };
-        //        this._context.Launch.Add(launch);
-        //    }
-
-        //}
-
-        #region Budget Words
 
         public BudgetWords UpdateWord(int budgetWordId, BudgetWords budgetWord)
         {
@@ -192,7 +136,7 @@ namespace Repository
         }
 
 
-        public BudgetWords AddNewWord(BudgetWordReq budget)
+        public BudgetWords AddNewWord(BudgetWordRequest budget)
         {
             var budgetRepo = this._context.Budget.FirstOrDefault(f => f.Id == budget.BudgetId);
             var newBudgetWord = new BudgetWords();
@@ -217,7 +161,5 @@ namespace Repository
             return newBudgetWord;
 ;
         }
-
-        #endregion
     }
 }

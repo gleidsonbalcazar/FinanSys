@@ -1,6 +1,6 @@
-﻿namespace Api.FinanSys.Models.ViewModels
+﻿namespace Api.FinanSys.Models.Requests
 {
-    public class BudgetWordReq
+    public class BudgetWordRequest
     {
         public int BudgetId { get; set; }
 

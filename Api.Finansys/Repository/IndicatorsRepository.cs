@@ -3,9 +3,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Api.FinanSys.Models.Presentations;
 using FinansysControl.Data;
 using FinansysControl.Models;
-using FinansysControl.Models.ViewModels;
 
 namespace Repository
 {
@@ -17,9 +17,9 @@ namespace Repository
             _context = context;
         }
 
-        public List<BudgetMonthIndicatorExecuted> GetLineBudgetIndicators(int budgetId)
+        public List<BudgetMonthExecutedPresentation> GetLineBudgetIndicators(int budgetId)
         {
-            var list = new List<BudgetMonthIndicatorExecuted>();
+            var list = new List<BudgetMonthExecutedPresentation>();
             var yearToday = DateTime.Now.Year;
             var launchsExecuted = _context.Launch.Where(w => w.Day.Year == yearToday && w.ValueExec > 0 && w.BudgetId == budgetId)
                                          .OrderBy(o => o.Day.Month)
@@ -27,22 +27,28 @@ namespace Repository
                                          .Select(grp => new MonthValue() { Month = grp.Key.Month, Value = grp.Sum(s => s.ValueExec) })
                                          .ToList();
 
-            var budgetsExecuted = new BudgetMonthIndicatorExecuted() { 
-                                                                        Label = "Executado", 
-                                                                        Data = GetMonthValue(launchsExecuted), 
-                                                                        AverageValue = launchsExecuted.OrderByDescending(a => a.Month).Take(3).Average(s => s.Value)
-            };
-            list.Add(budgetsExecuted);
+            if(launchsExecuted.Count() > 0)
+            {
+                var budgetsExecuted = new BudgetMonthExecutedPresentation()
+                {
+                    Label = "Executado",
+                    Data = GetMonthValue(launchsExecuted),
+                    AverageValue = launchsExecuted.OrderByDescending(a => a.Month).Take(3).Average(s => s.Value)
+                };
+                list.Add(budgetsExecuted);
+            }
+           
 
 
-            var budgetsValue = _context.Budget.Where(w => w.Id == budgetId).FirstOrDefault().Value;
+            var budgetsValue = _context.BudgetConfig.Where(w => w.Id == budgetId).FirstOrDefault().Value;
+
             List<MonthValue> budgetsArrayValue = new List<MonthValue>();
             for (int i = 1; i <= 12; i++)
             {
                 budgetsArrayValue.Add(new MonthValue() { Month = i, MonthDesc = ResumeMonth(i), Value = budgetsValue });
             }
 
-            var budgetsIndicator = new BudgetMonthIndicatorExecuted() { 
+            var budgetsIndicator = new BudgetMonthExecutedPresentation() { 
                                                                             Label = "Orçamento", 
                                                                             Data = budgetsArrayValue, 
                                                                             AverageValue = budgetsArrayValue.Average(s => s.Value)

@@ -1,4 +1,4 @@
-﻿namespace Api.FinanSys.Models.ViewModels
+﻿namespace Api.FinanSys.Models.Requests
 {
     public class UploadRequest
     {

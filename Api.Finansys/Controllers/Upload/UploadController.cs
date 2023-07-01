@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using FinansysControl.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FinansysControl.Controllers
+namespace Api.FinanSys.Controllers.Upload
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -36,9 +36,9 @@ namespace FinansysControl.Controllers
                     {
                         file.CopyTo(stream);
                         var result = importService.Process(dbPath, (BankEnum)Enum.Parse(typeof(BankEnum), bank));
-                        var retorno = new { ImportModel = result.DataList, FileName = result.fileName, FileWasImported = result.FileWasImported };
+                        var retorno = new { ImportModel = result.DataList, FileName = result.fileName, result.FileWasImported };
                         return Ok(retorno);
-                    }                   
+                    }
                 }
                 else
                 {
@@ -51,6 +51,6 @@ namespace FinansysControl.Controllers
             }
         }
 
-        
+
     }
 }

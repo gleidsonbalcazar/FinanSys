@@ -2,12 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using FinansysControl.Models;
+using Api.FinanSys.Models.Entities;
+using Api.FinanSys.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 
-namespace FinansysControl.Controllers
+namespace Api.FinanSys.Controllers.Launchs
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -17,7 +18,7 @@ namespace FinansysControl.Controllers
         private readonly LaunchRepository _repository;
         public LaunchsController(LaunchRepository repository)
         {
-            this._repository = repository;
+            _repository = repository;
         }
 
         [HttpGet]

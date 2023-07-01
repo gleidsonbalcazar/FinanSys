@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace FinansysControl.Models.ViewModels
+namespace Api.FinanSys.Models.Presentations
 {
-    public class BudgetMonthIndicatorExecuted 
+    public class BudgetMonthExecutedPresentation
     {
         public string Label { get; set; }
         public List<MonthValue> Data { get; set; }
 
-        public decimal AverageValue {get;set;}
+        public decimal AverageValue { get; set; }
     }
 
     public class MonthValue

@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Api.FinanSys.Models.Entities;
+using Api.FinanSys.Models.Requests;
+using Api.FinanSys.Models.ViewModels;
 using FinansysControl.Data;
-using FinansysControl.Models;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Base;
 

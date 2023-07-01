@@ -1,42 +1,42 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Api.FinanSys.Models.ViewModels;
-using FinansysControl.Models;
-using Microsoft.AspNetCore.Authorization;
+using Api.FinanSys.Models.Entities;
+using Api.FinanSys.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 
-namespace FinansysControl.Controllers
+namespace FinansysControl.Controllers.Budgets
 {
     [Route("api/[controller]")]
     [ApiController]
     //Authorize]
     public class BudgetsController : Controller
     {
-        private readonly BudgetRepository _repository;
-        public BudgetsController(BudgetRepository repository) 
+        private readonly BudgetRepository budgetRepository;
+
+        public BudgetsController(BudgetRepository budgetRepository) 
         {
-            this._repository = repository;
+            this.budgetRepository = budgetRepository;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Budget>>> Get(bool allFields = false)
         {
-            return await _repository.GetAllFilter(x => !allFields ? x.Active==true : x.Active == true || x.Active == false, o => o.OrderBy(a => a.Description));
+            return await budgetRepository.GetAllFilter(x => !allFields ? x.Active==true : x.Active == true || x.Active == false, o => o.OrderBy(a => a.Description));
         }
 
         [HttpGet("{month}/{year}")]
         public async Task<ActionResult<IEnumerable<Budget>>> Get(int month, int year)
         {
-            return await _repository.GetAllFilter(w => w.BudgetConfig.Any(), o => o.OrderBy(a => a.Description), u => u.BudgetConfig.Where(w => w.Year == year && w.Month == month));
+            return await budgetRepository.GetAllFilter(w => w.BudgetConfig.Any(), o => o.OrderBy(a => a.Description), u => u.BudgetConfig.Where(w => w.Year == year && w.Month == month));
         }
 
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Budget>> Get(int id)
         {
-            var entity = await _repository.Get(id);
+            var entity = await budgetRepository.Get(id);
             if (entity == null)
             {
                 return NotFound();
@@ -45,32 +45,24 @@ namespace FinansysControl.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, BudgetReq budgetReq)
+        public async Task<IActionResult> Put(int id, BudgetRequest budgetReq)
         {
             if (id != budgetReq.Id)
             {
                 return BadRequest();
             }
 
-            _repository.UpdateBudget(budgetReq);
-
-            _repository.UpdateConfig(id, budgetReq);
+            budgetRepository.UpdateBudget(budgetReq);
 
             return CreatedAtAction("Get", new { id = budgetReq.Id }, budgetReq);
         }
 
 
         [HttpPost]
-        public async Task<ActionResult<Budget>> Post(BudgetReq budgetReq)
+        public async Task<ActionResult<Budget>> Post(BudgetRequest budgetReq)
         {
 
-            var budget = _repository.AddBudget(budgetReq);
-
-            if(budget.Id != null)
-            {
-                _repository.UpdateConfig(budget.Id, budgetReq);
-
-            }
+            var budget = budgetRepository.AddBudget(budgetReq);
 
             return CreatedAtAction("Get", new { id = budget.Id }, budgetReq);
         }
@@ -78,7 +70,19 @@ namespace FinansysControl.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Budget>> Delete(int id)
         {
-            var entity = await _repository.DeleteBudget(id);
+            var entity = await budgetRepository.DeleteBudget(id);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            return entity;
+        }
+
+
+        [HttpDelete("budgetConfig/{id}")]
+        public async Task<ActionResult<BudgetConfig>> DeleteBudgetConfig(int budgetId)
+        {
+            var entity = await budgetRepository.RemoveBudgetConfig(budgetId);
             if (entity == null)
             {
                 return NotFound();
@@ -87,9 +91,9 @@ namespace FinansysControl.Controllers
         }
 
         [HttpPost("addWord")]
-        public ActionResult<BudgetWords> AddWord(BudgetWordReq budget)
+        public ActionResult<BudgetWords> AddWord(BudgetWordRequest budget)
         {
-            var result = _repository.AddNewWord(budget);
+            var result = budgetRepository.AddNewWord(budget);
             if (result.Id == null)
             {
                 return NotFound();
@@ -105,7 +109,7 @@ namespace FinansysControl.Controllers
                 return BadRequest();
             }
 
-            _repository.UpdateWord(id,entity);
+            budgetRepository.UpdateWord(id,entity);
 
 
             return CreatedAtAction("Get", new { id = entity.Id }, entity);
@@ -114,7 +118,7 @@ namespace FinansysControl.Controllers
         [HttpDelete("removeWord/{id}")]
         public async Task<ActionResult<BudgetWords>> DeleteBudgetWord(int id)
         {
-            var entity = await _repository.DeleteBudgetWords(id);
+            var entity = await budgetRepository.DeleteBudgetWords(id);
             if (entity == null)
             {
                 return NotFound();

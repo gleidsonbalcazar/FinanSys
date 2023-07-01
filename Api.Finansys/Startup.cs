@@ -44,6 +44,7 @@ namespace FinanSys
             ));
 
             services.AddScoped<BudgetRepository>();
+            services.AddScoped<BudgetPlanRepository>();
             services.AddScoped<AccountRepository>();
             services.AddScoped<ImportService>();
             services.AddScoped<UserRepository>();
@@ -73,7 +74,6 @@ namespace FinanSys
                               .AddEnvironmentVariables()
                               .Build();
 
-            Console.WriteLine(env.EnvironmentName);
 
             if (env.IsDevelopment())
             {

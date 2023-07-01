@@ -1,7 +1,7 @@
 using FinansysControl.Data;
 using System.ComponentModel.DataAnnotations;
 
-namespace FinansysControl.Models
+namespace Api.FinanSys.Models.Entities
 {
     public class Account : IEntity
     {
@@ -9,7 +9,7 @@ namespace FinansysControl.Models
         public int? Id { get; set; }
 
         [Required]
-        public string  AccountName { get; set; }
+        public string AccountName { get; set; }
 
     }
 }

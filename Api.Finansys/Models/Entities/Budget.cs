@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace FinansysControl.Models
+namespace Api.FinanSys.Models.Entities
 {
     public class Budget : IEntity
     {
@@ -11,7 +11,7 @@ namespace FinansysControl.Models
         public int? Id { get; set; }
 
         [Required]
-        public string  Description { get; set; }
+        public string Description { get; set; }
 
         [Required]
         public decimal Value { get; set; }
@@ -24,7 +24,7 @@ namespace FinansysControl.Models
         public string TypeBudget { get; set; }
 
         public string UserCreated { get; set; }
-        public DateTime? DateCreated { get; set;}        
+        public DateTime? DateCreated { get; set; }
 
         public virtual List<BudgetWords> BudgetWords { get; set; }
 

@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using FinansysControl.Data;
 
-namespace FinansysControl.Models
+namespace Api.FinanSys.Models.Entities
 {
     public class BudgetWords : IEntity
     {
@@ -10,7 +10,7 @@ namespace FinansysControl.Models
         public int? Id { get; set; }
 
         [Required]
-        public int BudgetId {get;set;}
+        public int BudgetId { get; set; }
 
         [Required]
         protected string _BudgetName;
@@ -19,10 +19,10 @@ namespace FinansysControl.Models
         public bool Active { get; set; }
 
 
-        public string  BudgetWord { get { return this._BudgetName; } set { this._BudgetName = (value == null ? value : value.Trim()); } }
+        public string BudgetWord { get { return _BudgetName; } set { _BudgetName = value == null ? value : value.Trim(); } }
 
         public string UserCreated { get; set; }
-        public DateTime? DateCreated { get; set;}
+        public DateTime? DateCreated { get; set; }
     }
 
 }

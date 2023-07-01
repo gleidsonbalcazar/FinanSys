@@ -1,7 +1,6 @@
-
 using System;
 
-namespace FinansysControl.Models
+namespace Api.FinanSys.Models.ViewModels
 {
     public class ImportData
     {

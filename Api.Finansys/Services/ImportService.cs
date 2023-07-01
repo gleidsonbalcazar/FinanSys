@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using FinansysControl.Models;
+using Api.FinanSys.Models.Entities;
 using OfficeOpenXml;
 using Repository;
 

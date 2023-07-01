@@ -1,16 +1,15 @@
-
 using System;
 using System.Collections.Generic;
 
-namespace FinansysControl.Models
+namespace Api.FinanSys.Models.ViewModels
 {
-    public class Import 
+    public class Import
     {
 
         public int Id { get; set; }
         public string FileName { get; set; }
 
-        public DateTime DateCreated {get;set;}
+        public DateTime DateCreated { get; set; }
 
         public string UserCreated { get; set; }
 

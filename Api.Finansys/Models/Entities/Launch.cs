@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace FinansysControl.Models
+namespace Api.FinanSys.Models.Entities
 {
     public class Launch : IEntity
     {
@@ -11,13 +11,13 @@ namespace FinansysControl.Models
         public int? Id { get; set; }
 
         [Required]
-        public string  Description { get; set; }
+        public string Description { get; set; }
 
         [Required]
-        public int BudgetId {get;set;}
+        public int BudgetId { get; set; }
 
         [Required]
-        public int AccountId {get;set;}
+        public int AccountId { get; set; }
 
         [Required]
         public DateTime Day { get; set; }
@@ -31,12 +31,12 @@ namespace FinansysControl.Models
         public decimal ValueExec { get; set; }
         [Required]
         public string TypeLaunch { get; set; }
-        
+
         public bool? Active { get; set; }
 
         public string UserCreated { get; set; }
 
-        public DateTime? DateCreated { get; set;}
+        public DateTime? DateCreated { get; set; }
 
         public virtual Budget Budget { get; set; }
 

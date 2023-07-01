@@ -1,7 +1,7 @@
-using Api.FinanSys.Models.ViewModels;
+using Api.FinanSys.Models.Entities;
+using Api.FinanSys.Models.Presentations;
 using FinansysControl.Data;
 using FinansysControl.Helpers.Enum;
-using FinansysControl.Models;
 using Repository.Base;
 using System;
 using System.Collections.Generic;
@@ -17,13 +17,13 @@ namespace Repository
             this._context = context;
         }
 
-        public List<AccountViewModel> GetAll()
+        public List<AccountViewPresentation> GetAll()
         {
             var resultAccountsInbound = this._context.Launch
                                               .Where(w => w.TypeLaunch == TypeLaunchEnum.Receita.ToDescriptionString())
                                               .GroupBy(g => g.AccountId)
                                               .Select(s => new 
-                                                            AccountViewModel 
+                                                            AccountViewPresentation 
                                                             {
                                                                 AccountId = s.Key,
                                                                 Value = s.Sum(a => a.ValueExec),
@@ -35,7 +35,7 @@ namespace Repository
                                               .Where(w => w.TypeLaunch == TypeLaunchEnum.Despesa.ToDescriptionString())
                                               .GroupBy(g => g.AccountId)
                                               .Select(s => new
-                                                            AccountViewModel
+                                                            AccountViewPresentation
                                                             {
                                                                 AccountId = s.Key,
                                                                 Value = s.Sum(a => a.ValueExec) * -1,
@@ -46,7 +46,7 @@ namespace Repository
             var resultAccounts = resultAccountsInbound.Union(resultAccountsOutbound)
                                                       .GroupBy(g => g.AccountId)
                                                       .Select(s => new 
-                                                                    AccountViewModel 
+                                                                    AccountViewPresentation 
                                                                     { 
                                                                         AccountId = s.Key, 
                                                                         Value =s.Sum(a=> a.Value)

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Api.FinanSys.Models.ViewModels;
-using FinansysControl.Models;
+using Api.FinanSys.Models.Entities;
+using Api.FinanSys.Models.Presentations;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 
-namespace FinansysControl.Controllers
+namespace Api.FinanSys.Controllers.Accounts
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -13,18 +13,18 @@ namespace FinansysControl.Controllers
     public class AccountsController : Controller
     {
         private readonly AccountRepository _repository;
-        public AccountsController(AccountRepository repository) 
+        public AccountsController(AccountRepository repository)
         {
-            this._repository = repository;
+            _repository = repository;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AccountViewModel>>> Get()
+        public async Task<ActionResult<IEnumerable<AccountViewPresentation>>> Get()
         {
             return _repository.GetAll();
 
         }
-        
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> Get(int id)

@@ -1,13 +1,10 @@
 ﻿using FinansysControl.Data;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace FinansysControl.Models
+namespace Api.FinanSys.Models.Entities
 {
     public class BudgetConfig : IEntity
     {
-
         public int? Id { get; set; }
 
         [Required]
@@ -18,10 +15,12 @@ namespace FinansysControl.Models
         public int Month { get; set; }
 
         [Required]
+        public decimal Value { get; set; }
+
+        [Required]
         public int Year { get; set; }
 
         public bool? Active { get; set; }
-
 
     }
 }

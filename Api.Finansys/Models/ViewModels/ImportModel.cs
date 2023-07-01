@@ -1,4 +1,4 @@
-using FinansysControl.Models;
+using Api.FinanSys.Models.Entities;
 using System;
 using System.Collections.Generic;
 
