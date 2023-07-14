@@ -66,12 +66,13 @@ export class DashBoardComponent implements OnInit{
   }
 
   ifAvailableToLaunch(b:any){
-    return (b.valueExec || b.valuePrev) < b.valueOrc;
+    return b.valueOrc > 0 && b.valueExec == 0.0 && b.valuePrev == 0;
   }
 
-  addToLaunch(b:any){
+  addToLaunch(budget:any){
     const modalRef = this.modalService.open(LaunchModalComponent,{ windowClass : "modal-pre-lg"});
     modalRef.componentInstance.title = "Realizar Lançamento do Budget";
+    modalRef.componentInstance.budgetToLaunch = budget;
   }
 
   checkLastDateUpdated(date:any):boolean{
@@ -92,9 +93,16 @@ export class DashBoardComponent implements OnInit{
 
   public getPercentual(value){
     if(isNaN(value)){
-      return 0.0;
+      return 0;
     }
     return value;
+  }
+
+  public getPercentualWidth(value){
+    if(isNaN(value)){
+      return null;
+    }
+    return `--d:${value * 100}%`;
   }
 
   public getClass(value){

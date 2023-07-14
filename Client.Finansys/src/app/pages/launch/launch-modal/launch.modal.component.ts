@@ -19,6 +19,7 @@ import { ToastrService } from "ngx-toastr";
 export class LaunchModalComponent extends BaseComponent{
   @Input() title:string;
   @Input() launch:launch;
+  @Input() budgetToLaunch:any;
 
   selectedMonth:number;
   selectedYear:number;
@@ -41,10 +42,38 @@ export class LaunchModalComponent extends BaseComponent{
     this.getTypeBudgets();
     this.getAccounts();
     this.createForm();
+
+    if (this.budgetToLaunch != null) {
+      let budget = this.budgetToLaunch;
+      this.launch = {
+        id: null,
+        budget: null,
+        account: null,
+        description: budget.description,
+        budgetId: budget.id,
+        accountId: 1,
+        day: new Date(),
+        valuePrev: budget.valueOrc,
+        valueExec:0,
+        typeLaunch: budget.typeBudget,
+        active: true,
+      };
+
+      this.loadForm(this.launch);
+    }
+
     if(this.launch?.id > 0){
-      this.myForm.setValue(this.launch);
+      this.loadForm(this.launch);
     }
   }
+
+  loadForm(launch:any):void {
+    this.myForm.patchValue(launch);
+    let dayForm  = this.myForm.get('day');
+    dayForm.patchValue(this.formatDate(new Date()));
+  }
+
+
 
   getTypeBudgets() {
     this.appService.getYear().subscribe(r => this.selectedYear = r);
@@ -67,6 +96,8 @@ export class LaunchModalComponent extends BaseComponent{
       id: [null],
       description: [{ value: "", disabled: false }, Validators.required],
       budgetId: [null, Validators.required],
+      budget:[],
+      account:[],
       accountId: [1, Validators.required],
       day: [new Date(), Validators.required],
       valuePrev: [{ value: 0, disabled: false }, Validators.required],
@@ -138,20 +169,21 @@ export class LaunchModalComponent extends BaseComponent{
          return;
     }
     var formSend = <launch>this.myForm.value;
-    this.launchService.checkDuplicate(formSend).subscribe((f) => {
-      let that = this;
-      if (f) {
-        this.confirmDialogService.confirmThis(
-          "É possível já ter efetuado este lançamento, tem certeza que deseja continuar?",
-          function () {
-           that.submitForm(formSend,nextBe);
-          },
-          function () {}
-        );
-      }else {
-        that.submitForm(formSend,nextBe);
-      }
-    });
+    this.submitForm(formSend,nextBe);
+    // this.launchService.checkDuplicate(formSend).subscribe((f) => {
+    //   let that = this;
+    //   if (f) {
+    //     this.confirmDialogService.confirmThis(
+    //       "É possível já ter efetuado este lançamento, tem certeza que deseja continuar?",
+    //       function () {
+    //        that.submitForm(formSend,nextBe);
+    //       },
+    //       function () {}
+    //     );
+    //   }else {
+    //     that.submitForm(formSend,nextBe);
+    //   }
+    // });
   }
 
 

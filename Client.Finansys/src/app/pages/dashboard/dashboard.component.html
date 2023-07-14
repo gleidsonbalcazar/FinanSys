@@ -54,9 +54,11 @@
                   {{ b.valueOrc | currency: "EUR":true }}
                 </td>
                 <td>
-                  <p [ngClass]="getClass((b.valueExec / b.valueOrc) * 100)">
-                    {{ getPercentual((b.valueExec / b.valueOrc)) * 100 | number: "1.2-2" }} %
-                  </p>
+                  <div class="bar-line">
+                    <div class="bar-container" style="text-align: center;" [style]="getPercentualWidth((b.valueExec / b.valueOrc))">
+                        <span class="text"> {{ getPercentual((b.valueExec / b.valueOrc)) * 100 | number: "1.2-2" }} %</span>
+                    </div>
+                </div>
                 </td>
               </tr>
             </tbody>
