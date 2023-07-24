@@ -34,7 +34,7 @@ namespace FinanSys
                 {
                     Title = "Api.Finansys Swagger",
                     Version = "v1",
-                    Description = $"Api de Controle Financeiro Pessoal {versionString}"
+                    Description = $"Api de Controle Financeiro Pessoal {versionString} ambiente: {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}"
                 });
             });
 
