@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FinansysControl.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Base;
 
@@ -8,6 +9,7 @@ namespace Api.FinanSys.Controllers.Base
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public abstract class GenericController<TEntity, TRepository> : ControllerBase
                         where TEntity : class, IEntity
                         where TRepository : IRepository<TEntity>

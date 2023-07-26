@@ -2,10 +2,10 @@ import { Component, HostListener, Input } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
-import { Budget } from "src/app/class/budget.class";
-import { BudgetConfig } from "src/app/class/budgetConfig.interface";
+import { Budget } from "src/app/models/budget.class";
+import { BudgetConfig } from "src/app/models/budgetConfig.interface";
 import { BaseComponent } from "src/app/core/baseComponent/base";
-import { BudgetService } from "../budget.service";
+import { BudgetService } from "../../../services/budget.service";
 import { ViewportScroller } from "@angular/common";
 
 @Component({

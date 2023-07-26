@@ -2,9 +2,9 @@ import { Component, Input, NgZone } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
-import { BudgetWord } from "src/app/class/budgetWord.interface";
-import { BudgetService } from "../budget.service";
-import { Budget } from "src/app/class/budget.class";
+import { BudgetWord } from "src/app/models/budgetWord.interface";
+import { BudgetService } from "../../../services/budget.service";
+import { Budget } from "src/app/models/budget.class";
 
 @Component({
   selector: "app-budget-word",

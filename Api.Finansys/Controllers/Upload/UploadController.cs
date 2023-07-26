@@ -4,12 +4,14 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using FinansysControl.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.FinanSys.Controllers.Upload
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UploadController : ControllerBase
     {
         private readonly ImportService importService;

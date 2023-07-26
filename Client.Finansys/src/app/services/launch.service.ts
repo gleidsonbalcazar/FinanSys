@@ -4,16 +4,15 @@ import { Inject, Injectable, PipeTransform } from "@angular/core";
 import { BehaviorSubject, Observable, of, Subject } from "rxjs";
 import { tap, debounceTime, switchMap, delay } from "rxjs/operators";
 import { AppService } from "src/app/app.service";
-import { ImportBank } from "src/app/class/importBank.interface";
-import { ImportRequest } from "src/app/class/importRequest.class";
-import { SearchResult } from "src/app/class/searchresult.interface";
-import { State } from "src/app/class/state.interface";
+import { ImportRequest } from "src/app/models/importRequest.class";
+import { SearchResult } from "src/app/models/searchresult.interface";
+import { State } from "src/app/models/state.interface";
 import {
   SortColumn,
   SortDirection,
 } from "src/app/core/directives/sort/sortable.directive";
-import { launch } from "../../class/launch.interface";
-import { CrudService } from "../../core/service/crud.service";
+import { launch } from "../models/launch.interface";
+import { CrudService } from "../core/service/crud.service";
 
 const compare = (v1: string | number, v2: string | number) =>
   v1 < v2 ? -1 : v1 > v2 ? 1 : 0;

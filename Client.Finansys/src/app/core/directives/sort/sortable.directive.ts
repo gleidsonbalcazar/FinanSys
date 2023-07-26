@@ -1,5 +1,5 @@
 import {Directive, EventEmitter, Input, Output} from '@angular/core';
-import { launch } from 'src/app/class/launch.interface';
+import { launch } from 'src/app/models/launch.interface';
 
 export type SortColumn = keyof launch | '';
 export type SortDirection = 'asc' | 'desc' | '';

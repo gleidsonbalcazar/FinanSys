@@ -10,7 +10,7 @@ namespace Api.FinanSys.Controllers.Indicators
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class IndicatorsController : Controller
     {
         private readonly IndicatorsRepository _repository;

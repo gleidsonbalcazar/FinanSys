@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { Account } from "./class/account.interface";
-import { Months } from "./class/months.interface";
+import { Account } from "./models/account.interface";
+import { Months } from "./models/months.interface";
 
 @Injectable()
 export class AppService {

@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AppService } from 'src/app/app.service';
-import { Account } from 'src/app/class/account.interface';
-import { Banks } from 'src/app/class/banks.interface';
-import { ImportBank } from 'src/app/class/importBank.interface';
-import { BudgetService } from '../../budget/budget.service';
-import { LaunchService } from '../launch.service';
-import { ImportRequest } from '../../../class/importRequest.class';
+import { Account } from 'src/app/models/account.interface';
+import { Banks } from 'src/app/models/banks.interface';
+import { ImportBank } from 'src/app/models/importBank.interface';
+import { BudgetService } from '../../../services/budget.service';
+import { LaunchService } from '../../../services/launch.service';
+import { ImportRequest } from '../../../models/importRequest.class';
 import * as moment from "moment";
-import { Budget } from 'src/app/class/budget.class';
+import { Budget } from 'src/app/models/budget.class';
 
 @Component({
   selector: 'launch-import',

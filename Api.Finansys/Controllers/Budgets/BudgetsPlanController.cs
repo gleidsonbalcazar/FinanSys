@@ -1,5 +1,5 @@
 using Api.FinanSys.Models.Entities;
-using Api.FinanSys.Models.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace FinansysControl.Controllers.Budgets
 {
     [Route("api/[controller]")]
     [ApiController]
-    //Authorize
+    [Authorize]
     public  class BudgetsPlanController : Controller
     {
         private readonly BudgetPlanRepository budgetPlanRepository;

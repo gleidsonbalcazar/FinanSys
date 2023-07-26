@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { Months } from "src/app/class/months.interface";
+import { Months } from "src/app/models/months.interface";
 
 @Component({
   template: "",

@@ -31,6 +31,9 @@ import { NgxLoadingModule } from 'ngx-loading';
 import { LoaderModule } from './core/load/loader.module';
 import { LoaderInterceptor } from './core/load/loader.interceptor';
 import { LaunchModalComponent } from './pages/launch/launch-modal/launch.modal.component';
+import { LoginComponent } from './pages/login/login.component';
+import { LoginService } from './services/login.service';
+import { JwtInterceptor } from './core/interceptor/jwt.interceptor';
 
 
 @NgModule({
@@ -40,6 +43,7 @@ import { LaunchModalComponent } from './pages/launch/launch-modal/launch.modal.c
     NavMenuComponent,
     LaunchComponent,
     BudgetListComponent,
+    LoginComponent,
     UploadComponent,
     ModalComponent,
     LaunchImportComponent,
@@ -79,6 +83,8 @@ import { LaunchModalComponent } from './pages/launch/launch-modal/launch.modal.c
   providers: [
     DecimalPipe,
     AppService,
+    LoginService,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     {
     provide: HTTP_INTERCEPTORS,
     useClass: LoaderInterceptor,

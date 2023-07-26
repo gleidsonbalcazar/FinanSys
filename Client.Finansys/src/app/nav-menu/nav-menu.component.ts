@@ -1,20 +1,21 @@
-import { Component, Input, Output } from "@angular/core";
+import { Component, Input, OnInit, Output } from "@angular/core";
 import { EventEmitter } from "@angular/core";
 import { AppService } from "../app.service";
-import { Months } from "../class/months.interface";
-import { user } from "../class/user.interface";
+import { Months } from "../models/months.interface";
+import { LoginService } from "../services/login.service";
 
 @Component({
-  selector: "app-nav-menu",
+  selector: "nav-menu",
   templateUrl: "./nav-menu.component.html",
   styleUrls: ["./nav-menu.component.css"],
 })
-export class NavMenuComponent {
-  @Input() user!: user;
+export class NavMenuComponent implements OnInit{
   @Output() logoutEvent: EventEmitter<any> = new EventEmitter();
   isExpanded = false;
   public monthId!: number;
   public year!: number;
+  public user!:any;
+  public isLogged:boolean = false;
   public months: Months[] = [
     { id: 0, name: "Todos", pref: "All" },
     { id: 1, name: "Janeiro", pref: "Jan" },
@@ -34,14 +35,25 @@ export class NavMenuComponent {
      '2019', '2020','2021','2022','2023','2024'
   ];
 
-  constructor(public appService: AppService) {
+  constructor(
+      public appService: AppService,
+      public loginService: LoginService
+  ) {
+
+  }
+
+  ngOnInit() {
     this.appService.getMonth().subscribe((s) => {
       this.monthId = s;
       this.appService.getYear().subscribe(y => {
         this.year = y;
       })
     });
+
+    this.user = this.loginService.currentUserValue;
+    this.isLogged = this.user != null;
   }
+
   collapse() {
     this.isExpanded = false;
   }
@@ -60,6 +72,7 @@ export class NavMenuComponent {
   }
 
   public logout() {
-    this.logoutEvent.emit(null);
+    this.loginService.logout();
+    window.location.reload();
   }
 }

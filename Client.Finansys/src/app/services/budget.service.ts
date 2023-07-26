@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BudgetWord } from 'src/app/class/budgetWord.interface';
-import { CrudService } from '../../core/service/crud.service';
-import { Budget } from 'src/app/class/budget.class';
+import { BudgetWord } from 'src/app/models/budgetWord.interface';
+import { CrudService } from '../core/service/crud.service';
+import { Budget } from 'src/app/models/budget.class';
 
 @Injectable({
   providedIn: 'root',

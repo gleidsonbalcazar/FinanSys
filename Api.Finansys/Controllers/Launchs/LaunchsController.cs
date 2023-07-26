@@ -12,7 +12,7 @@ namespace Api.FinanSys.Controllers.Launchs
 {
     [Route("api/[controller]")]
     [ApiController]
-    // [Authorize]
+    [Authorize]
     public class LaunchsController : Controller
     {
         private readonly LaunchRepository _repository;

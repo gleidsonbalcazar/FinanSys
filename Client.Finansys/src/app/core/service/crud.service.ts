@@ -1,7 +1,7 @@
 
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { CrudOperations } from '../../class/crud-operations';
+import { CrudOperations } from '../../models/crud-operations';
 
 export class CrudService<T, ID> implements CrudOperations<T, ID> {
 

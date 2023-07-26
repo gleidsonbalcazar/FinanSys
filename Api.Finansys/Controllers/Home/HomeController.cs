@@ -9,7 +9,7 @@ namespace Api.FinanSys.Controllers.Home
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly HomeRepository _repository;

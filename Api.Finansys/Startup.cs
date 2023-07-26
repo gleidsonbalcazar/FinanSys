@@ -10,6 +10,13 @@ using FinansysControl.Services;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Reflection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.IdentityModel.Tokens;
+using FinansysControl;
+using System.Text;
+using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
+using System.Reflection.Metadata;
 
 namespace FinanSys
 {
@@ -36,12 +43,53 @@ namespace FinanSys
                     Version = "v1",
                     Description = $"Api de Controle Financeiro Pessoal {versionString} ambiente: {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}"
                 });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer'[space] and then your token in the text input below. \r\n\r\nExample: \"Bearer 12345abcdef\"",
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                          new OpenApiSecurityScheme
+                          {
+                              Reference = new OpenApiReference
+                              {
+                                  Type = ReferenceType.SecurityScheme,
+                                  Id = "Bearer"
+                              }
+                          },
+                         new string[] {}
+                    }
+                });
             });
 
             services.AddDbContext<FinansysContext>(options =>
                   options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DefaultConnection")
                   
             ));
+
+            var key = Encoding.ASCII.GetBytes(Settings.Secret);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
 
             services.AddScoped<BudgetRepository>();
             services.AddScoped<BudgetPlanRepository>();
@@ -102,6 +150,8 @@ namespace FinanSys
                 .AllowAnyMethod()
                 .AllowAnyHeader();
             });
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

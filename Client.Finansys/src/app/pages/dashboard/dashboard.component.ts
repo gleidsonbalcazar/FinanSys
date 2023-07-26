@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from "moment";
 import { AppService } from 'src/app/app.service';
-import { Account } from 'src/app/class/account.interface';
-import { homeResume } from 'src/app/class/homeResume.interface';
-import { Budget } from '../../class/budget.class';
-import { home } from '../../class/home.interface';
-import { launch } from '../../class/launch.interface';
-import { DashboardService } from './dashboard.service';
-import { LaunchService } from '../launch/launch.service';
+import { Account } from 'src/app/models/account.interface';
+import { homeResume } from 'src/app/models/homeResume.interface';
+import { Budget } from '../../models/budget.class';
+import { home } from '../../models/home.interface';
+import { launch } from '../../models/launch.interface';
+import { DashboardService } from '../../services/dashboard.service';
+import { LaunchService } from '../../services/launch.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LaunchModalComponent } from '../launch/launch-modal/launch.modal.component';
 

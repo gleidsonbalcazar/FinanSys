@@ -2,8 +2,8 @@ import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
-import { IndicatorsService } from '../../indicators/indicators.service';
-import { Budget } from 'src/app/class/budget.class';
+import { IndicatorsService } from '../../../services/indicators.service';
+import { Budget } from 'src/app/models/budget.class';
 
 @Component({
   selector: 'app-budget-indicators',
