@@ -22,6 +22,7 @@ services:
   db:
     image: mcr.microsoft.com/mssql/server
     restart: unless-stopped
+    user: root
     environment:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: "numsey#2022"
