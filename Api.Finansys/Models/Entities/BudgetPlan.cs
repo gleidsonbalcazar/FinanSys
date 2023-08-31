@@ -23,7 +23,7 @@ namespace Api.FinanSys.Models.Entities
         [Required]
         public bool Planned { get; set; }
 
-        public int UserCreated { get; set; }
+        public string UserCreated { get; set; }
 
         public DateTime DateCreated { get; set; }
 

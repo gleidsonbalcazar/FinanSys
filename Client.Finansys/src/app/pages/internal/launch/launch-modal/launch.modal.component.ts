@@ -2,14 +2,16 @@ import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { AppService } from "src/app/app.service";
 import { BaseComponent } from "src/app/core/baseComponent/base";
-import { BudgetService } from "../../../services/budget.service";
+import { BudgetService } from "../../../../services/budget.service";
 import { Budget } from "src/app/models/budget.class";
 import { Account } from "src/app/models/account.interface";
 import { FormBuilder, Validators } from "@angular/forms";
-import { LaunchService } from "../../../services/launch.service";
+import { LaunchService } from "../../../../services/launch.service";
 import { launch } from "src/app/models/launch.interface";
-import { ConfirmDialogService } from "src/app/core/modal/confirm/confirm-dialog.service";
 import { ToastrService } from "ngx-toastr";
+import { LoginService } from "src/app/services/login.service";
+import { User } from "src/app/models/user";
+import { AccountService } from "src/app/services/account.service";
 
 @Component({
   selector: "app-launch-modal",
@@ -25,23 +27,26 @@ export class LaunchModalComponent extends BaseComponent{
   selectedYear:number;
   typeBudgets: Budget[] = [];
   accounts: Account[] = [];
+  userLogged:any;
 
   constructor(
     public activeModal: NgbActiveModal,
-    private formBuilder: FormBuilder,
-    private appService: AppService,
-    private toastr: ToastrService,
-    private budgetService: BudgetService,
+    public formBuilder: FormBuilder,
+    public appService: AppService,
+    public toastr: ToastrService,
+    public budgetService: BudgetService,
+    public accountService: AccountService,
     public launchService: LaunchService,
-    private confirmDialogService: ConfirmDialogService,
+    public loginService: LoginService
   ) {
     super()
   }
 
   override ngOnInit() {
+    this.userLogged = this.loginService.currentUserValue;
+
     this.getTypeBudgets();
-    this.getAccounts();
-    this.createForm();
+    this.getAccountByUser();
 
     if (this.budgetToLaunch != null) {
       let budget = this.budgetToLaunch;
@@ -62,6 +67,7 @@ export class LaunchModalComponent extends BaseComponent{
       this.loadForm(this.launch);
     }
 
+
     if(this.launch?.id > 0){
       this.loadForm(this.launch);
     }
@@ -73,16 +79,18 @@ export class LaunchModalComponent extends BaseComponent{
     dayForm.patchValue(this.formatDate(new Date()));
   }
 
-
-
   getTypeBudgets() {
     this.appService.getYear().subscribe(r => this.selectedYear = r);
     this.appService.getMonth().subscribe(r => this.selectedMonth = r);
     this.budgetService.findAllByMonthAndYear(this.selectedMonth,this.selectedYear).subscribe((s) => (this.typeBudgets = s));
   }
 
-  getAccounts() {
-    this.accounts = this.appService.accounts;
+  getAccountByUser() {
+    this.accountService.getAccountByUser(this.userLogged.id)
+                      .subscribe(r =>  {
+                                        this.accounts = r;
+                                        this.createForm();
+                                      });
   }
 
   handleKeyUp(e) {
@@ -98,7 +106,7 @@ export class LaunchModalComponent extends BaseComponent{
       budgetId: [null, Validators.required],
       budget:[],
       account:[],
-      accountId: [1, Validators.required],
+      accountId: [this.getPreferencialAccount(), Validators.required],
       day: [new Date(), Validators.required],
       valuePrev: [{ value: 0, disabled: false }, Validators.required],
       valueExec: [{ value: 0, disabled: false }, Validators.required],
@@ -111,6 +119,11 @@ export class LaunchModalComponent extends BaseComponent{
     dayForm.patchValue(this.formatDate(new Date()));
   }
 
+  public getPreferencialAccount():number {
+    let prefIndex = this.accounts.findIndex(f => f.preferencialAccount == true);
+    return this.accounts[prefIndex].id;
+  }
+
 
   submitForm(formSend:any,nextBe:boolean) {
     if (formSend.id === null) {
@@ -119,9 +132,6 @@ export class LaunchModalComponent extends BaseComponent{
       this.updateLaunch(formSend);
     }
     this.resetForm();
-    // if(!nextBe){
-    //   this.activeModal.close();
-    // }
   }
 
   createLaunch(formSend: launch) {

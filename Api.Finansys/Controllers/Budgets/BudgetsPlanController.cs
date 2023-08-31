@@ -2,11 +2,12 @@ using Api.FinanSys.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FinansysControl.Controllers.Budgets
+namespace Api.FinanSys.Controllers.Budgets
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -29,7 +30,8 @@ namespace FinansysControl.Controllers.Budgets
         [HttpPost]
         public async Task<ActionResult<BudgetPlan>> Post(BudgetPlan entity)
         {
-
+            entity.UserCreated = User.Identity.Name;
+            entity.DateCreated = DateTime.Now;
             await budgetPlanRepository.Add(entity);
             return CreatedAtAction("Get", new { id = entity.Id }, entity);
         }

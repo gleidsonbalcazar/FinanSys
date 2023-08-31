@@ -1,15 +1,14 @@
 import { Component, Inject } from "@angular/core";
-import { BudgetService } from "../../services/budget.service";
-import { BaseComponent } from "../../core/baseComponent/base";
 import { Account } from "src/app/models/account.interface";
 import { BudgetWord } from "src/app/models/budgetWord.interface";
-import { BudgetWordsModalComponent } from "./budgetWords/budgetWords.modal.component";
-import { BudgetIndicatorsModalComponent } from "./budgetIndicators/budgetIndicators.modal.component";
-import { BudgetManagerModalComponent } from "./budgetManager/budgetManager.modal.component";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
-import { BudgetConfig } from "src/app/models/budgetConfig.interface";
 import { Budget } from "src/app/models/budget.class";
+import { BaseComponent } from "src/app/core/baseComponent/base";
+import { BudgetService } from "src/app/services/budget.service";
+import { BudgetIndicatorsModalComponent } from "./budgetIndicators/budgetIndicators.modal.component";
+import { BudgetManagerModalComponent } from "./budgetManager/budgetManager.modal.component";
+import { BudgetWordsModalComponent } from "./budgetWords/budgetWords.modal.component";
 
 @Component({
   selector: "app-budget",

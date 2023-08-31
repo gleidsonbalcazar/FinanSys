@@ -22,6 +22,8 @@ namespace FinansysControl.Data
         public DbSet<Launch> Launch { get; set; }
 
         public DbSet<Account> Account { get; set; }
+
+        public DbSet<UserAccounts> UserAccounts { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Import> Import { get; set; }
         public DbSet<ImportData> ImportData { get; set; }

@@ -11,15 +11,15 @@ namespace Repository
 {
     public class AccountRepository : EfCoreGenericRepository<Account, FinansysContext>
     {
-        private readonly FinansysContext _context;
+        private readonly FinansysContext context;
         public AccountRepository(FinansysContext context) : base(context)
         {
-            this._context = context;
+            this.context = context;
         }
 
         public List<AccountViewPresentation> GetAll()
         {
-            var resultAccountsInbound = this._context.Launch
+            var resultAccountsInbound = this.context.Launch
                                               .Where(w => w.TypeLaunch == TypeLaunchEnum.Receita.ToDescriptionString())
                                               .GroupBy(g => g.AccountId)
                                               .Select(s => new 
@@ -31,7 +31,7 @@ namespace Repository
                                                         )
                                               .ToList();
 
-            var resultAccountsOutbound = this._context.Launch
+            var resultAccountsOutbound = this.context.Launch
                                               .Where(w => w.TypeLaunch == TypeLaunchEnum.Despesa.ToDescriptionString())
                                               .GroupBy(g => g.AccountId)
                                               .Select(s => new
@@ -62,10 +62,23 @@ namespace Repository
             return resultAccounts;
         }
 
+        public List<AccountsByUserPresentation> GetAccountByUser(int userID)
+        {
+            return (from c in context.Account
+                    join uc in context.UserAccounts on c.Id equals uc.AccountID
+                    where uc.UserID == userID
+                    select new AccountsByUserPresentation
+                    {
+                        Id = c.Id??0,
+                        AccountName = c.AccountName.Trim(),
+                        PreferencialAccount = uc.Preferencial,
+                    }).ToList();
+        }
+
         private DateTime? GetLastDay(int accountId)
         {
 
-            return this._context.Launch
+            return this.context.Launch
                                 .Where(w => w.DateCreated != null && w.AccountId == accountId)
                                 .OrderByDescending(o => o.DateCreated)
                                 .FirstOrDefault()?
@@ -74,7 +87,7 @@ namespace Repository
 
         private string GetAccountName(int key)
         {
-            return this._context.Account.FirstOrDefault(f => f.Id == key).AccountName;
+            return this.context.Account.FirstOrDefault(f => f.Id == key).AccountName;
         }
     }
 }

@@ -3,7 +3,7 @@ import { FormBuilder } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { BudgetWord } from "src/app/models/budgetWord.interface";
-import { BudgetService } from "../../../services/budget.service";
+import { BudgetService } from "../../../../services/budget.service";
 import { Budget } from "src/app/models/budget.class";
 
 @Component({

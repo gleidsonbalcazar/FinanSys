@@ -54,6 +54,7 @@ namespace Api.FinanSys.Controllers.Base
         [HttpPost]
         public async Task<ActionResult<TEntity>> Post(TEntity entity)
         {
+
             await _repository.Add(entity);
             return CreatedAtAction("Get", new { id = entity.Id }, entity);
         }

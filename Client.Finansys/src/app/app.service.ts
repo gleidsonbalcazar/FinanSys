@@ -6,12 +6,12 @@ import { Months } from "./models/months.interface";
 @Injectable()
 export class AppService {
 
-  public accounts: Account[] = [
-    { id: 1, accountName: 'Conta Gleidson'},
-    { id: 2, accountName: 'Poupança'},
-    { id: 3, accountName: 'Conta Nathalie'},
-    { id: 4, accountName: 'Conta N26'},
-  ]
+  // public accounts: Account[] = [
+  //   { id: 1, accountName: 'Conta Gleidson'},
+  //   { id: 2, accountName: 'Poupança'},
+  //   { id: 3, accountName: 'Conta Nathalie'},
+  //   { id: 4, accountName: 'Conta N26'},
+  // ]
   public month = new BehaviorSubject<number>(new Date().getMonth() + 1);
   public months: Months[] = [
     { id: 0, name: "Todos", pref: "All" },

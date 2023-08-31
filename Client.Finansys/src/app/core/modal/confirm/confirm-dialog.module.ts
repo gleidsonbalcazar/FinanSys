@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 
 import {ConfirmDialogComponent} from './confirm-dialog.component';
@@ -10,8 +9,7 @@ import {ConfirmDialogService} from './confirm-dialog.service';
         ConfirmDialogComponent
     ],
     imports: [
-        BrowserModule,
-        CommonModule
+        //CommonModule
     ],
     exports: [
         ConfirmDialogComponent

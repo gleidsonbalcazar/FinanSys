@@ -18,13 +18,19 @@
 .bar-container {
   padding: 0;
   border-radius: 5px;
+  animation: color-gradient 25s linear 1;
+  animation-fill-mode: forwards;
+  animation-play-state: paused;
   min-height: 24px;
   max-width: 100%;
   color: #000;
+  transition: 0.4s linear;
+  transition-property: width, background-color;
   background:
     linear-gradient(#f1f1f1,#f1f1f1) right/calc(100% - var(--d)) 100% no-repeat,
-    linear-gradient(to right, green 30%, yellow 50%, red 100%);
+    linear-gradient(to right, green 30%, yellow 50%, rgb(243, 146, 146) 100%);
 }
+
 
 .add-to-Launch{
   background-color: #48abe0;

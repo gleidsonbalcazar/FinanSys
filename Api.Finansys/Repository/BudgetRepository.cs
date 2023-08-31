@@ -40,12 +40,12 @@ namespace Repository
             var budget = new Budget()
             {
                 Active = true,
-                DateCreated = budgetReq.dateCreated,
-                UserCreated = budgetReq.userCreated,
                 Value = 0,
                 BudgetConfig = budgetReq.BudgetConfig,
                 Description = budgetReq.Description,
                 TypeBudget = budgetReq.TypeBudget,
+                DateCreated = budgetReq.DateCreated,
+                UserCreated = budgetReq.UserCreated,
             };
 
             this._context.Budget.Add(budget);
@@ -150,8 +150,8 @@ namespace Repository
             {
                 newBudgetWord.BudgetWord = budget.BudgetWord;
                 newBudgetWord.BudgetId = budget.BudgetId;
-                newBudgetWord.DateCreated = DateTime.Now;
-                newBudgetWord.UserCreated = "admin";
+                newBudgetWord.DateCreated = budget.DateCreated;
+                newBudgetWord.UserCreated = budget.UserCreated;
 
                 budgetRepo.BudgetWords.Add(newBudgetWord);
 

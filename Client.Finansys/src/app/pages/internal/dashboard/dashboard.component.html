@@ -3,7 +3,8 @@
     <div class="col-8">
       <div class="card">
         <div class="card-header">
-            <span class="card-text-header">Painel de Execução Orçamentária</span>
+            <span class="card-text-header">Painel de Execução Orçamentária
+            </span>
         </div>
         <div class="card-body">
           <form>
@@ -55,7 +56,7 @@
                 </td>
                 <td>
                   <div class="bar-line">
-                    <div class="bar-container" style="text-align: center;" [style]="getPercentualWidth((b.valueExec / b.valueOrc))">
+                    <div class="bar-container " style="text-align: center;" [style]="getPercentualWidth((b.valueExec / b.valueOrc))">
                         <span class="text"> {{ getPercentual((b.valueExec / b.valueOrc)) * 100 | number: "1.2-2" }} %</span>
                     </div>
                 </div>

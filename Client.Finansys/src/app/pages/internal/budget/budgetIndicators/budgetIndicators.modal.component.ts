@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
-import { IndicatorsService } from '../../../services/indicators.service';
+import { IndicatorsService } from '../../../../services/indicators.service';
 import { Budget } from 'src/app/models/budget.class';
 
 @Component({

@@ -5,8 +5,7 @@ import { ToastrService } from "ngx-toastr";
 import { Budget } from "src/app/models/budget.class";
 import { BudgetConfig } from "src/app/models/budgetConfig.interface";
 import { BaseComponent } from "src/app/core/baseComponent/base";
-import { BudgetService } from "../../../services/budget.service";
-import { ViewportScroller } from "@angular/common";
+import { BudgetService } from "../../../../services/budget.service";
 
 @Component({
   selector: "app-budget-manager",

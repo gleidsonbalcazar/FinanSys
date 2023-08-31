@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 
-namespace FinansysControl.Controllers.Budgets
+namespace Api.FinanSys.Controllers.Budgets
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -62,7 +63,8 @@ namespace FinansysControl.Controllers.Budgets
         [HttpPost]
         public async Task<ActionResult<Budget>> Post(BudgetRequest budgetReq)
         {
-
+            budgetReq.UserCreated = User.Identity.Name;
+            budgetReq.DateCreated = DateTime.Now;
             var budget = budgetRepository.AddBudget(budgetReq);
 
             return CreatedAtAction("Get", new { id = budget.Id }, budgetReq);
@@ -94,6 +96,8 @@ namespace FinansysControl.Controllers.Budgets
         [HttpPost("addWord")]
         public ActionResult<BudgetWords> AddWord(BudgetWordRequest budget)
         {
+            budget.UserCreated = User.Identity.Name;
+            budget.DateCreated = DateTime.Now;
             var result = budgetRepository.AddNewWord(budget);
             if (result.Id == null)
             {

@@ -11,12 +11,9 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using FinansysControl;
 using System.Text;
-using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
-using System.Reflection.Metadata;
 
 namespace FinanSys
 {
@@ -87,6 +84,7 @@ namespace FinanSys
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
+                    ValidateLifetime = true,
                     ValidateAudience = false
                 };
             });

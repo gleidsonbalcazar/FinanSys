@@ -11,11 +11,11 @@ import { LoginService } from "../services/login.service";
 })
 export class NavMenuComponent implements OnInit{
   @Output() logoutEvent: EventEmitter<any> = new EventEmitter();
-  isExpanded = false;
+  public isExpanded = false;
+  public isLogged:boolean = false;
   public monthId!: number;
   public year!: number;
   public user!:any;
-  public isLogged:boolean = false;
   public months: Months[] = [
     { id: 0, name: "Todos", pref: "All" },
     { id: 1, name: "Janeiro", pref: "Jan" },
@@ -43,6 +43,10 @@ export class NavMenuComponent implements OnInit{
   }
 
   ngOnInit() {
+   this.loadNavMenu();
+  }
+
+  public loadNavMenu(){
     this.appService.getMonth().subscribe((s) => {
       this.monthId = s;
       this.appService.getYear().subscribe(y => {
@@ -50,8 +54,14 @@ export class NavMenuComponent implements OnInit{
       })
     });
 
-    this.user = this.loginService.currentUserValue;
-    this.isLogged = this.user != null;
+    this.loginService.isUserLogged().subscribe((s) => {
+      this.user = this.loginService.currentUserValue;
+      this.isLogged = s;
+    })
+
+    if(this.user){
+      this.isLogged = true;
+    }
   }
 
   collapse() {

@@ -5,9 +5,9 @@ import { AppService } from 'src/app/app.service';
 import { Account } from 'src/app/models/account.interface';
 import { Banks } from 'src/app/models/banks.interface';
 import { ImportBank } from 'src/app/models/importBank.interface';
-import { BudgetService } from '../../../services/budget.service';
-import { LaunchService } from '../../../services/launch.service';
-import { ImportRequest } from '../../../models/importRequest.class';
+import { BudgetService } from '../../../../services/budget.service';
+import { LaunchService } from '../../../../services/launch.service';
+import { ImportRequest } from '../../../../models/importRequest.class';
 import * as moment from "moment";
 import { Budget } from 'src/app/models/budget.class';
 
@@ -47,8 +47,8 @@ export class LaunchImportComponent {
     }
 
   getAccounts() {
-    this.accounts = this.appService.accounts;
-    this.accounts.unshift({id:0,accountName:"-- Selecione a Conta --"});
+    this.accounts = null;//this.appService.accounts;
+    this.accounts.unshift({id:0,accountName:"-- Selecione a Conta --", preferencialAccount: false});
   }
 
   getBanks() {

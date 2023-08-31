@@ -7,7 +7,7 @@ export class CrudService<T, ID> implements CrudOperations<T, ID> {
 
   constructor(
     protected _http: HttpClient,
-    protected _base: string
+    protected _base: string,
   ) {}
 
   save(t: T): Observable<T> {

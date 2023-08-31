@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Api.FinanSys.Models.Requests;
 using FinansysControl.Helpers;
-using FinansysControl.Models.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 
@@ -31,6 +30,7 @@ namespace Api.FinanSys.Controllers.Login
 
             return new
             {
+                user.Id,
                 user.Username,
                 token
             };

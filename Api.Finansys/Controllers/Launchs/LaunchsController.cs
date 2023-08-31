@@ -1,6 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Api.FinanSys.Models.Entities;
 using Api.FinanSys.Models.Requests;
@@ -48,6 +47,7 @@ namespace Api.FinanSys.Controllers.Launchs
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, Launch entity)
         {
+
             if (id != entity.Id)
             {
                 return BadRequest();
@@ -59,6 +59,9 @@ namespace Api.FinanSys.Controllers.Launchs
         [HttpPost]
         public async Task<ActionResult<Launch>> Post(Launch entity)
         {
+            entity.UserCreated = User.Identity.Name;
+            entity.DateCreated = DateTime.Now;
+
             await _repository.Add(entity);
             return CreatedAtAction("Get", new { id = entity.Id }, entity);
         }
@@ -66,6 +69,7 @@ namespace Api.FinanSys.Controllers.Launchs
         [HttpPost("import/{accountId}")]
         public async Task<ActionResult<ImportRequest>> Import(ImportRequest importRequest, int accountId)
         {
+
             await _repository.ProcessImport(importRequest, accountId);
             return CreatedAtAction("Get", new { id = accountId });
         }

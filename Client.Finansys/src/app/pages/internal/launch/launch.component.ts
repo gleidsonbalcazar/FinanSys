@@ -1,14 +1,14 @@
 import { Component, QueryList, ViewChildren } from "@angular/core";
-import { BudgetService } from "../../services/budget.service";
-import { launch } from "../../models/launch.interface";
-import { LaunchService } from "../../services/launch.service";
-import { BaseComponent } from "../../core/baseComponent/base";
 import { NgbdSortableHeader, SortEvent } from "src/app/core/directives/sort/sortable.directive";
 import { Observable } from "rxjs";
 import { AppService } from "src/app/app.service";
 import { Account } from "src/app/models/account.interface";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Budget } from "src/app/models/budget.class";
+import { BaseComponent } from "src/app/core/baseComponent/base";
+import { launch } from "src/app/models/launch.interface";
+import { BudgetService } from "src/app/services/budget.service";
+import { LaunchService } from "src/app/services/launch.service";
 import { LaunchModalComponent } from "./launch-modal/launch.modal.component";
 
 @Component({
@@ -21,7 +21,7 @@ export class LaunchComponent extends BaseComponent {
   selectedMonth:number;
   selectedYear:number;
   launchs: launch[] = [];
-  accounts: Account[] = [];
+  //accounts: Account[] = [];
   typeBudgets: Budget[] = [];
   searchText!: string;
   monthId: number = new Date().getMonth() + 1;
@@ -38,14 +38,14 @@ export class LaunchComponent extends BaseComponent {
     private modalService: NgbModal,
   ) {
     super();
-    this.getAccounts();
+    //this.getAccounts();
     this.launchs$ = launchService.launchs$;
     this.total$ = launchService.total$;
   }
 
-  getAccounts() {
-    this.accounts = this.appService.accounts;
-  }
+  // getAccounts() {
+  //   this.accounts = this.appService.accounts;
+  // }
 
   getTypeBudgets() {
     this.appService.getYear().subscribe(r => this.selectedYear = r);
@@ -103,7 +103,7 @@ export class LaunchComponent extends BaseComponent {
   }
 
 
-  addLaunch2() {
+  addLaunch() {
     const modalRef = this.modalService.open(LaunchModalComponent,{ windowClass : "modal-pre-lg"});
     modalRef.componentInstance.title = "Criar Lançamento";
     modalRef.result.then(r => {

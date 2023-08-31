@@ -3,13 +3,15 @@ import * as moment from "moment";
 import { AppService } from 'src/app/app.service';
 import { Account } from 'src/app/models/account.interface';
 import { homeResume } from 'src/app/models/homeResume.interface';
-import { Budget } from '../../models/budget.class';
-import { home } from '../../models/home.interface';
-import { launch } from '../../models/launch.interface';
-import { DashboardService } from '../../services/dashboard.service';
-import { LaunchService } from '../../services/launch.service';
+import { Budget } from '../../../models/budget.class';
+import { home } from '../../../models/home.interface';
+import { launch } from '../../../models/launch.interface';
+import { DashboardService } from '../../../services/dashboard.service';
+import { LaunchService } from '../../../services/launch.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LaunchModalComponent } from '../launch/launch-modal/launch.modal.component';
+import { LoginService } from 'src/app/services/login.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,12 +34,15 @@ export class DashBoardComponent implements OnInit{
     public appService:AppService,
     public launchService: LaunchService,
     public modalService: NgbModal,
+    public loginservice: LoginService,
+    public router: Router,
+    public activateRoute: ActivatedRoute
     ) {
 
   }
 
   ngOnInit() {
-    this.getAccounts();
+     this.getAccounts();
     this.appService.getMonth().subscribe(id => {
       this.monthId = id;
       this.appService.getYear().subscribe(y => {
@@ -46,6 +51,7 @@ export class DashBoardComponent implements OnInit{
       })
     })
   }
+
 
   public getPainel() {
     this.painelService.getPainel(this.monthId, this.year).subscribe( (s) => {

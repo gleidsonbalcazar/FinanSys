@@ -16,9 +16,9 @@ namespace Api.FinanSys.Models.Requests
 
         public bool? Active { get; set; }
 
-        public string userCreated { get; set; }
+        public string UserCreated { get; set; }
 
-        public DateTime? dateCreated { get; set; }
+        public DateTime? DateCreated { get; set; }
 
     }
 }

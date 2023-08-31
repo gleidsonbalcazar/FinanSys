@@ -1,36 +1,46 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { BudgetListComponent } from './pages/budget/budget.component';
-import { DashBoardComponent } from './pages/dashboard/dashboard.component';
-import { LaunchImportComponent } from './pages/launch/launch-import/launch-import.component';
-import { LaunchComponent } from './pages/launch/launch.component';
-import { LoginComponent } from './pages/login/login.component';
+import { LaunchImportComponent } from './pages/internal/launch/launch-import/launch-import.component';
+import { LoginComponent } from './pages/external/login/login.component';
 import { AuthGuard } from './core/guard/auth.guard';
+import { AppComponent } from './app.component';
+import { BudgetListComponent } from './pages/internal/budget/budget.component';
+import { LaunchComponent } from './pages/internal/launch/launch.component';
+import { DashBoardComponent } from './pages/internal/dashboard/dashboard.component';
 
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {
-    path: "",
+    path: 'home',
+    component: AppComponent,
+  },
+  {
+    path: 'dashboard',
     component: DashBoardComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
-    path: "budget",
+    path: 'budget',
     component: BudgetListComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
-    path: "launch",
+    path: 'launch',
     component: LaunchComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
-    path: "import",
+    path: 'import',
     component: LaunchImportComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
-  { path: "**", redirectTo: "" },
+  { path: '**', redirectTo: '' },
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'home',
+  },
 ];
 
 @NgModule({

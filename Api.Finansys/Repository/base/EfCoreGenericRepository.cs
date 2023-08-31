@@ -1,4 +1,5 @@
 using FinansysControl.Data;
+using FinansysControl.Models.Auth;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
