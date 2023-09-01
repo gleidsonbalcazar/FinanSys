@@ -42,12 +42,14 @@ export class LaunchModalComponent extends BaseComponent{
     super()
   }
 
-  override ngOnInit() {
+  override async ngOnInit() {
     this.userLogged = this.loginService.currentUserValue;
 
     this.getTypeBudgets();
     this.getAccountByUser();
+  }
 
+  initComponent(){
     if (this.budgetToLaunch != null) {
       let budget = this.budgetToLaunch;
       this.launch = {
@@ -85,11 +87,12 @@ export class LaunchModalComponent extends BaseComponent{
     this.budgetService.findAllByMonthAndYear(this.selectedMonth,this.selectedYear).subscribe((s) => (this.typeBudgets = s));
   }
 
-  getAccountByUser() {
+  async getAccountByUser() {
     this.accountService.getAccountByUser(this.userLogged.id)
                       .subscribe(r =>  {
                                         this.accounts = r;
                                         this.createForm();
+                                        this.initComponent();
                                       });
   }
 

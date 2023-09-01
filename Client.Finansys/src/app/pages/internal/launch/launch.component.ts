@@ -46,7 +46,7 @@ export class LaunchComponent extends BaseComponent {
   }
 
   getAccounts() {
-    this.accountService.findAll(null).subscribe(f => { console.log(f); this.accounts = f;});
+    this.accountService.findAll(null).subscribe(f => { this.accounts = f;});
   }
 
   getTypeBudgets() {
