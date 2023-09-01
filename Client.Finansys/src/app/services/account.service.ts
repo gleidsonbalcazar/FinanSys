@@ -12,11 +12,15 @@ export class AccountService extends CrudService<Account, number> {
     private http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string
   ) {
-    super(http, `${baseUrl}budgets`);
+    super(http, `${baseUrl}Accounts`);
   }
 
   public getAccountByUser(id:number): Observable<Account[]>{
     return this.http.get<Account[]>(this.baseUrl + 'Accounts/user' + '/' + id);
+  }
+
+  public getAllAccountsWithDetail(): Observable<Account[]>{
+    return this.http.get<Account[]>(this.baseUrl + 'Accounts/GetAllAccountsWithDetail');
   }
 
 }

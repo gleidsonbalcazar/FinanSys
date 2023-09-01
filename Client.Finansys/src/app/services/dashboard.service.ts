@@ -23,8 +23,4 @@ export class DashboardService {
     return this.http.get<home[]>(this.baseUrl + 'home' + '/resume/' + month + "/" +year);
   }
 
-  public getAccounts(): Observable<Account[]>{
-    return this.http.get<Account[]>(this.baseUrl + 'accounts');
-  }
-
 }

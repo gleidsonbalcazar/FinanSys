@@ -10,6 +10,7 @@ import { launch } from "src/app/models/launch.interface";
 import { BudgetService } from "src/app/services/budget.service";
 import { LaunchService } from "src/app/services/launch.service";
 import { LaunchModalComponent } from "./launch-modal/launch.modal.component";
+import { AccountService } from "src/app/services/account.service";
 
 @Component({
   selector: "app-launch",
@@ -21,7 +22,7 @@ export class LaunchComponent extends BaseComponent {
   selectedMonth:number;
   selectedYear:number;
   launchs: launch[] = [];
-  //accounts: Account[] = [];
+  accounts: Account[] = [];
   typeBudgets: Budget[] = [];
   searchText!: string;
   monthId: number = new Date().getMonth() + 1;
@@ -32,25 +33,30 @@ export class LaunchComponent extends BaseComponent {
   @ViewChildren(NgbdSortableHeader) headers!: QueryList<NgbdSortableHeader>;
 
   constructor(
-    private budgetService: BudgetService,
-    private appService: AppService,
+    public budgetService: BudgetService,
+    public appService: AppService,
     public launchService: LaunchService,
-    private modalService: NgbModal,
+    public accountService: AccountService,
+    public modalService: NgbModal,
   ) {
     super();
-    //this.getAccounts();
+    this.getAccounts();
     this.launchs$ = launchService.launchs$;
     this.total$ = launchService.total$;
   }
 
-  // getAccounts() {
-  //   this.accounts = this.appService.accounts;
-  // }
+  getAccounts() {
+    this.accountService.findAll(null).subscribe(f => { console.log(f); this.accounts = f;});
+  }
 
   getTypeBudgets() {
     this.appService.getYear().subscribe(r => this.selectedYear = r);
     this.appService.getMonth().subscribe(r => this.selectedMonth = r);
     this.budgetService.findAllByMonthAndYear(this.selectedMonth,this.selectedYear).subscribe((s) => (this.typeBudgets = s));
+  }
+
+  selectAccount(obj:any){
+    console.log(obj.value);
   }
 
   getAccountNameIcon(id: number) {

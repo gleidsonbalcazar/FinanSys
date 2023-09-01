@@ -12,6 +12,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LaunchModalComponent } from '../launch/launch-modal/launch.modal.component';
 import { LoginService } from 'src/app/services/login.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,6 +33,7 @@ export class DashBoardComponent implements OnInit{
   constructor(
     private painelService: DashboardService,
     public appService:AppService,
+    public accountService: AccountService,
     public launchService: LaunchService,
     public modalService: NgbModal,
     public loginservice: LoginService,
@@ -88,7 +90,7 @@ export class DashBoardComponent implements OnInit{
   }
 
   public getAccounts(){
-    this.painelService.getAccounts().subscribe( s => {
+    this.accountService.getAllAccountsWithDetail().subscribe( s => {
       this.accounts = s;
     });
   }

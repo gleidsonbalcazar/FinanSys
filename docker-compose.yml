@@ -29,5 +29,5 @@ services:
     ports:
       - "1433:1433"
     volumes:
-     # - /home/database:/var/opt/mssql/data
-      - D:\SQLSERVER\data:/var/opt/mssql/data
+      - /home/database:/var/opt/mssql/data
+     # - D:\SQLSERVER\data:/var/opt/mssql/data

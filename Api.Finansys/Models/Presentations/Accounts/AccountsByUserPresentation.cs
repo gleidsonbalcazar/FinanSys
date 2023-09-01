@@ -1,4 +1,4 @@
-﻿namespace Api.FinanSys.Models.Presentations
+﻿namespace Api.FinanSys.Models.Presentations.Accounts
 {
     public class AccountsByUserPresentation
     {
@@ -7,7 +7,7 @@
 
         public string AccountName { get; set; }
 
-        public bool PreferencialAccount{ get; set; }
+        public bool PreferencialAccount { get; set; }
 
     }
 }

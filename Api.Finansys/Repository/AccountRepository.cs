@@ -1,5 +1,5 @@
 using Api.FinanSys.Models.Entities;
-using Api.FinanSys.Models.Presentations;
+using Api.FinanSys.Models.Presentations.Accounts;
 using FinansysControl.Data;
 using FinansysControl.Helpers.Enum;
 using Repository.Base;
@@ -17,13 +17,23 @@ namespace Repository
             this.context = context;
         }
 
-        public List<AccountViewPresentation> GetAll()
+        public List<AccountsBasePresentation> GetAll()
+        {
+            return this.context.Account
+                            .Select(s => new AccountsBasePresentation { 
+                                Id = s.Id??0,
+                                AccountName = s.AccountName.Trim()
+                             })
+                            .ToList();
+        }
+
+        public List<AccountDetailsPresentation> GetAllAccountsWithDetail()
         {
             var resultAccountsInbound = this.context.Launch
                                               .Where(w => w.TypeLaunch == TypeLaunchEnum.Receita.ToDescriptionString())
                                               .GroupBy(g => g.AccountId)
                                               .Select(s => new 
-                                                            AccountViewPresentation 
+                                                            AccountDetailsPresentation 
                                                             {
                                                                 AccountId = s.Key,
                                                                 Value = s.Sum(a => a.ValueExec),
@@ -35,7 +45,7 @@ namespace Repository
                                               .Where(w => w.TypeLaunch == TypeLaunchEnum.Despesa.ToDescriptionString())
                                               .GroupBy(g => g.AccountId)
                                               .Select(s => new
-                                                            AccountViewPresentation
+                                                            AccountDetailsPresentation
                                                             {
                                                                 AccountId = s.Key,
                                                                 Value = s.Sum(a => a.ValueExec) * -1,
@@ -46,7 +56,7 @@ namespace Repository
             var resultAccounts = resultAccountsInbound.Union(resultAccountsOutbound)
                                                       .GroupBy(g => g.AccountId)
                                                       .Select(s => new 
-                                                                    AccountViewPresentation 
+                                                                    AccountDetailsPresentation 
                                                                     { 
                                                                         AccountId = s.Key, 
                                                                         Value =s.Sum(a=> a.Value)
@@ -54,7 +64,7 @@ namespace Repository
                                                        .ToList();
 
             resultAccounts.ForEach(f => {
-                                            f.AccountName = GetAccountName(f.AccountId);
+                                            f.AccountName = GetAccountName(f.AccountId).Trim();
                                             f.LastUpdate = GetLastDay(f.AccountId);
                                         }
                                     );

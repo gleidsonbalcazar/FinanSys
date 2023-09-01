@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Api.FinanSys.Models.Presentations
+namespace Api.FinanSys.Models.Presentations.Accounts
 {
-    public class AccountViewPresentation
+    public class AccountDetailsPresentation
     {
         public int AccountId { get; set; }
         public string AccountName { get; set; }

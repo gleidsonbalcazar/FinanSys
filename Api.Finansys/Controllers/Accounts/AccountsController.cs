@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Api.FinanSys.Models.Entities;
-using Api.FinanSys.Models.Presentations;
-using Microsoft.AspNetCore.Authorization;
+using Api.FinanSys.Models.Presentations.Accounts;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 
@@ -19,8 +18,14 @@ namespace Api.FinanSys.Controllers.Accounts
             _repository = repository;
         }
 
+        [HttpGet("GetAllAccountsWithDetail")]
+        public async Task<ActionResult<IEnumerable<AccountDetailsPresentation>>> GetAllAccountsWithDetail()
+        {
+            return _repository.GetAllAccountsWithDetail();
+        }
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AccountViewPresentation>>> Get()
+        public async Task<ActionResult<IEnumerable<AccountsBasePresentation>>> GetAll()
         {
             return _repository.GetAll();
 

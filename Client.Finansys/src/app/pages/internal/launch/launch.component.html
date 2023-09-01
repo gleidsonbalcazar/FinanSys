@@ -4,13 +4,26 @@
       <div class="row">
         <div class="col">
           <input
-            class="form-control ml-2"
+            class="form-control"
             type="text"
             name="searchTerm"
             placeholder="Pesquisar"
             [(ngModel)]="launchService.searchTerm"
           />
           <span class="ml-3" *ngIf="launchService.loading$ | async">Carregando...</span>
+        </div>
+        <div class="col">
+          <div ngbDropdown class="d-inline-block">
+            <button type="button" class="btn btn-outline-search" id="dropdownBasic1" ngbDropdownToggle>
+              Selecione a Conta
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" >
+              <button ngbDropdownItem value="0">Todas</button>
+              <button ngbDropdownItem *ngFor="let c of accounts" value={{c.id}} (click)="selectAccount($event.target)">
+                {{c.accountName}}
+              </button>
+            </div>
+          </div>
         </div>
         <div class="col text-right">
           <button (click)="addLaunch()" class="btn btn-primary">
