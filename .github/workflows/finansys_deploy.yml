@@ -18,4 +18,4 @@ jobs:
             cd /home/www/finansys
             git pull
             docker-compose build client api --force-rm --no-cache --compress
-            docker-compose up -d
+            docker-compose up -d client api
