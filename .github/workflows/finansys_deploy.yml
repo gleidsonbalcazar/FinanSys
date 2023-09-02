@@ -12,7 +12,7 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
-          script_top: true
+          script_stop: true
           command_timeout: 200m
           script: /
             cd /home/www/finansys
