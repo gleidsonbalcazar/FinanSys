@@ -52,7 +52,7 @@ export class LaunchComponent extends BaseComponent {
   getTypeBudgets() {
     this.appService.getYear().subscribe(r => this.selectedYear = r);
     this.appService.getMonth().subscribe(r => this.selectedMonth = r);
-    this.budgetService.findAllByMonthAndYear(this.selectedMonth,this.selectedYear).subscribe((s) => (this.typeBudgets = s));
+    this.budgetService.findAllByMonthAndYear(this.selectedMonth,this.selectedYear, 0).subscribe((s) => (this.typeBudgets = s));
   }
 
   selectAccount(obj:any){

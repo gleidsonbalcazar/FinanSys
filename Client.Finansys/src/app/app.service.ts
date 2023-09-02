@@ -1,17 +1,11 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { Account } from "./models/account.interface";
+import { BehaviorSubject, Observable } from "rxjs";
 import { Months } from "./models/months.interface";
 
 @Injectable()
 export class AppService {
 
-  // public accounts: Account[] = [
-  //   { id: 1, accountName: 'Conta Gleidson'},
-  //   { id: 2, accountName: 'Poupança'},
-  //   { id: 3, accountName: 'Conta Nathalie'},
-  //   { id: 4, accountName: 'Conta N26'},
-  // ]
+
   public month = new BehaviorSubject<number>(new Date().getMonth() + 1);
   public months: Months[] = [
     { id: 0, name: "Todos", pref: "All" },
@@ -30,6 +24,7 @@ export class AppService {
   ];
 
   public year = new BehaviorSubject<number>(new Date().getFullYear());
+  public accountFilter = new BehaviorSubject<number>(0);
 
   setMonth(value:number) {
     this.month.next(value);
@@ -45,5 +40,13 @@ export class AppService {
 
   getYear():Observable<number>{
     return this.year.asObservable();
+  }
+
+  getAccountFilter():Observable<number>{
+    return this.accountFilter.asObservable();
+  }
+
+  setAccountFilter(value:number){
+    return this.accountFilter.next(value);
   }
 }

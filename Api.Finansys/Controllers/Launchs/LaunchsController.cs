@@ -27,10 +27,10 @@ namespace Api.FinanSys.Controllers.Launchs
 
         }
 
-        [HttpGet("{month}/{year}")]
-        public ActionResult<IEnumerable<Launch>> Get(int month, int year)
+        [HttpGet("{month}/{year}/{accountID}")]
+        public ActionResult<IEnumerable<Launch>> Get(int month, int year, int accountID)
         {
-            var entity = _repository.GetAllOrdered(month, year);
+            var entity = _repository.GetAllOrdered(month, year, accountID);
             if (entity == null)
             {
                 return NotFound();

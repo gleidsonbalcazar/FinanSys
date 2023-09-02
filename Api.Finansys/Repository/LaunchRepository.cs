@@ -20,10 +20,17 @@ namespace Repository
             this._context = context;
         }
 
-        public ActionResult<IEnumerable<Launch>> GetAllOrdered(int month, int year)
+        public ActionResult<IEnumerable<Launch>> GetAllOrdered(int month, int year, int accountID)
         {
-           var launchs = this._context.Launch.Where(s => s.Day.Month == month || month == 0).Where(s => s.Day.Year == year || year == 0).OrderByDescending(s => s.Day).ToList();
-           var launchsPredicted = launchs.Where(s => s.ValuePrev > s.ValueExec).ToList();
+            var launchs = this._context.Launch.Where(s => s.Day.Month == month || month == 0)
+                                              .Where(s => s.Day.Year == year || year == 0)
+                                              .OrderByDescending(s => s.Day).ToList();
+           if(accountID > 0)
+            {
+                launchs.Where(w => w.AccountId == accountID);
+            }
+
+           var launchsPredicted = launchs.Where(s => s.ValuePrev > s.ValueExec);
            launchs.RemoveAll(s => s.ValuePrev > s.ValueExec);
            launchs.InsertRange(0,launchsPredicted);
 

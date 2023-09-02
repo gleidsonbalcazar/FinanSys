@@ -3,3 +3,7 @@
   height: calc(90vh - 100px);
   align-items: center;
 }
+.mini-name{
+  font-size: smaller;
+  color: cornflowerblue;
+}

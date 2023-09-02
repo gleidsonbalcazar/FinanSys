@@ -13,17 +13,17 @@
           <span class="ml-3" *ngIf="launchService.loading$ | async">Carregando...</span>
         </div>
         <div class="col">
-          <div ngbDropdown class="d-inline-block">
-            <button type="button" class="btn btn-outline-search" id="dropdownBasic1" ngbDropdownToggle>
+          <select class="form-control" (change)="selectAccount($event.target)">
+            <option [value]="null" disabled>
               Selecione a Conta
-            </button>
-            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" >
-              <button ngbDropdownItem value="0">Todas</button>
-              <button ngbDropdownItem *ngFor="let c of accounts" value={{c.id}} (click)="selectAccount($event.target)">
-                {{c.accountName}}
-              </button>
-            </div>
-          </div>
+            </option>
+            <option [value]="0">
+             Todas as Contas Familia
+            </option>
+            <option *ngFor="let c of accounts" [value]="c.id">
+              {{c.accountName}}
+            </option>
+          </select>
         </div>
         <div class="col text-right">
           <button (click)="addLaunch()" class="btn btn-primary">

@@ -2,20 +2,20 @@
   <div class="row">
     <div class="col-4"></div>
     <div class="col-4">
-        <h2>Login</h2>
+        <h2>Entrar no <span class="mini-name"><i class="fab fa-foursquare"></i>inansys<i class="fas fa-copyright"></i>ontrol</span></h2>
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <div class="form-group">
-                <label for="username">Username</label>
+                <label for="username">Usuário</label>
                 <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }"/>
                 <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
                     <div *ngIf="f.username.errors.required">Necessário preencher o usuário</div>
                 </div>
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password">Senha</label>
                 <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }"/>
                 <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                    <div *ngIf="f.password.errors.required">Necessário preencher o password</div>
+                    <div *ngIf="f.password.errors.required">Necessário preencher a senha</div>
                 </div>
             </div>
             <div class="form-group">
