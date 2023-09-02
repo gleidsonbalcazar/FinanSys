@@ -1,8 +1,8 @@
 name: deploy
-run-name: ${{ github.actor }} is deploying Finansys
+run-name: Deploying Finansys Client/Api
 on: [push]
 jobs:
-  check-bats-version:
+  finansys:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
