@@ -9,7 +9,7 @@ services:
     ports:
       - 80:80
     depends_on:
-      - db
+     # - db
       - api
   api:
     container_name: api
