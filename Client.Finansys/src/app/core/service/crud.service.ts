@@ -1,7 +1,8 @@
 
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { CrudOperations } from '../../models/crud-operations';
+import { Params } from '@angular/router';
 
 export class CrudService<T, ID> implements CrudOperations<T, ID> {
 
@@ -18,7 +19,6 @@ export class CrudService<T, ID> implements CrudOperations<T, ID> {
     return this._http.put<T>(this._base + "/" + id, t, {});
   }
 
-
   findOne(id: ID): Observable<T> {
     return this._http.get<T>(this._base + "/" + id);
   }
@@ -29,6 +29,10 @@ export class CrudService<T, ID> implements CrudOperations<T, ID> {
 
   findAllByMonthAndYear(month: ID, year: ID, accountFilter: ID): Observable<T[]> {
     return this._http.get<T[]>(this._base + "/" + month + "/" + year + "/" + accountFilter);
+  }
+
+  findAllBudgetsByMonthAndYear(month: ID, year: ID): Observable<T[]> {
+    return this._http.get<T[]>(this._base + "/" + month + "/" + year);
   }
 
   findAll(param: string): Observable<T[]> {

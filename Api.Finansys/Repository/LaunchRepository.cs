@@ -26,9 +26,9 @@ namespace Repository
                                               .Where(s => s.Day.Year == year || year == 0)
                                               .OrderByDescending(s => s.Day).ToList();
            if(accountID > 0)
-            {
-                launchs.Where(w => w.AccountId == accountID);
-            }
+           {
+               launchs.RemoveAll(w => w.AccountId != accountID);
+           }
 
            var launchsPredicted = launchs.Where(s => s.ValuePrev > s.ValueExec);
            launchs.RemoveAll(s => s.ValuePrev > s.ValueExec);

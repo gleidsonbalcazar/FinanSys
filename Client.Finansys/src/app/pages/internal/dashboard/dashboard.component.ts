@@ -13,6 +13,7 @@ import { LaunchModalComponent } from '../launch/launch-modal/launch.modal.compon
 import { LoginService } from 'src/app/services/login.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from 'src/app/services/account.service';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,6 +29,7 @@ export class DashBoardComponent implements OnInit{
   public monthId!: number;
   public year!: number;
   public homeResume!: homeResume;
+  public userLogged: User;
 
 
   constructor(
@@ -40,15 +42,14 @@ export class DashBoardComponent implements OnInit{
     public router: Router,
     public activateRoute: ActivatedRoute
     ) {
-
   }
 
   ngOnInit() {
-     this.getAccounts();
     this.appService.getMonth().subscribe(id => {
       this.monthId = id;
       this.appService.getYear().subscribe(y => {
         this.year = y;
+        this.getAccounts();
         this.getPainel();
       })
     })
@@ -90,8 +91,8 @@ export class DashBoardComponent implements OnInit{
   }
 
   public getAccounts(){
-    this.accountService.getAllAccountsWithDetail().subscribe( s => {
-      this.accounts = s;
+    this.accountService.getAllAccountsWithDetail(this.monthId).subscribe(result => {
+      this.accounts = result;
     });
   }
 

@@ -2,6 +2,7 @@ using Api.FinanSys.Models.Entities;
 using Api.FinanSys.Models.Presentations.Accounts;
 using FinansysControl.Data;
 using FinansysControl.Helpers.Enum;
+using FinansysControl.Models.Auth;
 using Repository.Base;
 using System;
 using System.Collections.Generic;
@@ -27,10 +28,12 @@ namespace Repository
                             .ToList();
         }
 
-        public List<AccountDetailsPresentation> GetAllAccountsWithDetail()
+        public List<AccountDetailsPresentation> GetAllAccountsWithDetail(int month, string userLogged)
         {
             var resultAccountsInbound = this.context.Launch
-                                              .Where(w => w.TypeLaunch == TypeLaunchEnum.Receita.ToDescriptionString())
+                                              .Where(w => w.TypeLaunch == TypeLaunchEnum.Receita.ToDescriptionString()
+                                                        && w.Day.Month == month
+                                                    )
                                               .GroupBy(g => g.AccountId)
                                               .Select(s => new 
                                                             AccountDetailsPresentation 
@@ -42,7 +45,9 @@ namespace Repository
                                               .ToList();
 
             var resultAccountsOutbound = this.context.Launch
-                                              .Where(w => w.TypeLaunch == TypeLaunchEnum.Despesa.ToDescriptionString())
+                                              .Where(w => w.TypeLaunch == TypeLaunchEnum.Despesa.ToDescriptionString()
+                                                    && w.Day.Month == month
+                                                )
                                               .GroupBy(g => g.AccountId)
                                               .Select(s => new
                                                             AccountDetailsPresentation
@@ -75,13 +80,14 @@ namespace Repository
         public List<AccountsByUserPresentation> GetAccountByUser(int userID)
         {
             return (from c in context.Account
-                    join uc in context.UserAccounts on c.Id equals uc.AccountID
-                    where uc.UserID == userID
+                    join uc in context.UserAccounts on c.Id equals uc.AccountID into ucLeftJoin
+                    from uc in ucLeftJoin.DefaultIfEmpty()
+                    //where uc.UserID == userID by family
                     select new AccountsByUserPresentation
                     {
                         Id = c.Id??0,
                         AccountName = c.AccountName.Trim(),
-                        PreferencialAccount = uc.Preferencial,
+                        PreferencialAccount = uc.Preferencial!=null,
                     }).ToList();
         }
 

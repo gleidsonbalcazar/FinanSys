@@ -56,7 +56,7 @@ export class LaunchComponent extends BaseComponent {
   }
 
   selectAccount(obj:any){
-    console.log(obj.value);
+    this.appService.setAccountFilter(obj.value);
   }
 
   getAccountNameIcon(id: number) {

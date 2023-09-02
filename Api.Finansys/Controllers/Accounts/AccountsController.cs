@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Api.FinanSys.Models.Entities;
 using Api.FinanSys.Models.Presentations.Accounts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 
@@ -9,7 +10,7 @@ namespace Api.FinanSys.Controllers.Accounts
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class AccountsController : Controller
     {
         private readonly AccountRepository _repository;
@@ -19,9 +20,10 @@ namespace Api.FinanSys.Controllers.Accounts
         }
 
         [HttpGet("GetAllAccountsWithDetail")]
-        public async Task<ActionResult<IEnumerable<AccountDetailsPresentation>>> GetAllAccountsWithDetail()
+        public async Task<ActionResult<IEnumerable<AccountDetailsPresentation>>> GetAllAccountsWithDetail([System.Web.Http.FromUri] int month)
         {
-            return _repository.GetAllAccountsWithDetail();
+            var userLogged = User.Identity.Name;
+            return _repository.GetAllAccountsWithDetail(month, userLogged);
         }
 
         [HttpGet]

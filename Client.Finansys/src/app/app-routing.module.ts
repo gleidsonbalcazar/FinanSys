@@ -35,11 +35,11 @@ const routes: Routes = [
     component: LaunchImportComponent,
     canActivate: [AuthGuard],
   },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: 'dashboard' },
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'home',
+    redirectTo: 'dashboard',
   },
 ];
 

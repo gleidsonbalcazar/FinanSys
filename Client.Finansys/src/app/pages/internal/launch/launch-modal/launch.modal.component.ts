@@ -84,7 +84,7 @@ export class LaunchModalComponent extends BaseComponent{
   getTypeBudgets() {
     this.appService.getYear().subscribe(r => this.selectedYear = r);
     this.appService.getMonth().subscribe(r => this.selectedMonth = r);
-    this.budgetService.findAllByMonthAndYear(this.selectedMonth,this.selectedYear, 0).subscribe((s) => (this.typeBudgets = s));
+    this.budgetService.findAllBudgetsByMonthAndYear(this.selectedMonth,this.selectedYear).subscribe((s) => (this.typeBudgets = s));
   }
 
   async getAccountByUser() {

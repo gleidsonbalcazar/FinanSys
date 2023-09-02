@@ -40,7 +40,7 @@ namespace Repository
            
 
 
-            var budgetsValue = _context.BudgetConfig.Where(w => w.Id == budgetId).FirstOrDefault().Value;
+            var budgetsValue = _context.BudgetConfig.Where(w => w.BudgetId == budgetId).FirstOrDefault().Value;
 
             List<MonthValue> budgetsArrayValue = new List<MonthValue>();
             for (int i = 1; i <= 12; i++)
