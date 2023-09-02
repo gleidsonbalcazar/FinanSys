@@ -6,8 +6,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Deploy Finansys
+        uses: appleboy/ssh-action@master
         with:
-          node-version: '14'
-      - run: npm install -g bats
-      - run: bats -v
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script_top: true
+          command_timeout: 200m
+          script: /
+            cd /home/www/finansys
+            git pull
+            docker-compose build client api --force-rm --no-cache --compress
+            docker-compose up -d
