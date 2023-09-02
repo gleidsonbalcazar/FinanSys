@@ -5,7 +5,7 @@ jobs:
   finansys:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - name: Deploy Finansys
         uses: appleboy/ssh-action@master
         with:
@@ -14,7 +14,7 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script_stop: true
           command_timeout: 200m
-          script:
+          script: |
             cd /home/www/finansys
             git pull
             docker-compose build client api --force-rm --no-cache --compress
