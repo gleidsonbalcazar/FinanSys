@@ -21,15 +21,15 @@ services:
       - "8000:80"
     depends_on:
       - db
-  db:
-    image: mcr.microsoft.com/mssql/server
-    restart: unless-stopped
-    user: root
-    environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: "numsey#2022"
-    ports:
-      - "1433:1433"
-    volumes:
-     # - /home/database:/var/opt/mssql/data
-      - D:\SQLSERVER\data:/var/opt/mssql/data
+  # db:
+  #   image: mcr.microsoft.com/mssql/server
+  #   restart: unless-stopped
+  #   user: root
+  #   environment:
+  #     ACCEPT_EULA: "Y"
+  #     SA_PASSWORD: "numsey#2022"
+  #   ports:
+  #     - "1433:1433"
+  #   volumes:
+  #    # - /home/database:/var/opt/mssql/data
+  #     - D:\SQLSERVER\data:/var/opt/mssql/data
