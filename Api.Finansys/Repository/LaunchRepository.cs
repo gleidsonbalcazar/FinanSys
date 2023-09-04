@@ -30,11 +30,7 @@ namespace Repository
                launchs.RemoveAll(w => w.AccountId != accountID);
            }
 
-           var launchsPredicted = launchs.Where(s => s.ValuePrev > s.ValueExec);
-           launchs.RemoveAll(s => s.ValuePrev > s.ValueExec);
-           launchs.InsertRange(0,launchsPredicted);
-
-           return launchs;
+           return launchs.OrderByDescending(o => o.ValuePrev > o.ValueExec).ToList();
         }
 
         public ActionResult<bool> CheckDuplicate(Launch launch)
