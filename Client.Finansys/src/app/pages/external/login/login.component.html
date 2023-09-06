@@ -1,32 +1,42 @@
-<div class="container-sm login-form">
-  <div class="row">
-    <div class="col-4"></div>
-    <div class="col-4">
-        <h2>Entrar no <span class="mini-name"><i class="fab fa-foursquare"></i>inansys<i class="fas fa-copyright"></i>ontrol</span></h2>
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-            <div class="form-group">
-                <label for="username">Usuário</label>
-                <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }"/>
-                <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-                    <div *ngIf="f.username.errors.required">Necessário preencher o usuário</div>
-                </div>
+<div id="loginWrapper">
+  <div class="container">
+    <div class="container-login">
+      <div class="wrap-login">
+        <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <span class="login-form-title">
+            Faça o login
+          </span>
+
+          <div class="wrap-input margin-top-35 margin-bottom-35">
+            <input class="input-form" formControlName="username" type="text" name="usuario" autocomplete="off" [ngClass]="{ 'is-invalid': submitted && f.username.errors }">
+            <span class="focus-input-form" data-placeholder="Usuário"></span>
+            <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+              <div *ngIf="f.username.errors.required">Necessário preencher o usuário</div>
+          </div>
+          </div>
+
+          <div class="wrap-input margin-bottom-35">
+            <input class="input-form" formControlName="password" type="password" name="password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
+            <span class="focus-input-form" data-placeholder="Senha"></span>
+            <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+              <div *ngIf="f.password.errors.required">Necessário preencher a senha</div>
             </div>
-            <div class="form-group">
-                <label for="password">Senha</label>
-                <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }"/>
-                <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                    <div *ngIf="f.password.errors.required">Necessário preencher a senha</div>
-                </div>
-            </div>
-            <div class="form-group">
-                <button [disabled]="loading" class="btn btn-primary">
-                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                    Login
-                </button>
-            </div>
+          </div>
+
+
+          <div class="container-login-form-btn">
+            <button [disabled]="loading" class="login-form-btn">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+              Login
+            </button>
+          </div>
         </form>
-        <div class="col-4"></div>
+      </div>
+      <img src="../../../../assets/images/login.png" width="300" height="300" class="margin-left-50" />
     </div>
   </div>
-</div>
 
+  <script>
+
+  </script>
+</div>
