@@ -32,7 +32,6 @@ namespace Repository
         {
             var resultAccountsInbound = this.context.Launch
                                               .Where(w => w.TypeLaunch == TypeLaunchEnum.Receita.ToDescriptionString()
-                                                        && (w.Day.Month <= month && w.Day.Year <= DateTime.Now.Year)
                                                     )
                                               .GroupBy(g => g.AccountId)
                                               .Select(s => new 
@@ -46,7 +45,6 @@ namespace Repository
 
             var resultAccountsOutbound = this.context.Launch
                                               .Where(w => w.TypeLaunch == TypeLaunchEnum.Despesa.ToDescriptionString()
-                                                    && (w.Day.Month <= month && w.Day.Year <= DateTime.Now.Year)
                                                 )
                                               .GroupBy(g => g.AccountId)
                                               .Select(s => new
