@@ -31,6 +31,18 @@
     linear-gradient(to right, green 30%, yellow 50%, rgb(243, 146, 146) 100%);
 }
 
+.availabe-to-launch{
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: from-font;
+  cursor: pointer;
+  &:hover {
+    border: 1px dotted #48abe0;
+    color: #48abe0;
+    background: transparent;
+  }
+}
 
 .add-to-Launch{
   background-color: #48abe0;
